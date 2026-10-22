@@ -535,7 +535,7 @@ function patternSVG(G,part,dark){const p=G.pat,n=G.neon||'#00e5ff';
   if(p==='shine')return `<ellipse cx="72" cy="158" rx="9" ry="16" fill="#fff" opacity=".35"/>`;
   return ''}
 
-function catSVG(cat,mood){const G=catGenes(cat);const wear=(cat&&cat.wear)||{};
+function catSVG(cat,mood){const G=catGenes(cat);const LK=G.look&&SKIN_BY_ID[G.look]&&SKIN_BY_ID[G.look].look;const wear={...(LK||{}),...((cat&&cat.wear)||{})};
   const it=s=>{const w=WEAR_BY_ID[wear[s]];return w&&(w.slot===s||(w.slot==='hand'&&(s==='handL'||s==='handR')))?w:null};
   const eyeIt=it('eyes');const E=eyeIt?{...G,glow:eyeIt.eye.glow??G.glow,eyeColor:eyeIt.eye.color||G.eyeColor,eyes:eyeIt.eye.shape||G.eyes,hetero:null}:G;
   const H=HEADS[G.head]||HEADS.round,B=BODIES[G.body]||BODIES.round,EA=EARS[G.ears]||EARS.pointed,T=TAILS[G.tail]||TAILS.thin;
@@ -666,6 +666,39 @@ WEAR.push(
  {id:'bk_rainbowwings',slot:'back',name:Lx('Радужные крылья феи','Rainbow fairy wings'),r:'legend',glowy:true,svg:`<g filter="url(#FID)" opacity=".5">${fairyWings('#ff8fc1','#7fc8f8','#ffd166')}</g>${fairyWings('#ffc2dc','#c8f0ff','#c77dff')}${['#ff595e','#ffca3a','#8ac926','#1982c4'].map((c,i)=>`<path d="M${-30-i*6} -${36-i*4} Q-60 -20 -${56-i*4} ${10-i*2} M${30+i*6} -${36-i*4} Q60 -20 ${56-i*4} ${10-i*2}" fill="none" stroke="${c}" stroke-width="3" opacity=".7"/>`).join('')}`});
 for(const w of WEAR)WEAR_BY_ID[w.id]=w;
 
+/* ===== Наряженные котики: порода с готовым образом (шапка, очки, вещи в лапках, одежда, спина) ===== */
+WEAR.push(
+ {id:'hat_chef',slot:'hat',name:Lx('Колпак повара','Chef hat'),r:'uncommon',svg:`<circle cx="78" cy="30" r="15" fill="#fff" stroke="#9aa6b8" stroke-width="3"/><circle cx="122" cy="30" r="15" fill="#fff" stroke="#9aa6b8" stroke-width="3"/><circle cx="100" cy="20" r="18" fill="#fff" stroke="#9aa6b8" stroke-width="3"/><rect x="72" y="34" width="56" height="22" rx="4" fill="#fff" stroke="#9aa6b8" stroke-width="3"/><path d="M84 38 V52 M100 38 V52 M116 38 V52" stroke="#e1e6ee" stroke-width="2"/>`},
+ {id:'hat_beret',slot:'hat',name:Lx('Берет','Beret'),r:'uncommon',svg:`<ellipse cx="94" cy="52" rx="46" ry="15" fill="#e63946" stroke="#9d1b28" stroke-width="3" transform="rotate(-8 94 52)"/><path d="M92 38 L94 28" stroke="#9d1b28" stroke-width="4" stroke-linecap="round"/>`},
+ {id:'hat_safari',slot:'hat',name:Lx('Шлем путешественника','Explorer helmet'),r:'rare',svg:`<path d="M62 58 Q62 20 100 20 Q138 20 138 58 Z" fill="#e9d8a6" stroke="#8a6a3a" stroke-width="3"/><ellipse cx="100" cy="58" rx="56" ry="9" fill="#d9c48a" stroke="#8a6a3a" stroke-width="3"/><path d="M64 49 L136 49" stroke="#6b8e23" stroke-width="5"/><path d="M84 28 Q100 22 116 28" fill="none" stroke="#fff" stroke-width="3" opacity=".6"/>`},
+ {id:'hat_straw',slot:'hat',name:Lx('Соломенная шляпа','Straw hat'),r:'common',svg:`<ellipse cx="100" cy="58" rx="62" ry="12" fill="#f2d16b" stroke="#b8902a" stroke-width="3"/><path d="M72 56 Q72 26 100 26 Q128 26 128 56 Z" fill="#f2d16b" stroke="#b8902a" stroke-width="3"/><path d="M72 49 Q100 55 128 49" stroke="#ff8fc1" stroke-width="6" fill="none"/><circle cx="122" cy="47" r="5" fill="#ff595e"/><circle cx="114" cy="50" r="4" fill="#ffd166"/>`},
+ {id:'gl_mask',slot:'glasses',name:Lx('Маска героя','Hero mask'),r:'rare',svg:`<path fill-rule="evenodd" d="M54 92 Q78 78 100 89 Q122 78 146 92 Q146 110 122 108 Q108 106 100 99 Q92 106 78 108 Q54 110 54 92 Z M68 96 a12 11 0 1 0 24 0 a12 11 0 1 0 -24 0 Z M108 96 a12 11 0 1 0 24 0 a12 11 0 1 0 -24 0 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><path d="M54 92 L40 84 M146 92 L160 84" stroke="#e63946" stroke-width="4" stroke-linecap="round"/>`},
+ HAND('ty_guitar',Lx('Гитара','Guitar'),'epic',`<g transform="rotate(-28)"><rect x="-3" y="-66" width="6" height="42" fill="#6b3d1f"/><rect x="-6" y="-74" width="12" height="10" rx="2" fill="#3a2410"/><ellipse cx="0" cy="-10" rx="16" ry="14" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><ellipse cx="0" cy="-26" rx="12" ry="10" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><circle cx="0" cy="-16" r="4.5" fill="#3a2410"/><path d="M-1.5 -66 V-6 M1.5 -66 V-6" stroke="#ffd166" stroke-width=".8"/></g>`),
+ HAND('ty_ball',Lx('Баскетбольный мяч','Basketball'),'common',`<circle cx="2" cy="-16" r="15" fill="#ff8c1a" stroke="#8a3c00" stroke-width="2"/><path d="M-13 -16 H17 M2 -31 V-1 M-8 -28 Q2 -16 -8 -4 M12 -28 Q2 -16 12 -4" stroke="#8a3c00" stroke-width="1.6" fill="none"/>`),
+ HAND('ty_spoon',Lx('Поварёшка','Ladle'),'common',`<path d="M0 8 L4 -30" stroke="#b5762a" stroke-width="5" stroke-linecap="round"/><ellipse cx="5" cy="-40" rx="9" ry="11" fill="#d9a066" stroke="#8a5a2b" stroke-width="2"/>`),
+ HAND('ty_brush',Lx('Кисточка','Paintbrush'),'uncommon',`<path d="M0 8 L10 -32" stroke="#3a7bd5" stroke-width="5" stroke-linecap="round"/><rect x="7" y="-38" width="7" height="6" fill="#c0c6d0" transform="rotate(14 10 -35)"/><path d="M8 -38 Q10 -54 16 -40 Z" fill="#c77dff"/>`),
+ HAND('ty_palette',Lx('Палитра','Palette'),'uncommon',`<path d="M-20 -22 Q-22 -42 2 -42 Q24 -42 22 -26 Q20 -16 10 -20 Q2 -22 4 -12 Q4 -2 -8 -4 Q-20 -6 -20 -22 Z" fill="#e9c78f" stroke="#8a6a3a" stroke-width="2"/>${[[-10,-32,'#e63946'],[0,-36,'#ffd166'],[10,-32,'#3a7bd5'],[-12,-20,'#2e9e5b']].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="3.6" fill="${c}"/>`).join('')}`),
+ HAND('ty_wateringcan',Lx('Лейка','Watering can'),'common',`<rect x="-14" y="-32" width="22" height="22" rx="4" fill="#7fc8f8" stroke="#2c6e95" stroke-width="2"/><path d="M8 -26 L24 -40" stroke="#2c6e95" stroke-width="4" stroke-linecap="round"/><circle cx="25" cy="-41" r="3.5" fill="#2c6e95"/><path d="M-14 -28 Q-26 -24 -18 -14" fill="none" stroke="#2c6e95" stroke-width="3"/>`),
+ HAND('ty_map',Lx('Карта сокровищ','Treasure map'),'uncommon',`<rect x="-16" y="-36" width="32" height="26" fill="#f2e2b8" stroke="#8a6a3a" stroke-width="2"/><path d="M-5 -36 V-10 M6 -36 V-10" stroke="#8a6a3a" stroke-width="1" opacity=".6"/><path d="M-11 -16 Q-4 -30 9 -26" stroke="#e63946" stroke-width="2" stroke-dasharray="3 2" fill="none"/><path d="M7 -30 L12 -25 M12 -30 L7 -25" stroke="#e63946" stroke-width="2"/>`),
+ {id:'bd_apron',slot:'body',name:Lx('Фартук','Apron'),r:'common',clip:`<path d="M64 138 L136 138 L142 222 L58 222 Z" fill="#ffffff" stroke="#c9d1dc" stroke-width="2"/><rect x="82" y="176" width="36" height="18" rx="4" fill="#ffd6e7" stroke="#e0457b" stroke-width="1.5"/>`});
+for(const w of WEAR)WEAR_BY_ID[w.id]=w;
+
+const lk=(id,ru,en,r,genes,look)=>({id,name:Lx(ru,en),r,look,g:{...genes,look:id}});
+SKINS.push(
+ lk('sk_cowgirl','Ковбойша Ириска','Toffee the cowgirl','epic',g('wide','round','fold','round','#e0a200','thin','#fbf7f0','#ffffff','#5b4a3a',{pat:'calico'}),{hat:'hat_cowboy',eyes:'ey_heart',handR:'ty_icecream',handL:'ty_balloon',chest:'nk_bowtie',back:'bk_fairy'}),
+ lk('sk_student','Отличник Снежок','Snowball the top student','rare',g('wide','chubby','round','almond','#9fd8ff','fluffy','#e9edf3','#ffffff','#4a5270',{pat:'spots'}),{hat:'hat_beanie',glasses:'gl_round',handR:'ty_book',wrist:'wr_beads',chest:'nk_scarf',body:'bd_sweater',back:'bk_pack'}),
+ lk('sk_pilot','Пилот Пушок','Fluffy the pilot','rare',g('round','round','pointed','round','#5aa05a','fluffy','#f4a259','#fde3c4','#6b3d1f',{pat:'tabby'}),{hat:'hat_cap',glasses:'gl_aviator',handR:'ty_flag',chest:'nk_scarf',body:'bd_vest',back:'bk_jet'}),
+ lk('sk_champ','Чемпион Тигруля','Tiger the champion','rare',g('round','chubby','pointed','big','#57c785','thin','#f4a259','#fde3c4','#6b3d1f',{pat:'tabby'}),{handR:'ty_ball',handL:'ty_trophy',wrist:'wr_bands',chest:'nk_medal',body:'bd_tshirt'}),
+ lk('sk_chef','Шеф Пончик','Donut the chef','uncommon',g('round','chubby','fold','big','#8b5a2b','fluffy','#f3d9b1','#fff3e0','#6b5134'),{hat:'hat_chef',handR:'ty_spoon',handL:'ty_fish',chest:'nk_bowtie',body:'bd_apron'}),
+ lk('sk_gardener','Садовница Ромашка','Daisy the gardener','uncommon',g('heart','round','round','big','#2e9e5b','curly','#f7f5f0','#ffffff','#6b6458',{pat:'calico'}),{hat:'hat_straw',handR:'ty_wateringcan',chest:'nk_heart',body:'bd_dress'}),
+ lk('sk_artist','Художница Клякса','Blot the artist','rare',g('heart','slim','pointed','big','#3a86ff','thin','#3a3a44','#ffffff','#111116',{pat:'bicolor'}),{hat:'hat_beret',handR:'ty_brush',handL:'ty_palette',wrist:'wr_charms',chest:'nk_pearls',body:'bd_tshirt'}),
+ lk('sk_explorer','Исследователь Финик','Date the explorer','rare',g('round','slim','long','almond','#57c785','thin','#e8b45c','#f8e2b8','#5a3612',{pat:'spots'}),{hat:'hat_safari',handR:'ty_map',wrist:'wr_watch',body:'bd_vest',back:'bk_pack'}),
+ lk('sk_rocker','Рокер Уголёк','Coal the rocker','epic',g('round','slim','pointed','slit','#ff2bd6','zigzag','#2e2e36','#45454f','#0e0e12',{glow:true}),{hat:'hat_mohawk',glasses:'gl_sun',handR:'ty_guitar',wrist:'wr_neon',chest:'nk_cyber',body:'bd_jacket'}),
+ lk('sk_astronaut','Космонавт Луноход','Moonwalker the astronaut','legend',g('round','round','round','big','#3a86ff','fluffy','#959cab','#ffffff','#3d424d',{pat:'bicolor'}),{glasses:'gl_cyber',handR:'ty_flag',chest:'nk_medal',body:'bd_astro',back:'bk_jet'}),
+ lk('sk_superhero','Супергерой Молния','Lightning the superhero','legend',g('square','square','pointed','round','#ffd166','thin','#4b84e0','#cfe0fa','#0d2550'),{glasses:'gl_mask',handL:'ty_shield',chest:'nk_medal',body:'bd_hero',back:'bk_cape'}),
+ lk('sk_mage','Маг Мурлин','Merlin the mage','mythic',g('wide','chubby','pointed','sleepy','#c77dff','fluffy','#a7adb8','#e6e8ec','#3d424d',{glow:true,pat:'tabby',extras:['star']}),{hat:'hat_wizard',glasses:'gl_mono',handR:'ty_staff',handL:'ty_book',chest:'nk_dragon',back:'bk_cape'}));
+for(const s of SKINS)SKIN_BY_ID[s.id]=s;
+
 /* ===== Генетика котят: гены внешности, свойства, характеристики, скрещивание ===== */
 const HEX=/^#[0-9a-f]{6}$/i;
 const PATS=['none','tabby','bicolor','points','calico','spots','stars','rainbow','shine','flame','circuit','ghost'];
@@ -688,7 +721,7 @@ function cleanDna(d){if(!d||typeof d!=='object')return null;const h=(v,f)=>HEX.t
       eyeColor:HEX.test(d.glow)?d.glow:'#5aa05a',glow:HEX.test(d.glow),pat:d.pat==='multi'?'rainbow':d.pat}}
   return {head:one(d.head,HEAD_T,'round'),body:one(d.body,BODY_T,'round'),ears:one(d.ears,EAR_T,'pointed'),eyes:one(d.eyes,EYE_T,'round'),eyeColor:h(d.eyeColor,'#5aa05a'),glow:d.glow===true,
     tail:one(d.tail,TAIL_T,'thin'),tailColor:HEX.test(d.tailColor)?d.tailColor:null,main:h(d.main,'#f4a259'),belly:h(d.belly,'#fde3c4'),line:h(d.line,'#6b3d1f'),
-    costume:COSTUMES[d.costume]?d.costume:null,pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
+    costume:COSTUMES[d.costume]?d.costume:null,look:typeof d.look==='string'&&SKIN_BY_ID[d.look]&&SKIN_BY_ID[d.look].look?d.look:null,pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
 function skinToDna(s){return cleanDna(s.g)}
 
 const CAT_TRAITS=[
@@ -745,6 +778,7 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   if(Math.random()<.05){d.tailColor=pick([...NEONS,'#ffffff','#3a3a44']);O.tail='mut'}else d.tailColor=from()[1].tailColor;
   if(Math.random()<.03){d.costume=pick(Object.keys(COSTUMES));O.costume='mut'}
   else{const has=[['A',a],['B',b]].filter(x=>x[1].costume);if(has.length&&Math.random()<.5){const x=pick(has);d.costume=x[1].costume;O.costume=x[0]}else d.costume=null}
+  {const has=[['A',a],['B',b]].filter(x=>x[1].look);if(has.length&&Math.random()<.5){const x=pick(has);d.look=x[1].look;O.look=x[0]}else d.look=null}
   d.neon=a.neon||b.neon||(d.pat==='circuit'?pick(NEONS):null);
   d.extras=[...new Set([...a.extras,...b.extras])].filter(()=>Math.random()<.5);if(Math.random()<.08){const n=pick(EXTRAS.filter(x=>!d.extras.includes(x)));if(n){d.extras.push(n);O.extras='mut'}}
   if(Math.random()<.05){d.hetero=pick(['#3a86ff','#2e9e5b','#ffd166','#c77dff','#e63946']);O.hetero='mut'}else d.hetero=(a.hetero||b.hetero)&&Math.random()<.4?(a.hetero||b.hetero):null;
@@ -753,7 +787,7 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   const stats={};CSTATS.forEach(([k])=>{let v=(Math.random()<.5?A:B).stats[k]+rnd(-1,1);if(Math.random()<.04){v+=2;O['s_'+k]='mut'}stats[k]=clamp(v,1,10)});
   return cleanKitten({id:'k'+Date.now().toString(36)+rnd(10,99),name:pick(KIT_NAMES),dna:d,traits,stats,gen:Math.max(A.gen,B.gen)+1,parents:[A.name,B.name],born:Date.now(),origin:O})}
 const kitRarity=k=>{const d=k.dna;const s=d.extras.length+(d.glow?1:0)+(d.hetero?1:0)+(d.tailColor?.5:0)+(['rainbow','flame','circuit','ghost','stars','shine'].includes(d.pat)?1:0)
-  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0)+(d.costume?1:0)+(d.costume==='goldapple'?2:0);
+  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0)+(d.costume?1:0)+(d.look?1:0)+(d.costume==='goldapple'?2:0);
   return s>=6?'mythic':s>=4.5?'legend':s>=3?'epic':s>=1.5?'rare':s>=.5?'uncommon':'common'};
 const BREED_COST=10,BREED_TIME=20*60e3,KENNEL_MAX=24;
 
@@ -1527,14 +1561,14 @@ function kennelHTML(){const n=player.nest,now=Date.now(),cats=allCats(),act=acti
     nest=`<div class="nest"><div class="pair">${slot('slA',A,Lx("Родитель 1","Parent 1"))}<span class="heart">💞</span>${slot('slB',B,Lx("Родитель 2","Parent 2"))}</div>
     <div class="btns"><button class="btn" id="doBreed" ${A&&B&&!full&&wallet()>=BREED_COST?'':'disabled'}>${Lx("Скрестить за ★","Breed for ★")} ${BREED_COST}</button></div>
     <p class="note" style="margin:6px 0 0">${full?`${Lx("В питомнике уже","The cattery already has")} ${KENNEL_MAX} ${Lx("рождённых котят. Отдай кого-нибудь в добрые руки, чтобы освободить место.","born kittens. Give one to a loving home to make room.")}`:Lx("Нажми на кота ниже и выбери его родителем. Котёнок получит гены от обоих и родится через 20 минут. Иногда случаются мутации!","Tap a cat below and choose it as a parent. The kitten gets genes from both and is born in 20 minutes. Sometimes mutations happen!")}</p></div>`}
-  const KF={all:()=>true,born:i=>!i.skin,veg:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat!=='girl',girl:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat==='girl',cyber:i=>i.dna.pat==='circuit',glow:i=>i.dna.glow,top:i=>['epic','legend','mythic'].includes(indRarity(i))};
+  const KF={all:()=>true,born:i=>!i.skin,veg:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat!=='girl',dressed:i=>!!i.dna.look,girl:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat==='girl',cyber:i=>i.dna.pat==='circuit',glow:i=>i.dna.glow,top:i=>['epic','legend','mythic'].includes(indRarity(i))};
   const f=KF[skinFilter]?skinFilter:'all';const shown=cats.filter(KF[f]);
   const grid=shown.map(ind=>`<button class="item r-${indRarity(ind)}${ind.id===act?' on':''}" data-cat="${ind.id}">${ind.skin?cntBadge('cats',ind.skin):''}${catPic(ind)}<span>${esc(ind.name)}</span>
     <span class="tag" style="font-size:12px">${ind.gen?`${Lx("Поколение","Generation")} ${ind.gen}`:`<span class="rt r-${indRarity(ind)}">${RARITY[indRarity(ind)].name}</span>`}</span><span style="font-size:18px">${ind.traits.map(t=>TRAIT_BY_ID[t].icon).join(' ')}</span></button>`).join('');
   const owned=new Set(player.cat.skins);const locked=f==='born'?[]:SKINS.filter(s=>!owned.has(s.id)&&KF[f]({skin:s.id,dna:s.g}));
   return `<h4 style="margin-top:14px">${Lx("Гнёздышко","Nest")}</h4>${nest}<h4>${Lx("Твои коты (","Your cats (")}${cats.length})</h4>
   <p class="note" style="margin:0">${Lx("Пород из сундуков:","Breeds from chests:")} ${player.cat.skins.length} ${Lx("из","of")} ${SKINS.length}${Lx(". Рождённых:",". Born here:")} ${player.kennel.length} ${Lx("из","of")} ${KENNEL_MAX}${Lx(". Нажми на кота, чтобы сделать его главным, посмотреть гены или выбрать родителем.",". Tap a cat to make it your main cat, see its genes or choose it as a parent.")}</p>
-  <div class="tabs" style="margin-top:10px" role="group" aria-label="${Lx("Фильтр","Filter")}">${[['all',Lx("Все","All")],['born',Lx("Рождённые","Born here")],['girl',Lx("Феи и принцессы","Fairies and princesses")],['veg',Lx("Овощи и фрукты","Veggies and fruits")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${f===k}">${n}</button>`).join('')}</div>
+  <div class="tabs" style="margin-top:10px" role="group" aria-label="${Lx("Фильтр","Filter")}">${[['all',Lx("Все","All")],['born',Lx("Рождённые","Born here")],['dressed',Lx("Наряженные","Dressed up")],['girl',Lx("Феи и принцессы","Fairies and princesses")],['veg',Lx("Овощи и фрукты","Veggies and fruits")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${f===k}">${n}</button>`).join('')}</div>
   <div class="items">${grid}${locked.map(s=>lockedCard(s.r,skinPreview(s))).join('')}</div>
   ${shown.length||locked.length?'':'<p class="empty">'+Lx("Здесь пока никого нет.","Nobody here yet.")+'</p>'}`}
 
@@ -1559,6 +1593,7 @@ function catDetail(ind,newborn){const m=$('#modal');const O=ind.origin||{},d=ind
     [Lx("Голова","Head"),RU.head[d.head]+src('head')],[Lx("Тело","Body"),RU.body[d.body]+src('body')],[Lx("Уши","Ears"),RU.ears[d.ears]+src('ears')],
     [Lx("Глаза","Eyes"),`${RU.eyes[d.eyes]}${src('eyes')} ${sw(d.eyeColor)}${d.glow?' '+Lx("светятся","glowing"):''}${src('eyeColor')}`+(d.hetero?` ${Lx("· разного цвета","· different colors")} ${sw(d.hetero)}${src('hetero')}`:'')],
     [Lx("Хвост","Tail"),RU.tail[d.tail]+(d.tailColor?' '+sw(d.tailColor):'')+src('tail')],
+    ...(d.look?[[Lx("Образ","Look"),esc(SKIN_BY_ID[d.look].name)+src('look')]]:[]),
     ...(d.costume?[[Lx("Костюм","Costume"),RU.costume[d.costume]+src('costume')]]:[]),
     [Lx("Особенности","Features"),(d.extras.length?d.extras.map(x=>RU.extra[x]).join(', '):Lx("нет","none"))+src('extras')]];
   const inNest=player.nest&&(player.nest.a===ind.id||player.nest.b===ind.id);
