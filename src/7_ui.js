@@ -146,7 +146,7 @@ function stageHTML(){const c=player.cat,sl=sleeping();
     <div class="row"><input class="field" id="catname" maxlength="14" value="${esc(c.name)}" aria-label="Имя котёнка"><button class="btn alt small" id="rename">Назвать</button></div></div>`}
 function bindStage(){const c=player.cat;
   const pet=()=>{if(sleeping())return;const el=$('#bigcat');el.classList.remove('purr');void el.offsetWidth;el.classList.add('purr');purr();
-    if(c.joy<70)c.joy=clamp(c.joy+6,0,70);$('#say').textContent=pick(['Мрррр…','Мур-мур-мур!','Ещё! Ещё!','Мне так хорошо!']);
+    if(c.joy<70)c.joy=clamp(c.joy+(hasTr('cuddly')?12:6)+Math.max(0,cstat('cha')-5),0,70);$('#say').textContent=pick(['Мрррр…','Мур-мур-мур!','Ещё! Ещё!','Мне так хорошо!']);
     el.innerHTML=catSVG(c,'happy');const f=app.querySelectorAll('.stage .fill');if(f[1])f[1].style.width=Math.round(c.joy)+'%';savePlayer()};
   $('#bigcat').onclick=pet;$('#pet').onclick=pet;
   $('#sleep').onclick=()=>{if(sleeping())return;c.sleepUntil=Date.now()+SLEEP_H*36e5;savePlayer(true);toast(`${esc(c.name)} уснул на ${SLEEP_H} часа`);catScreen()};
@@ -156,7 +156,7 @@ function bindStage(){const c=player.cat;
 const effText=f=>Object.entries(f.eff).map(([k,v])=>`${STAT_NAME[k]} +${v}`).join(', ')+(f.xp2?`, двойной опыт на ${f.xp2} игры`:'');
 
 async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;const c=player.cat,R=player.room;
-  const tabs=`<div class="tabs big" role="group" aria-label="Раздел">${[['care','Уход и еда'],['wear','Гардероб'],['skins','Котята'],['room','Комната'],['chest','Сундуки'+(anyGift()?' · подарки!':'')]].map(([k,n])=>`<button data-t="${k}" aria-pressed="${catTab===k}">${n}</button>`).join('')}</div>`;
+  const tabs=`<div class="tabs big" role="group" aria-label="Раздел">${[['care','Уход и еда'],['wear','Гардероб'],['skins','Породы'],['kennel','Питомник'+(player.nest&&player.nest.until<=Date.now()?' · котёнок!':'')],['room','Комната'],['chest','Сундуки'+(anyGift()?' · подарки!':'')]].map(([k,n])=>`<button data-t="${k}" aria-pressed="${catTab===k}">${n}</button>`).join('')}</div>`;
   let body='';
   if(catTab==='care'){const now=Date.now();
     body=`<div class="catpage">${stageHTML()}<div>
@@ -173,8 +173,9 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
     <p class="note">Нажми на вещь, чтобы надеть или снять. Серые вещи ждут в сундуках с одеждой. Собрано ${c.owned.length} из ${WEAR.length}.</p></div></div>`}
   else if(catTab==='skins'){const owned=new Set(c.skins);const list=SKINS.filter(s=>skinFilter==='all'||(s.st||'soft')===skinFilter&&s.pat!=='circuit'||(skinFilter==='cyber'&&s.pat==='circuit')||(skinFilter==='glow'&&s.glow));
     body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="Котята">${[['all','Все'],['soft','Пушистые'],['cyber','Кибер'],['pixel','Пиксельные'],['brick','Кирпичики'],['glow','Светятся глаза']].map(([k,n])=>`<button data-f="${k}" aria-pressed="${skinFilter===k}">${n}</button>`).join('')}</div>
-    <div class="items">${list.map(s=>owned.has(s.id)?`<button class="item r-${s.r}${c.skin===s.id?' on':''}" data-k="${s.id}">${skinPreview(s)}<span>${esc(s.name)}</span><span class="rt r-${s.r}">${RARITY[s.r].name}</span></button>`:lockedCard(s.r,skinPreview(s))).join('')}</div>
+    <div class="items">${list.map(s=>owned.has(s.id)?`<button class="item r-${s.r}${c.skin===s.id&&!c.kid?' on':''}" data-k="${s.id}">${skinPreview(s)}<span>${esc(s.name)}</span><span class="rt r-${s.r}">${RARITY[s.r].name}</span></button>`:lockedCard(s.r,skinPreview(s))).join('')}</div>
     <p class="note">Нажми на котёнка, чтобы играть им. Новые котята выпадают из сундуков с котятами. Собрано ${c.skins.length} из ${SKINS.length}.</p></div></div>`}
+  else if(catTab==='kennel')body=kennelHTML();
   else if(catTab==='room'){const art=await loadArt();if(screen!=='cat'||catTab!=='room')return;const owned=new Set(R.owned);const w=wallet();let grid='';
     if(roomSlot==='wp'||roomSlot==='fl'){const list=roomSlot==='wp'?WALLS:FLOORS;const cur=roomSlot==='wp'?R.wp:R.fl;
       grid=list.map(o=>{const has=owned.has(o.id);return `<button class="item${cur===o.id?' on':''}" data-o="${o.id}" ${!has&&w<o.price?'aria-disabled="true"':''}>${swatchSVG(o)}<span>${esc(o.name)}</span><span class="${has?'rt r-common':'price'}">${has?(cur===o.id?'выбрано':'есть'):'★ '+o.price}</span></button>`}).join('')}
@@ -195,12 +196,13 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
   $('#back').onclick=menu;
   app.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>catScreen(b.dataset.t));
   if(catTab==='care'||catTab==='wear'||catTab==='skins')bindStage();
+  if(catTab==='kennel')bindKennel();
   app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{wearSlot=b.dataset.s;catScreen()});
   app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{skinFilter=b.dataset.f;catScreen()});
   app.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{roomSlot=b.dataset.r;catScreen()});
   app.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const x=WEAR_BY_ID[b.dataset.w];c.wear={...c.wear,[x.slot]:c.wear[x.slot]===x.id?null:x.id};if(!c.wear[x.slot])delete c.wear[x.slot];
     c.joy=clamp(c.joy+2,0,100);tone(740,0,.12,'triangle');savePlayer();catScreen()});
-  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{c.skin=b.dataset.k;tone(740,0,.12,'triangle');savePlayer();catScreen()});
+  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{setActive(indFromSkin(SKIN_BY_ID[b.dataset.k]));tone(740,0,.12,'triangle');savePlayer();catScreen()});
   app.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const f=FURN_BY_ID[b.dataset.p];if(R.place[f.slot]===f.id)delete R.place[f.slot];else R.place[f.slot]=f.id;tone(620,0,.1,'triangle');savePlayer();catScreen()});
   app.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{const id=b.dataset.o;const o=WALL_BY_ID[id]||FLOOR_BY_ID[id];const isW=!!WALL_BY_ID[id];
     if(!R.owned.includes(id)){if(wallet()<o.price){toast(`Нужно ещё ★ ${o.price-wallet()}`);return}player.spent+=o.price;R.owned=[...R.owned,id];fanfare();toast(`Куплено: ${esc(o.name)}`)}
@@ -208,7 +210,7 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const f=FOOD_BY_ID[b.dataset.buy];if(wallet()<f.price){toast(`Нужно ещё ★ ${f.price-wallet()}`);return}
     player.spent+=f.price;c.inv={...c.inv,[f.id]:(c.inv[f.id]||0)+1};tone(660,0,.1);savePlayer(true);renderMe();toast(`${f.icon} ${f.name} в запасе`);catScreen()});
   app.querySelectorAll('[data-eat]').forEach(b=>b.onclick=()=>{if(sleeping()){toast('Котёнок спит');return}const f=FOOD_BY_ID[b.dataset.eat];if(!c.inv[f.id])return;
-    c.inv={...c.inv,[f.id]:c.inv[f.id]-1};if(!c.inv[f.id])delete c.inv[f.id];applyEffects(f.eff);if(f.xp2)player.buff={xp2:(player.buff.xp2||0)+f.xp2};
+    c.inv={...c.inv,[f.id]:c.inv[f.id]-1};if(!c.inv[f.id])delete c.inv[f.id];applyEffects(f.eff,true);if(f.xp2)player.buff={xp2:(player.buff.xp2||0)+f.xp2};
     tone(520,0,.1);tone(620,.1,.12);savePlayer(true);catScreen();const s=$('#say');if(s)s.textContent=pick(['Ням-ням! Спасибо!','Вкуснятина!','Мяу, я сытый!'])});
   const sw=$('#swap');if(sw)sw.onclick=()=>{if(c.bag<10)return;c.bag-=10;player.stars+=1;fanfare();savePlayer(true);renderMe();toast('+1 ★ за уборку');catScreen()};
   const ca=$('#cleanAll');if(ca)ca.onclick=()=>{c.bag+=c.poops;c.joy=clamp(c.joy+3*c.poops,0,100);c.poops=0;tone(500,0,.1);savePlayer();catScreen()};
@@ -240,7 +242,7 @@ const CHEST_SETS={
     preview:wearPreview,equip:it=>{player.cat.wear={...player.cat.wear,[it.slot]:it.id};wearSlot=it.slot;return 'wear'},gift:{common:60,rare:40,legend:0},
     tiers:{small:{name:'Деревянный сундук',cost:5,desc:'Чаще всего обычные вещи',w:{common:80,rare:18,legend:2}},rare:{name:'Волшебный сундук',cost:15,desc:'Много редких вещей',w:{common:25,rare:65,legend:10}},royal:{name:'Королевский сундук',cost:40,desc:'Шанс на легендарную вещь',w:{common:0,rare:40,legend:60}}}},
   cats:{title:'Сундуки с котятами',note:'Пушистые, кибер, пиксельные и котята-кирпичики, коты со светящимися глазами',pool:SKINS,get:()=>player.cat.skins,add:id=>player.cat.skins=[...player.cat.skins,id],
-    preview:s=>skinPreview(s,'happy'),equip:it=>{player.cat.skin=it.id;return 'skins'},gift:{common:70,rare:30,legend:0},
+    preview:s=>skinPreview(s,'happy'),equip:it=>{setActive(indFromSkin(it));return 'skins'},gift:{common:70,rare:30,legend:0},
     tiers:{small:{name:'Коробка с котёнком',cost:10,desc:'Обычные породы',w:{common:75,rare:22,legend:3}},rare:{name:'Волшебная корзинка',cost:25,desc:'Редкие и кибер-котята',w:{common:20,rare:65,legend:15}},royal:{name:'Королевская переноска',cost:60,desc:'Шанс на легендарного кота',w:{common:0,rare:35,legend:65}}}},
   room:{title:'Сундуки обустройства',note:'Лежанки, когтеточки, лампы, коврики, растения и окна для комнаты',pool:FURN,get:()=>player.room.owned,add:id=>player.room.owned=[...player.room.owned,id],
     preview:furnPreview,equip:it=>{player.room.place={...player.room.place,[it.slot]:it.id};roomSlot=it.slot;return 'room'},gift:{common:70,rare:30,legend:0},

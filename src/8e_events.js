@@ -27,7 +27,7 @@ function startEvent(k){const E=EVENTS[k];player.nextEv=Date.now()+EV_EVERY;saveP
   fanfare();$('#evGo').focus();const sk=$('#evSkip');if(sk)sk.onclick=closeEvent;
   $('#evGo').onclick=()=>{if(E.type==='tap')tapEvent(k);else if(E.type==='quiz')quizEvent(k);else passiveEvent(k)}}
 function closeEvent(){$('#modal').innerHTML='';renderMe();if(screen==='menu')menu();else if(screen==='cat')catScreen()}
-function evReward(title,text,stars,xp){const info=grant(stars,xp);savePlayer(true);renderMe();
+function evReward(title,text,stars,xp){if(stars>0)stars+=(hasTr('starry')?2:0)+Math.floor(cstat('luck')/4);const info=grant(stars,xp);savePlayer(true);renderMe();
   $('#modal').innerHTML=evOverlay(`<div class="prize glow" style="width:130px;margin:0 auto">${catSVG(player.cat,'happy')}</div><h3>${title}</h3><p>${text}</p>${stars||xp?`<p class="result" style="padding:0"><span class="st" style="font-size:30px">${stars?'+'+stars+' ★':''}</span> ${xp?`<b style="color:var(--xp)">+${xp} опыта</b>`:''}</p>`:''}
   ${info.up?`<p class="bubble">Новый уровень ${info.level}! Бонус +${info.bonus} ★</p>`:''}<div class="btns"><button class="btn" id="evOk">Отлично!</button></div>`);
   if(stars||info.up)fanfare();$('#evOk').onclick=closeEvent;$('#evOk').focus()}

@@ -21,6 +21,9 @@ function normalize(p){if(!p)return p;
   c.poopNext=+c.poopNext||now0+rnd(8,15)*36e5;
   c.feeder=c.feeder&&typeof c.feeder==='object'?{n:clamp(Math.floor(+c.feeder.n||0),0,FEEDER_MAX),next:+c.feeder.next||now0+FEEDER_EVERY}:{n:2,next:now0+FEEDER_EVERY};
   const inv={};if(c.inv&&typeof c.inv==='object')for(const [k,n] of Object.entries(c.inv))if(FOOD_BY_ID[k]&&+n>0)inv[k]=Math.min(99,Math.floor(+n));c.inv=inv;
+  p.kennel=(Array.isArray(p.kennel)?p.kennel:[]).map(cleanKitten).filter(Boolean).slice(0,KENNEL_MAX);
+  p.nest=p.nest&&typeof p.nest==='object'&&typeof p.nest.a==='string'&&typeof p.nest.b==='string'?{a:p.nest.a.slice(0,40),b:p.nest.b.slice(0,40),until:+p.nest.until||0}:null;
+  if(c.kid){const k=p.kennel.find(x=>x.id===c.kid);if(k)c.dna=k.dna;else{delete c.kid;delete c.dna}}else delete c.dna;
   p.nextEv=+p.nextEv||now0+5*60e3;p.tDate=typeof p.tDate==='string'?p.tDate:'';p.tClass=+p.tClass||0;p.tScore=+p.tScore||0;
   const r=p.room=p.room&&typeof p.room==='object'?p.room:{};
   r.owned=[...new Set([...(Array.isArray(r.owned)?r.owned:[]),'wp_plain','fl_wood'])].filter(id=>FURN_BY_ID[id]||WALL_BY_ID[id]||FLOOR_BY_ID[id]);
@@ -45,8 +48,9 @@ const sleeping=()=>player&&player.cat.sleepUntil>Date.now();
 function tick(){if(!player)return;const c=player.cat,now=Date.now();if(now<=c.t){c.t=now;return}
   const from=c.t,sleepEnd=Math.max(from,Math.min(now,c.sleepUntil));const hs=(sleepEnd-from)/36e5,ha=(now-sleepEnd)/36e5;
   if(hs>0){c.energy=clamp(c.energy+100/SLEEP_H*hs,0,100);c.food=clamp(c.food-3*hs,0,100);c.joy=clamp(c.joy-1*hs,0,100);c.fun=clamp(c.fun-1*hs,0,100);c.sport=clamp(c.sport-1*hs,0,100)}
-  if(ha>0){c.food=clamp(c.food-6*ha,0,100);c.joy=clamp(c.joy-(4+2*c.poops)*ha,0,100);c.fun=clamp(c.fun-5*ha,0,100);c.sport=clamp(c.sport-4*ha,0,100);c.energy=clamp(c.energy-5*ha,0,100)}
-  while(c.poopNext<=now){c.poops=Math.min(5,c.poops+1);c.poopNext+=rnd(8,15)*36e5}
+  const gm=hasTr('glutton')?1.3:1,em=hasTr('sleepy')?.7:hasTr('fidget')?1.3:1,lm=hasTr('lazy')?1.3:1;
+  if(ha>0){c.food=clamp(c.food-6*gm*ha,0,100);c.joy=clamp(c.joy-(4+2*c.poops)*ha,0,100);c.fun=clamp(c.fun-5*ha,0,100);c.sport=clamp(c.sport-4*lm*ha,0,100);c.energy=clamp(c.energy-5*em*ha,0,100)}
+  while(c.poopNext<=now){c.poops=Math.min(5,c.poops+1);c.poopNext+=(hasTr('clean')?rnd(12,20):rnd(8,15))*36e5}
   while(c.feeder.next<=now){c.feeder.n=Math.min(FEEDER_MAX,c.feeder.n+1);c.feeder.next+=FEEDER_EVERY}
   while(c.food<40&&c.feeder.n>0){c.food=clamp(c.food+30,0,100);c.feeder.n--}
   if(c.energy<=0&&c.sleepUntil<now)c.sleepUntil=now+SLEEP_H*36e5;
@@ -56,7 +60,7 @@ function mood(){if(!player)return 'normal';const c=player.cat;if(sleeping())retu
 const emptyStat=()=>{const c=player.cat;const s=STATS.find(([k])=>c[k]<=0);return s?s[1]:null};
 function canPlayWithCat(){tick();if(sleeping())return 'Котёнок спит. Поиграть можно, когда он проснётся.';const e=emptyStat();if(e)return `Шкала «${e}» пустая. Сначала позаботься о котёнке.`;
   if(player.cat.energy<10)return 'Котёнок слишком устал. Отправь его спать.';return null}
-function applyEffects(eff){const c=player.cat;for(const [k,v] of Object.entries(eff))if(k in c)c[k]=clamp(c[k]+v,0,100)}
+function applyEffects(eff,gourmet){const c=player.cat;for(let [k,v] of Object.entries(eff)){if(!(k in c))continue;if(v>0){if(k==='sport')v*=(hasTr('athlete')?1.5:1)*(hasTr('fidget')?1.25:1);if(k==='fun'&&hasTr('joker'))v*=1.5;if(gourmet&&hasTr('gourmet'))v*=1.25}c[k]=clamp(c[k]+Math.round(v),0,100)}}
 
 const TITLES=[[1,'Котёнок-новичок'],[3,'Юный умник'],[6,'Знаток'],[10,'Мудрый кот'],[15,'Профессор'],[20,'Гений'],[30,'Легенда тетрадки']];
 function lvlInfo(xp){let l=1,need=100,x=xp;while(x>=need){x-=need;l++;need=100+(l-1)*40}return {l,cur:x,need,title:TITLES.filter(t=>t[0]<=l).pop()[1]}}
@@ -99,6 +103,7 @@ async function claimNick(nick){const key=nickKey(nick);
 function grant(stars,xp){const before=lvlInfo(player.xp).l;player.stars+=stars;player.xp+=xp;
   const after=lvlInfo(player.xp).l;const bonus=after>before?5*(after-before):0;player.stars+=bonus;return {xp,up:after>before,level:after,bonus}}
 function record(game,stars,xp,value,lowerBetter,bestKey=game){
+  xp=Math.round(xp*(hasTr('smart')?1.2:1)*(1+(cstat('int')-5)*.04));
   const b=player.buff||{};if(b.xp2>0){xp*=2;player.buff={...b,xp2:b.xp2-1}}
   player.games+=1;const {up,level:after,bonus}=grant(stars,xp);
   tick();player.cat.joy=clamp(player.cat.joy+15,0,100);player.cat.food=clamp(player.cat.food-3,0,100);

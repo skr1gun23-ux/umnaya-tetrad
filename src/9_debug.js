@@ -15,6 +15,7 @@ function debugMenu(confirmReset){const m=$('#modal');
     <button class="btn alt" id="dbFeed" ${p?'':'disabled'}>Все шкалы 100% и разбудить</button>
     <button class="btn alt" id="dbPoop" ${p?'':'disabled'}>Добавить какашку</button>
     <button class="btn alt" id="dbEvNow" ${p?'':'disabled'}>Событие прямо сейчас (на главной)</button>
+    <button class="btn alt" id="dbNest" ${p?'':'disabled'}>Котёнок родится сейчас</button>
     <button class="btn alt" id="dbTour" ${p?'':'disabled'}>Сбросить попытку турнира</button>
     <p class="tag" style="margin:6px 0 0">Запустить ивент:</p><div class="row" style="margin:0">${Object.entries(EVENTS).map(([k,e])=>`<button class="btn alt small" data-ev="${k}" ${p?'':'disabled'} title="${e.name}">${e.icon}</button>`).join('')}</div>
     <button class="btn alt" id="dbRestart">Перезапуск</button>
@@ -30,6 +31,7 @@ function debugMenu(confirmReset){const m=$('#modal');
   on('dbFeed',()=>{tick();Object.assign(p.cat,{food:100,joy:100,fun:100,sport:100,energy:100,sleepUntil:0,t:Date.now()});savePlayer(true);refresh();toast('Все шкалы 100%, котёнок проснулся');debugMenu()});
   on('dbPoop',()=>{p.cat.poops=Math.min(5,p.cat.poops+1);savePlayer(true);refresh();toast('Появилась какашка');debugMenu()});
   on('dbEvNow',()=>{p.nextEv=Date.now();savePlayer(true);refresh();toast('Событие готово');debugMenu()});
+  on('dbNest',()=>{if(p.nest){p.nest.until=Date.now();savePlayer(true);refresh();toast('Котёнок готов в гнёздышке')}else toast('Гнёздышко пустое');debugMenu()});
   on('dbTour',()=>{p.tDate='';savePlayer(true);refresh();toast('Попытка турнира снова доступна');debugMenu()});
   on('dbRestart',async()=>{close();stopTimer();clearTimeout(store.writeTimer);await store.writeQ;player=null;store.art=undefined;app.innerHTML='<p class="empty">Перезапускаем…</p>';
     await initStore();renderMe();player?menu():login();toast('Перезапущено')});

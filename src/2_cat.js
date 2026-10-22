@@ -149,15 +149,22 @@ function softCat(S,F,mood,eye,ids){const pat=S.pat;const pt=pat==='points'?F.dar
   const cyberPlate=pat==='circuit'?`<rect x="104" y="80" width="32" height="32" rx="7" fill="#2a2f3a" stroke="${F.neon}" stroke-width="2"/>`:'';
   const antenna=pat==='circuit'?`<path d="M150 30 L158 6" stroke="#888" stroke-width="3"/><circle cx="158" cy="6" r="5" fill="${F.neon}" filter="url(#${ids.f})"/><circle cx="158" cy="6" r="3" fill="#fff"/>`:'';
   const ghost=pat==='ghost'?' opacity=".78"':'';
-  const under=`<g${ghost}><path d="M134 196 C178 198 186 160 168 128" fill="none" stroke="${F.line}" stroke-width="17" stroke-linecap="round"/>
-  <path d="M134 196 C178 198 186 160 168 128" fill="none" stroke="${tailCol}" stroke-width="11" stroke-linecap="round"/>
+  const TP={normal:['M134 196 C178 198 186 160 168 128'],fluffy:['M134 196 C178 198 186 160 168 128'],short:['M134 198 C152 200 160 190 160 176'],double:['M134 196 C178 198 186 160 168 128','M130 200 C186 214 196 176 188 150']}[S.tail||'normal']||['M134 196 C178 198 186 160 168 128'];
+  const tw=S.tail==='fluffy'?[28,21]:[17,11];
+  const under=`<g${ghost}>${TP.map(d=>`<path d="${d}" fill="none" stroke="${F.line}" stroke-width="${tw[0]}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${tailCol}" stroke-width="${tw[1]}" stroke-linecap="round"/>`).join('')}
   <ellipse cx="100" cy="172" rx="44" ry="40" fill="${F.main}" stroke="${F.line}" stroke-width="3"/>
   <g clip-path="url(#${ids.b})">${bodyPat}<ellipse cx="100" cy="184" rx="${pat==='bicolor'?30:26}" ry="${pat==='bicolor'?28:24}" fill="${F.belly}"/></g></g>`;
   const shape=`<ellipse cx="100" cy="172" rx="44" ry="40"/>`;
   const over=`<g${ghost}><ellipse cx="100" cy="172" rx="44" ry="40" fill="none" stroke="${F.line}" stroke-width="3"/>
   <ellipse cx="78" cy="208" rx="16" ry="10" fill="${paw}" stroke="${F.line}" stroke-width="3"/><ellipse cx="122" cy="208" rx="16" ry="10" fill="${paw}" stroke="${F.line}" stroke-width="3"/></g>`;
-  const head=`<g${ghost}>${antenna}<path d="M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z" fill="${pt}" stroke="${F.line}" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z" fill="#ffb3c7"/>
+  const EARS={normal:['M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z','M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z'],
+    tufts:['M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z','M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z'],
+    long:['M56 80 L42 2 L90 56 Z M144 80 L158 2 L110 56 Z','M62 68 L50 22 L80 58 Z M138 68 L150 22 L120 58 Z'],
+    round:['M48 74 A22 22 0 1 1 88 54 Z M152 74 A22 22 0 1 0 112 54 Z','M56 66 A13 13 0 1 1 80 56 Z M144 66 A13 13 0 1 0 120 56 Z'],
+    fold:['M52 82 Q50 50 88 56 Q76 70 62 84 Z M148 82 Q150 50 112 56 Q124 70 138 84 Z','M60 74 Q60 60 80 60 Q72 68 64 76 Z M140 74 Q140 60 120 60 Q128 68 136 76 Z']}[S.ears||'normal']||null;
+  const E2=EARS||['M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z','M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z'];
+  const head=`<g${ghost}>${antenna}<path d="${E2[0]}" fill="${pt}" stroke="${F.line}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="${E2[1]}" fill="#ffb3c7"/>${S.ears==='tufts'?`<path d="M50 30 L44 8 M50 30 L54 10 M150 30 L156 8 M150 30 L146 10" stroke="${F.line}" stroke-width="3.5" stroke-linecap="round"/>`:''}
   <ellipse cx="100" cy="98" rx="55" ry="46" fill="${F.main}"/>
   <g clip-path="url(#${ids.h})">${headPat}${pat==='points'?`<ellipse cx="100" cy="112" rx="24" ry="18" fill="${F.dark}" opacity=".55"/>`:''}</g>
   <ellipse cx="100" cy="98" rx="55" ry="46" fill="none" stroke="${F.line}" stroke-width="3"/>
@@ -202,7 +209,7 @@ function brickCat(S,F,mood,eye,ids){const multi=S.pat==='multi';
   ${eyesSVG(mood,eye,{...F,line:'#1a1a1a',light:false},ids.f)}${noseSVG('#1a1a1a')}${mouthSVG(mood,'#1a1a1a')}`;
   return {under,shape:`<rect x="58" y="140" width="84" height="64" rx="6"/>`,over,head}}
 
-function catSVG(cat,mood){const S=SKIN_BY_ID[cat&&cat.skin]||SKINS[0];const F=S.c;
+function catSVG(cat,mood){const S=cat&&cat.dna?dnaToSkin(cat.dna):SKIN_BY_ID[cat&&cat.skin]||SKINS[0];const F=S.c;
   const wear=(cat&&cat.wear)||{};const it=s=>{const w=WEAR_BY_ID[wear[s]];return w&&w.slot===s?w:null};
   const ids={b:uid('b'),h:uid('h'),f:uid('f')};
   const ei=it('eyes');const eye=ei?ei.eye:S.glow?{kind:'glow',color:S.glow}:{kind:'normal'};
@@ -211,9 +218,9 @@ function catSVG(cat,mood){const S=SKIN_BY_ID[cat&&cat.skin]||SKINS[0];const F=S.
   return `<svg viewBox="0 -20 200 248" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Котёнок">
   <defs><clipPath id="${ids.b}">${parts.shape}</clipPath><clipPath id="${ids.h}"><ellipse cx="100" cy="98" rx="55" ry="46"/></clipPath>
   <filter id="${ids.f}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
-  ${fx(it('back'))}${parts.under}
+  ${fx(it('back'))}${extrasSVG(S,'back',ids,mood)}${parts.under}
   ${body&&body.clip?`<g clip-path="url(#${ids.b})">${body.clip}</g>`:''}${body&&body.svg?body.svg:''}
-  ${parts.over}${parts.head}${fx(it('neck'))}${mood==='sleep'?'':fx(it('glasses'))}${fx(it('hat'))}${fx(it('toy'))}${mood==='sleep'?'<text x="146" y="30" font-family="Nunito,sans-serif" font-size="22" font-weight="900" fill="#7a8bb5">z</text><text x="164" y="12" font-family="Nunito,sans-serif" font-size="30" font-weight="900" fill="#7a8bb5">Z</text>':''}</svg>`}
+  ${parts.over}${parts.head}${extrasSVG(S,'front',ids,mood)}${fx(it('neck'))}${mood==='sleep'?'':fx(it('glasses'))}${fx(it('hat'))}${fx(it('toy'))}${mood==='sleep'?'<text x="146" y="30" font-family="Nunito,sans-serif" font-size="22" font-weight="900" fill="#7a8bb5">z</text><text x="164" y="12" font-family="Nunito,sans-serif" font-size="30" font-weight="900" fill="#7a8bb5">Z</text>':''}</svg>`}
 
 function wearPreview(w){return catSVG({skin:'sk_orange',wear:{[w.slot]:w.id}},'normal')}
 function skinPreview(s,mood='normal'){return catSVG({skin:s.id,wear:{}},mood)}

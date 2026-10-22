@@ -108,7 +108,7 @@ async function catGame(key){screen='cg';stopTimer();const g=GAMES[key],C=CAT_GAM
   function frame(now){if(!alive())return;const dt=Math.min(50,now-last);last=now;const fin=game.update(dt,now-t0,tap);tap=null;const l=$('#cgS');if(l)l.textContent=game.label();
     if(fin)return finish();requestAnimationFrame(frame)}
   requestAnimationFrame(frame);
-  function finish(){screen='result';const s=st.score;const stars=game.stars(s);tick();applyEffects(C.eff);
+  function finish(){screen='result';const s=st.score;const stars=game.stars(s)+(s>0&&hasTr('lucky')?1:0)+(s>0&&cstat('str')+cstat('agi')>=16?1:0);tick();applyEffects(C.eff);
     player.cat.energy=clamp(player.cat.energy-10,0,100);player.cat.food=clamp(player.cat.food-5,0,100);const info=record(key,stars,20+s*3,s,false);
     resultScreen(game.result(s),stars,s>0?'Котёнок в восторге!':'Котёнку всё равно понравилось',()=>start(key),info,
       `<p class="tag">${Object.entries(C.eff).map(([k,v])=>`${STAT_NAME[k]} +${v}`).join(' · ')} · Энергия −10</p>`)}}
