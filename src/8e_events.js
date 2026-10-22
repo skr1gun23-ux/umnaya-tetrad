@@ -1,43 +1,43 @@
 /* ===== Ивенты: появляются по таймеру, в каждом участвует котёнок игрока ===== */
 const EV_EVERY=20*60e3;
 const EVENTS={
- meteor:{name:'Метеоритный дождь',icon:'☄️',type:'tap',desc:'С неба падают метеориты со звёздами внутри! Лови их пальцем, пока они не упали на землю.'},
- volcano:{name:'Извержение вулкана',icon:'🌋',type:'tap',desc:'Вулкан выбрасывает горячие камни. Нажимай на них, и они остынут и превратятся в кристаллы!'},
- bubbles:{name:'Подводный мир',icon:'🫧',type:'tap',desc:'Котёнок нырнул на дно! Лопай пузыри с жемчугом, но не трогай медуз — они жгутся.'},
- fireflies:{name:'Ночь светлячков',icon:'✨',type:'tap',desc:'В лесу зажглись светлячки. Лови их, и котёнок соберёт их в банку-фонарик.'},
- tornado:{name:'Торнадо',icon:'🌪️',type:'tap',desc:'Смерч уносит вещи котёнка! Хватай их, пока они кружатся в вихре.'},
- leaves:{name:'Золотая осень',icon:'🍂',type:'tap',desc:'Падают листья. Лови только золотые — они волшебные! Красные и зелёные не считаются.'},
- hole:{name:'Чёрная дыра',icon:'🕳️',type:'quiz',need:5,dur:30,q:'math',desc:'Рядом открылась чёрная дыра и затягивает котёнка! Реши 5 примеров, чтобы её закрыть. Ошибки помогают дыре расти.'},
- tsunami:{name:'Цунами',icon:'🌊',type:'quiz',need:5,dur:35,q:'math',desc:'На посёлок идёт огромная волна! Каждый правильный ответ — новый ряд кирпичей. Построй стену из 5 рядов, пока волна не дошла.'},
- blizzard:{name:'Снежная буря',icon:'❄️',type:'quiz',need:5,dur:35,q:'math',desc:'Котёнок замерзает в метель! Каждый правильный ответ подбрасывает полено в костёр. Разожги большой огонь, пока не стало слишком холодно.'},
- pirates:{name:'Клад пиратов',icon:'🏴‍☠️',type:'quiz',need:5,dur:0,q:'math',lives:3,desc:'Котёнок нашёл карту сокровищ! Каждый правильный ответ — шаг к кладу. Три ошибки — и пиратский корабль приплывёт первым.'},
- ufo:{name:'Пришельцы',icon:'🛸',type:'quiz',need:3,dur:0,q:'riddle',asked:true,desc:'Прилетели инопланетяне и хотят узнать, умные ли на Земле котята. Ответь на 3 хитрых вопроса!'},
- dragon:{name:'Добрый дракон',icon:'🐉',type:'quiz',need:4,dur:0,q:'riddle',asked:true,desc:'Дракон охраняет сокровищницу и любит загадки. Отгадай 4 загадки, и он поделится сокровищами.'},
- aurora:{name:'Северное сияние',icon:'🌌',type:'passive',desc:'В небе разлилось северное сияние! Следующие 3 игры дадут двойной опыт.'},
- rainbow:{name:'Радуга',icon:'🌈',type:'passive',desc:'После дождя вышла радуга, а под ней стоит подарочная коробка с котёнком!'},
- comet:{name:'Комета желаний',icon:'💫',type:'passive',desc:'Мимо пролетает комета! Котёнок загадал желание и получил 5 звёзд.'},
- fair:{name:'Ярмарка',icon:'🎪',type:'passive',desc:'В городе ярмарка! Торговцы угостили котёнка: 2 рыбки и креветки в запас.'},
- letter:{name:'Письмо от бабушки',icon:'📬',type:'passive',desc:'Почтальон принёс письмо от бабушки котёнка! Внутри открытка и 3 звезды.'},
- birthday:{name:'День рождения котёнка',icon:'🎂',type:'passive',desc:'Сегодня праздник! Котёнок задувает свечи: все шкалы +20 и 5 звёзд в подарок.'}};
+ meteor:{name:Lx("Метеоритный дождь","Meteor shower"),icon:'☄️',type:'tap',desc:Lx("С неба падают метеориты со звёздами внутри! Лови их пальцем, пока они не упали на землю.","Meteors with stars inside are falling from the sky! Catch them with your finger before they hit the ground.")},
+ volcano:{name:Lx("Извержение вулкана","Volcano eruption"),icon:'🌋',type:'tap',desc:Lx("Вулкан выбрасывает горячие камни. Нажимай на них, и они остынут и превратятся в кристаллы!","The volcano is throwing hot rocks. Tap them and they'll cool into crystals!")},
+ bubbles:{name:Lx("Подводный мир","Underwater world"),icon:'🫧',type:'tap',desc:Lx("Котёнок нырнул на дно! Лопай пузыри с жемчугом, но не трогай медуз — они жгутся.","Your kitten dove to the bottom of the sea! Pop the bubbles with pearls, but don't touch the jellyfish, they sting.")},
+ fireflies:{name:Lx("Ночь светлячков","Firefly night"),icon:'✨',type:'tap',desc:Lx("В лесу зажглись светлячки. Лови их, и котёнок соберёт их в банку-фонарик.","Fireflies lit up in the forest. Catch them, and your kitten will put them in a lantern jar.")},
+ tornado:{name:Lx("Торнадо","Tornado"),icon:'🌪️',type:'tap',desc:Lx("Смерч уносит вещи котёнка! Хватай их, пока они кружатся в вихре.","A tornado is carrying away your kitten's things! Grab them while they spin in the wind.")},
+ leaves:{name:Lx("Золотая осень","Golden autumn"),icon:'🍂',type:'tap',desc:Lx("Падают листья. Лови только золотые — они волшебные! Красные и зелёные не считаются.","Leaves are falling. Catch only the golden ones, they're magic! Red and green ones don't count.")},
+ hole:{name:Lx("Чёрная дыра","Black hole"),icon:'🕳️',type:'quiz',need:5,dur:30,q:'math',desc:Lx("Рядом открылась чёрная дыра и затягивает котёнка! Реши 5 примеров, чтобы её закрыть. Ошибки помогают дыре расти.","A black hole opened nearby and is pulling your kitten in! Solve 5 examples to close it. Mistakes make the hole grow.")},
+ tsunami:{name:Lx("Цунами","Tsunami"),icon:'🌊',type:'quiz',need:5,dur:35,q:'math',desc:Lx("На посёлок идёт огромная волна! Каждый правильный ответ — новый ряд кирпичей. Построй стену из 5 рядов, пока волна не дошла.","A huge wave is heading for the village! Each correct answer adds a row of bricks. Build a wall of 5 rows before the wave arrives.")},
+ blizzard:{name:Lx("Снежная буря","Snowstorm"),icon:'❄️',type:'quiz',need:5,dur:35,q:'math',desc:Lx("Котёнок замерзает в метель! Каждый правильный ответ подбрасывает полено в костёр. Разожги большой огонь, пока не стало слишком холодно.","Your kitten is freezing in a snowstorm! Each correct answer adds a log to the fire. Build a big fire before it gets too cold.")},
+ pirates:{name:Lx("Клад пиратов","Pirate treasure"),icon:'🏴‍☠️',type:'quiz',need:5,dur:0,q:'math',lives:3,desc:Lx("Котёнок нашёл карту сокровищ! Каждый правильный ответ — шаг к кладу. Три ошибки — и пиратский корабль приплывёт первым.","Your kitten found a treasure map! Each correct answer is a step toward the treasure. Three mistakes and the pirate ship gets there first.")},
+ ufo:{name:Lx("Пришельцы","Aliens"),icon:'🛸',type:'quiz',need:3,dur:0,q:'riddle',asked:true,desc:Lx("Прилетели инопланетяне и хотят узнать, умные ли на Земле котята. Ответь на 3 хитрых вопроса!","Aliens have landed and want to know if Earth kittens are smart. Answer 3 tricky questions!")},
+ dragon:{name:Lx("Добрый дракон","Kind dragon"),icon:'🐉',type:'quiz',need:4,dur:0,q:'riddle',asked:true,desc:Lx("Дракон охраняет сокровищницу и любит загадки. Отгадай 4 загадки, и он поделится сокровищами.","A dragon guards a treasure and loves riddles. Solve 4 riddles and it will share its treasure.")},
+ aurora:{name:Lx("Северное сияние","Northern lights"),icon:'🌌',type:'passive',desc:Lx("В небе разлилось северное сияние! Следующие 3 игры дадут двойной опыт.","The northern lights filled the sky! The next 3 games give double XP.")},
+ rainbow:{name:Lx("Радуга","Rainbow"),icon:'🌈',type:'passive',desc:Lx("После дождя вышла радуга, а под ней стоит подарочная коробка с котёнком!","A rainbow came out after the rain, and there's a gift kitten box under it!")},
+ comet:{name:Lx("Комета желаний","Wishing comet"),icon:'💫',type:'passive',desc:Lx("Мимо пролетает комета! Котёнок загадал желание и получил 5 звёзд.","A comet flies by! Your kitten made a wish and got 5 stars.")},
+ fair:{name:Lx("Ярмарка","Fair"),icon:'🎪',type:'passive',desc:Lx("В городе ярмарка! Торговцы угостили котёнка: 2 рыбки и креветки в запас.","There's a fair in town! The vendors treated your kitten: 2 fish and some shrimp for the stock.")},
+ letter:{name:Lx("Письмо от бабушки","Letter from Grandma"),icon:'📬',type:'passive',desc:Lx("Почтальон принёс письмо от бабушки котёнка! Внутри открытка и 3 звезды.","The mail carrier brought a letter from your kitten's grandma! Inside are a card and 3 stars.")},
+ birthday:{name:Lx("День рождения котёнка","Kitten's birthday"),icon:'🎂',type:'passive',desc:Lx("Сегодня праздник! Котёнок задувает свечи: все шкалы +20 и 5 звёзд в подарок.","It's a celebration! Your kitten blows out the candles: all bars +20 and 5 stars as a gift.")}};
 
-const evOverlay=html=>`<div class="overlay" role="dialog" aria-modal="true" aria-label="Событие"><div class="modal evm">${html}</div></div>`;
+const evOverlay=html=>`<div class="overlay" role="dialog" aria-modal="true" aria-label="${Lx("Событие","Event")}"><div class="modal evm">${html}</div></div>`;
 function startEvent(k){const E=EVENTS[k];player.nextEv=Date.now()+EV_EVERY;savePlayer(true);const m=$('#modal');
-  m.innerHTML=evOverlay(`<div class="evicon">${E.icon}</div><p class="rt r-legend" style="margin:0">Событие!</p><h3>${E.name}</h3><p>${E.desc}</p>
-  <div class="btns"><button class="btn" id="evGo">${E.type==='passive'?'Забрать':'Начать!'}</button>${E.type==='passive'?'':'<button class="btn alt" id="evSkip">Пропустить</button>'}</div>`);
+  m.innerHTML=evOverlay(`<div class="evicon">${E.icon}</div><p class="rt r-legend" style="margin:0">${Lx("Событие!","Event!")}</p><h3>${E.name}</h3><p>${E.desc}</p>
+  <div class="btns"><button class="btn" id="evGo">${E.type==='passive'?Lx("Забрать","Collect"):Lx("Начать!","Start!")}</button>${E.type==='passive'?'':'<button class="btn alt" id="evSkip">'+Lx("Пропустить","Skip")+'</button>'}</div>`);
   fanfare();$('#evGo').focus();const sk=$('#evSkip');if(sk)sk.onclick=closeEvent;
   $('#evGo').onclick=()=>{if(E.type==='tap')tapEvent(k);else if(E.type==='quiz')quizEvent(k);else passiveEvent(k)}}
 function closeEvent(){$('#modal').innerHTML='';renderMe();if(screen==='menu')menu();else if(screen==='cat')catScreen()}
 function evReward(title,text,stars,xp){if(stars>0)stars+=(hasTr('starry')?2:0)+Math.floor(cstat('luck')/4);const info=grant(stars,xp);savePlayer(true);renderMe();
-  $('#modal').innerHTML=evOverlay(`<div class="prize glow" style="width:130px;margin:0 auto">${catSVG(player.cat,'happy')}</div><h3>${title}</h3><p>${text}</p>${stars||xp?`<p class="result" style="padding:0"><span class="st" style="font-size:30px">${stars?'+'+stars+' ★':''}</span> ${xp?`<b style="color:var(--xp)">+${xp} опыта</b>`:''}</p>`:''}
-  ${info.up?`<p class="bubble">Новый уровень ${info.level}! Бонус +${info.bonus} ★</p>`:''}<div class="btns"><button class="btn" id="evOk">Отлично!</button></div>`);
+  $('#modal').innerHTML=evOverlay(`<div class="prize glow" style="width:130px;margin:0 auto">${catSVG(player.cat,'happy')}</div><h3>${title}</h3><p>${text}</p>${stars||xp?`<p class="result" style="padding:0"><span class="st" style="font-size:30px">${stars?'+'+stars+' ★':''}</span> ${xp?`<b style="color:var(--xp)">+${xp} ${Lx("опыта","XP")}</b>`:''}</p>`:''}
+  ${info.up?`<p class="bubble">${Lx("Новый уровень","New level")} ${info.level}${Lx("! Бонус +","! Bonus +")}${info.bonus} ★</p>`:''}<div class="btns"><button class="btn" id="evOk">${Lx("Отлично!","Great!")}</button></div>`);
   if(stars||info.up)fanfare();$('#evOk').onclick=closeEvent;$('#evOk').focus()}
 function passiveEvent(k){const c=player.cat;
-  if(k==='aurora'){player.buff={xp2:(player.buff.xp2||0)+3};evReward('Северное сияние','Следующие 3 игры дают двойной опыт!',0,0)}
-  else if(k==='rainbow'){player.gifts={...player.gifts,cats:true};evReward('Радуга','В сундуках тебя ждёт подарочная коробка с котёнком!',0,0)}
-  else if(k==='fair'){c.inv={...c.inv,fish:(c.inv.fish||0)+2,shrimp:(c.inv.shrimp||0)+1};evReward('Ярмарка','2 рыбки и креветки лежат в запасе еды.',0,20)}
-  else if(k==='letter'){c.joy=clamp(c.joy+20,0,100);evReward('Письмо от бабушки','«Дорогой котёнок, учись хорошо и слушайся хозяина!» Настроение +20.',3,20)}
-  else if(k==='birthday'){applyEffects({food:20,joy:20,fun:20,sport:20,energy:20});evReward('С днём рождения!','Все шкалы котёнка выросли на 20.',5,30)}
-  else evReward('Комета желаний','Желание исполнилось!',5,20)}
+  if(k==='aurora'){player.buff={xp2:(player.buff.xp2||0)+3};evReward(Lx("Северное сияние","Northern lights"),Lx("Следующие 3 игры дают двойной опыт!","The next 3 games give double XP!"),0,0)}
+  else if(k==='rainbow'){player.gifts={...player.gifts,cats:true};evReward(Lx("Радуга","Rainbow"),Lx("В сундуках тебя ждёт подарочная коробка с котёнком!","A gift kitten box is waiting in your chests!"),0,0)}
+  else if(k==='fair'){c.inv={...c.inv,fish:(c.inv.fish||0)+2,shrimp:(c.inv.shrimp||0)+1};evReward(Lx("Ярмарка","Fair"),Lx("2 рыбки и креветки лежат в запасе еды.","2 fish and some shrimp are in your food stock."),0,20)}
+  else if(k==='letter'){c.joy=clamp(c.joy+20,0,100);evReward(Lx("Письмо от бабушки","Letter from Grandma"),Lx("«Дорогой котёнок, учись хорошо и слушайся хозяина!» Настроение +20.","“Dear kitten, study hard and listen to your owner!” Mood +20."),3,20)}
+  else if(k==='birthday'){applyEffects({food:20,joy:20,fun:20,sport:20,energy:20});evReward(Lx("С днём рождения!","Happy birthday!"),Lx("Все шкалы котёнка выросли на 20.","All your kitten's bars went up by 20."),5,30)}
+  else evReward(Lx("Комета желаний","Wishing comet"),Lx("Желание исполнилось!","Your wish came true!"),5,20)}
 
 const evPoint=(cv,e,W,H)=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
 function drawCatImg(ctx,im,cx,bottom,w,rot=0,flip=false){if(!im)return;const h=w*248/200;ctx.save();ctx.translate(cx,bottom-h/2);ctx.rotate(rot);if(flip)ctx.scale(-1,1);ctx.drawImage(im,-w/2,-h/2,w,h);ctx.restore()}
@@ -46,7 +46,7 @@ function emo(ctx,e,x,y,s,rot=0){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ct
 
 /* --- Ивенты-ловилки --- */
 async function tapEvent(k){const E=EVENTS[k];const W=360,H=440,DUR=15000;
-  $('#modal').innerHTML=evOverlay(`<h3>${E.icon} ${E.name}</h3><canvas id="evc" width="${W}" height="${H}" aria-label="Игровое поле"></canvas><p class="count" id="evs">0 · 15 с</p>`);
+  $('#modal').innerHTML=evOverlay(`<h3>${E.icon} ${E.name}</h3><canvas id="evc" width="${W}" height="${H}" aria-label="${Lx("Игровое поле","Game field")}"></canvas><p class="count" id="evs">${Lx("0 · 15 с","0 · 15 s")}</p>`);
   const cat=await svgImage(catSVG(player.cat,'happy'));
   const cv=$('#evc');if(!cv)return;const ctx=cv.getContext('2d');let objs=[],parts=[],caught=0,missed=0,t0=performance.now(),last=t0,spawn=0,run=true;
   const sky=Array.from({length:50},()=>[Math.random()*W,Math.random()*300,Math.random()*1.6+.4]);
@@ -109,21 +109,21 @@ async function tapEvent(k){const E=EVENTS[k];const W=360,H=440,DUR=15000;
       if(k==='bubbles'?o.y<-30:o.y>ground-4){if(k==='meteor'||k==='volcano'){for(let i=0;i<6;i++)parts.push({x:o.x,y:ground,vx:(Math.random()-.5)*4,vy:-Math.random()*3,l:.8,c:'#8a8aa0'})}return false}return o.x>-50&&o.x<W+50});
     parts.forEach(p=>{p.x+=p.vx*dt/16;p.y+=p.vy*dt/16;p.l-=dt/650});parts=parts.filter(p=>p.l>0);
     bg(el);objs.forEach(o=>drawObj(o,el));parts.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,3.5,0,7);ctx.fill()});ctx.globalAlpha=1;
-    const s=$('#evs');if(s)s.textContent=`${caught} · ${Math.max(0,Math.ceil((DUR-el)/1000))} с`;
+    const s=$('#evs');if(s)s.textContent=`${caught} · ${Math.max(0,Math.ceil((DUR-el)/1000))} ${Lx("с","s")}`;
     if(el>=DUR&&(!objs.length||el>=DUR+2500)){run=false;const st=Math.min(caught,15);
-      const t={meteor:['Звёздный улов!','метеорит','метеорита','метеоритов'],volcano:['Кристаллы собраны!','камень','камня','камней'],bubbles:['Жемчужины!','жемчужину','жемчужины','жемчужин'],
-        fireflies:['Фонарик светится!','светлячка','светлячков','светлячков'],tornado:['Вещи спасены!','вещь','вещи','вещей'],leaves:['Волшебный гербарий!','лист','листа','листьев']}[k];
-      evReward(t[0],`Ты поймал ${caught} ${plural(caught,t.slice(1))}.`,st,caught*3);return}
+      const t={meteor:[Lx("Звёздный улов!","Star catch!"),Lx("метеорит","meteor"),Lx("метеорита","meteors"),Lx("метеоритов","meteors")],volcano:[Lx("Кристаллы собраны!","Crystals collected!"),Lx("камень","rock"),Lx("камня","rocks"),Lx("камней","rocks")],bubbles:[Lx("Жемчужины!","Pearls!"),Lx("жемчужину","pearl"),Lx("жемчужины","pearls"),Lx("жемчужин","pearls")],
+        fireflies:[Lx("Фонарик светится!","The lantern glows!"),Lx("светлячка","firefly"),Lx("светлячков","fireflies"),Lx("светлячков","fireflies")],tornado:[Lx("Вещи спасены!","Things saved!"),Lx("вещь","item"),Lx("вещи","things"),Lx("вещей","things")],leaves:[Lx("Волшебный гербарий!","Magic leaf collection!"),Lx("лист","leaf"),Lx("листа","leaves"),Lx("листьев","leaves")]}[k];
+      evReward(t[0],`${Lx("Ты поймал","You caught")} ${caught} ${plural(caught,t.slice(1))}.`,st,caught*3);return}
     requestAnimationFrame(frame)}
   requestAnimationFrame(frame)}
 
 /* --- Ивенты с вопросами --- */
 async function quizEvent(k){const E=EVENTS[k];const W=360,H=210;let prog=0,asked=0,wrong=0,danger=0,run=true,t0=performance.now(),last=t0,busy=false,flash=0;
-  $('#modal').innerHTML=evOverlay(`<h3>${E.icon} ${E.name}</h3><canvas id="evc" width="${W}" height="${H}" aria-label="Событие"></canvas><p class="count" id="evp"></p><div id="evq"></div>`);
+  $('#modal').innerHTML=evOverlay(`<h3>${E.icon} ${E.name}</h3><canvas id="evc" width="${W}" height="${H}" aria-label="${Lx("Событие","Event")}"></canvas><p class="count" id="evp"></p><div id="evq"></div>`);
   const cat=await svgImage(catSVG(player.cat,'happy')),catSad=await svgImage(catSVG(player.cat,'sad'));
   const cv=$('#evc');if(!cv)return;const ctx=cv.getContext('2d');const sky=Array.from({length:40},()=>[Math.random()*W,Math.random()*H,Math.random()*1.5+.4]);
   const snow=Array.from({length:60},()=>[Math.random()*W,Math.random()*H,Math.random()*2+1]);
-  const status=()=>{const p=$('#evp');if(!p)return;p.textContent=E.asked?`Вопрос ${Math.min(asked+1,E.need)} из ${E.need} · верно ${prog}`:E.lives?`${prog} из ${E.need} · ошибок ${wrong} из ${E.lives}`:`${prog} из ${E.need}`};
+  const status=()=>{const p=$('#evp');if(!p)return;p.textContent=E.asked?`${Lx("Вопрос","Question")} ${Math.min(asked+1,E.need)} ${Lx("из","of")} ${E.need} ${Lx("· верно","· correct")} ${prog}`:E.lives?`${prog} ${Lx("из","of")} ${E.need} ${Lx("· ошибок","· mistakes")} ${wrong} ${Lx("из","of")} ${E.lives}`:`${prog} ${Lx("из","of")} ${E.need}`};
   function nextQ(){busy=false;const t=E.q==='riddle'?(Math.random()<.5?bankTask(trNext(),''):oddTask()):mathTask();status();
     const long=t.opts.some(o=>String(o).length>5);
     $('#evq').innerHTML=`<p class="prompt" style="font-size:${E.q==='riddle'?19:30}px;margin:6px 0 10px">${t.raw?t.q:esc(t.q)}</p>
@@ -176,11 +176,11 @@ async function quizEvent(k){const E=EVENTS[k];const W=360,H=210;let prog=0,asked
     if(E.dur){danger=Math.min(1,danger+dt/(E.dur*1000));if(danger>=1){draw(now-t0);end(false);return}}
     draw(now-t0);requestAnimationFrame(frame)}
   function end(win){run=false;const c=player.cat;
-    if(k==='hole')win?evReward('Чёрная дыра закрыта!','Котёнок спасён и очень гордится тобой.',8,60):evReward('Ой, затянуло!','Чёрная дыра покатала котёнка по космосу и выплюнула обратно. Он вернулся с сувениром.',2,15);
-    else if(k==='tsunami'){if(win){player.gifts={...player.gifts,clothes:true};evReward('Стена выдержала!','Волна разбилась о стену. В награду в сундуках ждёт подарок с одеждой.',5,50)}else evReward('Брызги!','Волна намочила котёнка, но он высох на солнышке.',2,15)}
-    else if(k==='blizzard'){if(win){c.inv={...c.inv,fish:(c.inv.fish||0)+2};evReward('Тепло и уютно!','Костёр горит, котёнок согрелся. Соседи принесли 2 рыбки в запас.',4,50)}else evReward('Бррр!','Котёнок замёрз, но добежал домой и укутался в плед.',2,15)}
-    else if(k==='pirates'){if(win){player.gifts={...player.gifts,room:true};evReward('Клад найден!','В сундуке пиратов — подарок с мебелью для комнаты и золотые монеты!',6,60)}else evReward('Пираты успели первыми','Но они оставили котёнку пару монет за смелость.',2,15)}
-    else if(k==='dragon'){const all=prog===E.need;if(all)player.gifts={...player.gifts,cats:true};evReward(all?'Дракон в восторге!':'Дракон улетел',all?'Он подарил коробку с котёнком из своей сокровищницы!':`Отгадано ${prog} из ${E.need}. Дракон оставил немного золота.`,prog*2,prog*15)}
+    if(k==='hole')win?evReward(Lx("Чёрная дыра закрыта!","The black hole is closed!"),Lx("Котёнок спасён и очень гордится тобой.","Your kitten is saved and very proud of you."),8,60):evReward(Lx("Ой, затянуло!","Oops, pulled in!"),Lx("Чёрная дыра покатала котёнка по космосу и выплюнула обратно. Он вернулся с сувениром.","The black hole took your kitten on a space ride and spat it back out. It came back with a souvenir."),2,15);
+    else if(k==='tsunami'){if(win){player.gifts={...player.gifts,clothes:true};evReward(Lx("Стена выдержала!","The wall held!"),Lx("Волна разбилась о стену. В награду в сундуках ждёт подарок с одеждой.","The wave crashed against the wall. A clothes gift is waiting in your chests as a reward."),5,50)}else evReward(Lx("Брызги!","Splash!"),Lx("Волна намочила котёнка, но он высох на солнышке.","The wave soaked your kitten, but it dried off in the sun."),2,15)}
+    else if(k==='blizzard'){if(win){c.inv={...c.inv,fish:(c.inv.fish||0)+2};evReward(Lx("Тепло и уютно!","Warm and cozy!"),Lx("Костёр горит, котёнок согрелся. Соседи принесли 2 рыбки в запас.","The fire is burning and your kitten warmed up. The neighbors brought 2 fish for the stock."),4,50)}else evReward(Lx("Бррр!","Brrr!"),Lx("Котёнок замёрз, но добежал домой и укутался в плед.","Your kitten got cold, but ran home and wrapped up in a blanket."),2,15)}
+    else if(k==='pirates'){if(win){player.gifts={...player.gifts,room:true};evReward(Lx("Клад найден!","Treasure found!"),Lx("В сундуке пиратов — подарок с мебелью для комнаты и золотые монеты!","The pirates' chest holds a furniture gift for the room and gold coins!"),6,60)}else evReward(Lx("Пираты успели первыми","The pirates got there first"),Lx("Но они оставили котёнку пару монет за смелость.","But they left your kitten a couple of coins for being brave."),2,15)}
+    else if(k==='dragon'){const all=prog===E.need;if(all)player.gifts={...player.gifts,cats:true};evReward(all?Lx("Дракон в восторге!","The dragon is delighted!"):Lx("Дракон улетел","The dragon flew away"),all?Lx("Он подарил коробку с котёнком из своей сокровищницы!","It gave you a kitten box from its treasure!"):`${Lx("Отгадано","Solved")} ${prog} ${Lx("из","of")} ${E.need}${Lx(". Дракон оставил немного золота.",". The dragon left a little gold.")}`,prog*2,prog*15)}
     else{const all=prog===E.need;if(all)player.gifts={...player.gifts,room:true};
-      evReward(all?'Пришельцы в восторге!':'Пришельцы улетели',all?'Они оставили подарочный сундук с мебелью для комнаты!':`Ты ответил верно на ${prog} из ${E.need}. Пришельцы оставили звёзды.`,prog*3,prog*15)}}
+      evReward(all?Lx("Пришельцы в восторге!","The aliens are delighted!"):Lx("Пришельцы улетели","The aliens flew away"),all?Lx("Они оставили подарочный сундук с мебелью для комнаты!","They left a gift furniture chest for the room!"):`${Lx("Ты ответил верно на","You got right")} ${prog} ${Lx("из","of")} ${E.need}${Lx(". Пришельцы оставили звёзды.",". The aliens left some stars.")}`,prog*3,prog*15)}}
   nextQ();requestAnimationFrame(frame)}

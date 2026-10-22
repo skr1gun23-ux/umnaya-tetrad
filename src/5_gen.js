@@ -13,14 +13,14 @@ function mathTask(){
   else if(op==='−'){a=rnd(2,max);b=rnd(1,a-1);ans=a-b}
   else if(op==='×'){a=rnd(2,level===3?9:12);b=rnd(2,9);ans=a*b}
   else{b=rnd(2,9);ans=rnd(2,level===3?9:12);a=b*ans}
-  return {q:`${a} ${op} ${b} = ?`,hint:'Посчитай в уме',ans:String(ans),opts:numOpts(ans)}}
-function blitzTask(){const t=mathTask();t.hint='Быстрее!';return t}
+  return {q:`${a} ${op} ${b} = ?`,hint:Lx("Посчитай в уме","Work it out in your head"),ans:String(ans),opts:numOpts(ans)}}
+function blitzTask(){const t=mathTask();t.hint=Lx("Быстрее!","Faster!");return t}
 function boxTask(){const max=MAX();const kind=level>=3?rnd(0,3):rnd(0,1);let q,ans;
   if(kind===0){const a=rnd(1,max-1),b=rnd(1,max-a);ans=b;q=`${a} + ☐ = ${a+b}`}
   else if(kind===1){const a=rnd(2,max),b=rnd(1,a-1);ans=b;q=`${a} − ☐ = ${a-b}`}
   else if(kind===2){const a=rnd(2,9),b=rnd(2,9);ans=b;q=`${a} × ☐ = ${a*b}`}
   else{const b=rnd(2,9),c=rnd(2,9);ans=b*c;q=`☐ ÷ ${b} = ${c}`}
-  return {q,hint:'Какое число спряталось в окошке?',ans:String(ans),opts:numOpts(ans)}}
+  return {q,hint:Lx("Какое число спряталось в окошке?","Which number is hiding in the box?"),ans:String(ans),opts:numOpts(ans)}}
 function cmpTask(){const max=MAX();let L,R,lv,rv;
   const expr=()=>{if(level>=3&&Math.random()<.4){const a=rnd(2,9),b=rnd(2,9);return [`${a} × ${b}`,a*b]}
     if(Math.random()<.5){const a=rnd(1,Math.floor(max/2)),b=rnd(1,Math.floor(max/2));return [`${a} + ${b}`,a+b]}
@@ -29,13 +29,14 @@ function cmpTask(){const max=MAX();let L,R,lv,rv;
   else{[L,lv]=expr();
     if(level===2){rv=Math.random()<.3?lv:Math.max(0,lv+rnd(-3,3));R=rv}
     else{[R,rv]=expr();if(Math.random()<.3){const a=rnd(2,9);if(lv%a===0&&lv/a>1){R=`${a} × ${lv/a}`;rv=lv}else{R=lv;rv=lv}}}}
-  return {q:`${L} ☐ ${R}`,cls:'multi',hint:'Поставь знак: больше, меньше или равно',ans:lv>rv?'>':lv<rv?'<':'=',opts:['>','<','=']}}
+  return {q:`${L} ☐ ${R}`,cls:'multi',hint:Lx("Поставь знак: больше, меньше или равно","Choose the sign: greater, less or equal"),ans:lv>rv?'>':lv<rv?'<':'=',opts:['>','<','=']}}
 
+/*i18n-skip-start*/
 const NAMES=[['Маша','f'],['Петя','m'],['Аня','f'],['Миша','m'],['Оля','f'],['Ваня','m'],['Катя','f'],['Дима','m'],['Лиза','f'],['Саша','m']];
 const GEN={'Маша':'Маши','Петя':'Пети','Аня':'Ани','Миша':'Миши','Оля':'Оли','Ваня':'Вани','Катя':'Кати','Дима':'Димы','Лиза':'Лизы','Саша':'Саши'};
 const STUFF=[['яблоко','яблока','яблок'],['конфету','конфеты','конфет'],['машинку','машинки','машинок'],['марку','марки','марок'],
   ['карандаш','карандаша','карандашей'],['наклейку','наклейки','наклеек'],['шишку','шишки','шишек'],['ракушку','ракушки','ракушек']];
-function storyTask(){const [N,g]=pick(NAMES);const it=pick(STUFF);const v=(m,f)=>g==='m'?m:f;const max=MAX();
+function storyTask(){if(lang==='en')return storyTaskEn();const [N,g]=pick(NAMES);const it=pick(STUFF);const v=(m,f)=>g==='m'?m:f;const max=MAX();
   const nom=[it[0].replace(/у$/,'а'),it[1],it[2]];const P=n=>`${n} ${plural(n,it)}`;let q,ans;
   const k=pick(level===1?[0,1]:level===2?[0,1,2,3,6]:[0,1,2,3,4,5,6]);
   if(k===0){const a=rnd(1,max-1),b=rnd(1,Math.max(1,max-a));ans=a+b;q=`${N} ${v('нашёл','нашла')} ${P(a)}, а потом ещё ${b}. Сколько всего ${it[2]} у ${v('него','неё')}?`}
@@ -47,15 +48,28 @@ function storyTask(){const [N,g]=pick(NAMES);const it=pick(STUFF);const v=(m,f)=
   else{const a=rnd(2,Math.floor(max/2)),b=rnd(2,Math.floor(max/2));ans=a+b;q=`Тетрадь стоит ${a} ${plural(a,['рубль','рубля','рублей'])}, а ручка — ${b} ${plural(b,['рубль','рубля','рублей'])}. Сколько стоят тетрадь и ручка вместе?`}
   return {q,cls:'text',hint:'Прочитай задачу внимательно',ans:String(ans),opts:numOpts(ans)}}
 
+const NAMES_EN=[['Masha','f'],['Peter','m'],['Anna','f'],['Mike','m'],['Olivia','f'],['John','m'],['Kate','f'],['Dan','m'],['Lisa','f'],['Sam','m']];
+const STUFF_EN=[['apple','apples'],['candy','candies'],['toy car','toy cars'],['stamp','stamps'],['pencil','pencils'],['sticker','stickers'],['pine cone','pine cones'],['seashell','seashells']];
+function storyTaskEn(){const [N,g]=pick(NAMES_EN),it=pick(STUFF_EN),he=g==='m'?'he':'she',He=g==='m'?'He':'She',max=MAX();const P=n=>`${n} ${n===1?it[0]:it[1]}`;let q,ans;
+  const k=pick(level===1?[0,1]:level===2?[0,1,2,3,6]:[0,1,2,3,4,5,6]);
+  if(k===0){const a=rnd(1,max-1),b=rnd(1,Math.max(1,max-a));ans=a+b;q=`${N} found ${P(a)}, and then ${b} more. How many ${it[1]} does ${he} have in all?`}
+  else if(k===1){const a=rnd(2,max),b=rnd(1,a-1);ans=a-b;q=`${N} had ${P(a)}. ${He} gave ${b} to a friend. How many are left?`}
+  else if(k===2){const a=rnd(2,max-5),b=rnd(1,Math.min(9,max-a));ans=a+b;q=`The first box has ${P(a)}, and the second box has ${b} more. How many ${it[1]} are in the second box?`}
+  else if(k===3){const a=rnd(5,max),b=rnd(1,Math.min(9,a-1));ans=a-b;q=`The first box has ${P(a)}, and the second box has ${b} fewer. How many ${it[1]} are in the second box?`}
+  else if(k===4){const a=rnd(2,level===3?6:9),b=rnd(2,9);ans=a*b;q=`There are ${a} bags with ${P(b)} in each. How many ${it[1]} are there in all?`}
+  else if(k===5){const b=rnd(2,6),c=rnd(2,9);ans=c;q=`${N} shared ${P(b*c)} equally between ${b} boxes. How many ${it[1]} are in each box?`}
+  else{const a=rnd(2,Math.floor(max/2)),b=rnd(2,Math.floor(max/2));ans=a+b;q=`A notebook costs ${a} ${a===1?'ruble':'rubles'} and a pen costs ${b} ${b===1?'ruble':'rubles'}. How much do they cost together?`}
+  return {q,cls:'text',hint:'Read the problem carefully',ans:String(ans),opts:numOpts(ans)}}
+/*i18n-skip-end*/
 function seqTask(){const type=rnd(0,level>2?3:1);let arr;
   if(type===0){const s=rnd(1,20),d=rnd(2,level+3);arr=[0,1,2,3,4].map(i=>s+i*d)}
   else if(type===1){const d=rnd(2,6),s=rnd(4*d+1,60);arr=[0,1,2,3,4].map(i=>s-i*d)}
   else if(type===2){const s=rnd(1,3);arr=[0,1,2,3,4].map(i=>s*2**i)}
   else{const a=rnd(1,5),b=rnd(1,5);arr=[a,b];for(let i=2;i<5;i++)arr.push(arr[i-1]+arr[i-2])}
   const hide=rnd(2,4),ans=arr[hide];
-  return {q:arr.map((x,i)=>i===hide?'?':x).join(', '),cls:'multi',hint:'Какое число пропущено?',ans:String(ans),opts:numOpts(ans)}}
+  return {q:arr.map((x,i)=>i===hide?'?':x).join(', '),cls:'multi',hint:Lx("Какое число пропущено?","Which number is missing?"),ans:String(ans),opts:numOpts(ans)}}
 const oddNext=pooled('odd',()=>ODD);
-function oddTask(){const [items,ans,why]=oddNext();return {q:'Что лишнее?',cls:'multi',hint:'Найди то, что не подходит к остальным',ans,opts:shuffle(items),why}}
+function oddTask(){const [items,ans,why]=oddNext();return {q:Lx("Что лишнее?","Which is the odd one out?"),cls:'multi',hint:Lx("Найди то, что не подходит к остальным","Find the one that doesn't fit with the rest"),ans,opts:shuffle(items),why}}
 const FRUITS=['🍎','🍐','🍌','🍓','🍇','🍊','🍒','🥝','🍉','🍋','🍑','🍍','🥥','🫐','🍈','🥭'];
 function scaleTask(){const F=shuffle(FRUITS);const n=level===1?rnd(1,2):level===2?2:level===3?3:rnd(3,4);
   const ops=[['+'],['+','−'],['+','−','×'],['+','−','×','÷']][level-1],maxV=[5,9,10,12][level-1];const v=[];let lines=[];
@@ -68,49 +82,59 @@ function scaleTask(){const F=shuffle(FRUITS);const n=level===1?rnd(1,2):level===
     if(op==='+')lines.push(`${F[a]} + ${F[b]} = ${v[a]+v[b]}`);
     else if(op==='−'){const [x,y]=v[j]>v[i]?[j,i]:[i,j];lines.push(`${F[x]} − ${F[y]} = ${v[x]-v[y]}`)}
     else lines.push(`${F[a]} × ${F[b]} = ${v[a]*v[b]}`)}
-  let q,ans,hint='Каждый фрукт — это число. Найди его';const last=n-1;
+  let q,ans,hint=Lx("Каждый фрукт — это число. Найди его","Each fruit is a number. Find it");const last=n-1;
   if(level===1||n===1||Math.random()<.3){q=`${F[last]} = ?`;ans=v[last]}
   else{const a=rnd(0,n-1);let b=rnd(0,n-1);while(b===a)b=rnd(0,n-1);const third=[0,1,2,3].slice(0,n).find(x=>x!==a&&x!==b);const c2=third==null?a:third;
     const form=pick(level===2?['+','−']:level===3?['+','×','+×','−']:['×−','()×','+×','×']);
     if(form==='+'){q=`${F[a]} + ${F[b]} = ?`;ans=v[a]+v[b]}
     else if(form==='−'){const [x,y]=v[a]>=v[b]?[a,b]:[b,a];q=`${F[x]} − ${F[y]} = ?`;ans=v[x]-v[y]}
     else if(form==='×'){q=`${F[a]} × ${F[b]} = ?`;ans=v[a]*v[b]}
-    else if(form==='+×'){q=`${F[a]} + ${F[b]} × ${F[c2]} = ?`;ans=v[a]+v[b]*v[c2];hint='Сначала умножение, потом сложение'}
-    else if(form==='×−'){const p=v[a]*v[b];if(p>=v[c2]){q=`${F[a]} × ${F[b]} − ${F[c2]} = ?`;ans=p-v[c2]}else{q=`${F[a]} × ${F[b]} + ${F[c2]} = ?`;ans=p+v[c2]}hint='Сначала умножение'}
-    else{q=`(${F[a]} + ${F[b]}) × ${F[c2]} = ?`;ans=(v[a]+v[b])*v[c2];hint='Сначала то, что в скобках'}}
+    else if(form==='+×'){q=`${F[a]} + ${F[b]} × ${F[c2]} = ?`;ans=v[a]+v[b]*v[c2];hint=Lx("Сначала умножение, потом сложение","Multiplication first, then addition")}
+    else if(form==='×−'){const p=v[a]*v[b];if(p>=v[c2]){q=`${F[a]} × ${F[b]} − ${F[c2]} = ?`;ans=p-v[c2]}else{q=`${F[a]} × ${F[b]} + ${F[c2]} = ?`;ans=p+v[c2]}hint=Lx("Сначала умножение","Multiplication first")}
+    else{q=`(${F[a]} + ${F[b]}) × ${F[c2]} = ?`;ans=(v[a]+v[b])*v[c2];hint=Lx("Сначала то, что в скобках","Brackets first")}}
   if(level===4)lines=shuffle(lines);
   return {q:lines.join('<br>')+`<br><b>${q}</b>`,cls:'multi',raw:true,hint,ans:String(ans),opts:numOpts(ans)}}
+/*i18n-skip-start*/
 const KIDS=['Маша','Петя','Аня','Миша','Оля','Ваня','Катя','Дима'];
 const TRAITS=[
   {more:'выше',less:'ниже',top:'Кто самый высокий?',bottom:'Кто самый низкий?',second:'Кто второй по росту?'},
   {more:'старше',less:'младше',top:'Кто самый старший?',bottom:'Кто самый младший?',second:'Кто второй по возрасту?'},
   {more:'бегает быстрее, чем',less:'бегает медленнее, чем',top:'Кто бегает быстрее всех?',bottom:'Кто бегает медленнее всех?',second:'Кто прибежит вторым?'}];
-function whoTask(){const n=level<=2?3:4;const order=shuffle(KIDS).slice(0,n);const tr=pick(TRAITS);const facts=[];
+function whoTask(){if(lang==='en')return whoTaskEn();const n=level<=2?3:4;const order=shuffle(KIDS).slice(0,n);const tr=pick(TRAITS);const facts=[];
   for(let i=0;i<n-1;i++){const a=order[i],b=order[i+1];
     facts.push(tr.more.includes('чем')?(Math.random()<.5?`${a} ${tr.more} ${b}.`:`${b} ${tr.less} ${a}.`):(Math.random()<.5?`${a} ${tr.more} ${GEN[b]}.`:`${b} ${tr.less} ${GEN[a]}.`))}
   const qk=level>=3?pick(['top','bottom','second']):pick(['top','bottom']);const ans=qk==='top'?order[0]:qk==='bottom'?order[n-1]:order[1];
   return {q:shuffle(facts).join(' ')+'<br><b>'+tr[qk]+'</b>',cls:'text',raw:true,hint:'Расставь ребят по порядку в уме',ans,opts:shuffle(order)}}
+const KIDS_EN=['Masha','Peter','Anna','Mike','Olivia','John','Kate','Dan'];
+const TRAITS_EN=[{more:'is taller than',less:'is shorter than',top:'Who is the tallest?',bottom:'Who is the shortest?',second:'Who is the second tallest?'},
+  {more:'is older than',less:'is younger than',top:'Who is the oldest?',bottom:'Who is the youngest?',second:'Who is the second oldest?'},
+  {more:'runs faster than',less:'runs slower than',top:'Who runs the fastest?',bottom:'Who runs the slowest?',second:'Who will finish second?'}];
+function whoTaskEn(){const n=level<=2?3:4;const order=shuffle(KIDS_EN).slice(0,n);const tr=pick(TRAITS_EN);const facts=[];
+  for(let i=0;i<n-1;i++){const a=order[i],b=order[i+1];facts.push(Math.random()<.5?`${a} ${tr.more} ${b}.`:`${b} ${tr.less} ${a}.`)}
+  const qk=level>=3?pick(['top','bottom','second']):pick(['top','bottom']);const ans=qk==='top'?order[0]:qk==='bottom'?order[n-1]:order[1];
+  return {q:shuffle(facts).join(' ')+'<br><b>'+tr[qk]+'</b>',cls:'text',raw:true,hint:'Put the kids in order in your head',ans,opts:shuffle(order)}}
+/*i18n-skip-end*/
 const SHAPES=['▲','●','■','◆','★','♥'];
 function patternTask(){const len=level===1?2:level===2?rnd(2,3):level===3?3:rnd(3,4);
   const unit=shuffle(SHAPES).slice(0,len);if(level>=3&&Math.random()<.4)unit.splice(rnd(0,len-1),0,unit[0]);
   const shown=level<=2?7:8;const seq=Array.from({length:shown+1},(_,i)=>unit[i%unit.length]);
   const ans=seq[shown];const opts=new Set([ans,...unit]);for(const s of shuffle(SHAPES)){if(opts.size>=4)break;opts.add(s)}
-  return {q:seq.slice(0,shown).join(' ')+' ?',cls:'shapes',hint:'Что будет дальше?',ans,opts:shuffle([...opts].slice(0,4))}}
+  return {q:seq.slice(0,shown).join(' ')+' ?',cls:'shapes',hint:Lx("Что будет дальше?","What comes next?"),ans,opts:shuffle([...opts].slice(0,4))}}
 
-function dayPart(h){return h>=5&&h<=11?'🌅 Утро':h>=12&&h<=16?'☀️ День':h>=17&&h<=22?'🌇 Вечер':'🌙 Ночь'}
+function dayPart(h){return h>=5&&h<=11?Lx("🌅 Утро","🌅 Morning"):h>=12&&h<=16?Lx("☀️ День","☀️ Afternoon"):h>=17&&h<=22?Lx("🌇 Вечер","🌇 Evening"):Lx("🌙 Ночь","🌙 Night")}
 function clockTask(){const h=rnd(0,23);const mins=level===1?[0,30]:level===2?[0,15,30,45]:[0,5,10,15,20,25,30,35,40,45,50,55];
   const m=pick(mins);const fmt=(h,m)=>`${h}:${String(m).padStart(2,'0')}`;const s=new Set([fmt(h,m)]);
   s.add(fmt((h+12)%24,m));let sh=m/5||12;if(h>=12)sh=sh===12?12:sh+12;else if(sh===12)sh=0;s.add(fmt(sh,(h%12)*5));
   while(s.size<4)s.add(fmt(rnd(0,23),pick(mins)));
-  return {q:'',svg:clockSVG(h,m),label:dayPart(h),hint:'Сколько времени показывают часы?',ans:fmt(h,m),opts:shuffle([...s].slice(0,4)),
-    why:h===12?'12 часов дня — это полдень':h>12?`Днём и вечером к часам прибавляем 12: ${h-12} + 12 = ${h}`:null}}
+  return {q:'',svg:clockSVG(h,m),label:dayPart(h),hint:Lx("Сколько времени показывают часы?","What time does the clock show?"),ans:fmt(h,m),opts:shuffle([...s].slice(0,4)),
+    why:h===12?Lx("12 часов дня — это полдень","12 o'clock in the day is noon"):h>12?`${Lx("Днём и вечером к часам прибавляем 12:","In the afternoon and evening we add 12 to the hours:")} ${h-12} + 12 = ${h}`:null}}
 function clockSVG(h,m){let t='';for(let i=1;i<=12;i++){const a=i*Math.PI/6;
     t+=`<text x="${(100+70*Math.sin(a)).toFixed(1)}" y="${(100-70*Math.cos(a)+8).toFixed(1)}" text-anchor="middle" font-size="22" font-family="Neucha,cursive" fill="var(--text)">${i}</text>`;
     t+=`<text x="${(100+50*Math.sin(a)).toFixed(1)}" y="${(100-50*Math.cos(a)+4).toFixed(1)}" text-anchor="middle" font-size="11" font-family="Nunito,sans-serif" fill="var(--muted)">${(i+12)%24}</text>`}
   for(let i=0;i<60;i++){const a=i*Math.PI/30,r1=i%5?88:84;
     t+=`<line x1="${(100+r1*Math.sin(a)).toFixed(1)}" y1="${(100-r1*Math.cos(a)).toFixed(1)}" x2="${(100+92*Math.sin(a)).toFixed(1)}" y2="${(100-92*Math.cos(a)).toFixed(1)}" stroke="var(--muted)" stroke-width="${i%5?1:3}"/>`}
   const ha=((h%12)+m/60)*30*Math.PI/180,ma=m*6*Math.PI/180;
-  return `<svg class="clock" viewBox="0 0 200 200" role="img" aria-label="Часы"><circle cx="100" cy="100" r="96" fill="var(--paper)" stroke="var(--ink)" stroke-width="5"/>${t}
+  return `<svg class="clock" viewBox="0 0 200 200" role="img" aria-label="${Lx("Часы","Clock")}"><circle cx="100" cy="100" r="96" fill="var(--paper)" stroke="var(--ink)" stroke-width="5"/>${t}
   <line x1="100" y1="100" x2="${100+40*Math.sin(ha)}" y2="${100-40*Math.cos(ha)}" stroke="var(--ink)" stroke-width="7" stroke-linecap="round"/>
   <line x1="100" y1="100" x2="${100+72*Math.sin(ma)}" y2="${100-72*Math.cos(ma)}" stroke="var(--margin)" stroke-width="4" stroke-linecap="round"/>
   <circle cx="100" cy="100" r="6" fill="var(--ink)"/></svg>`}
@@ -126,22 +150,22 @@ function spotTask(){const n=[4,5,6,7][level-1],k=rnd(0,n*n-1),L=level-1;
   else if(mode==='hue')st=`filter:hue-rotate(${[90,70,55,40][L]}deg) saturate(1.3)`;
   else st=`opacity:${[.4,.55,.68,.76][L]}`;
   const opts=Array.from({length:n*n},(_,i)=>i===k?diff:e),optStyle=opts.map((_,i)=>i===k?st:'');
-  return {q:'',hint:'Найди одну картинку, которая отличается от всех',ans:diff,ansIdx:k,ansLabel:'Отличалась картинка, подсвеченная зелёным',opts,optStyle,tap:n}}
+  return {q:'',hint:Lx("Найди одну картинку, которая отличается от всех","Find the one picture that is different from all the others"),ans:diff,ansIdx:k,ansLabel:Lx("Отличалась картинка, подсвеченная зелёным","The different picture is highlighted in green"),opts,optStyle,tap:n}}
 function stroopTask(){const [w]=pick(STROOP);let c;do{c=pick(STROOP)}while(c[0]===w&&Math.random()<.85);
   const askWord=level>=3&&Math.random()<.3;const ans=askWord?w:c[0];
   const opts=new Set([ans,askWord?c[0]:w]);while(opts.size<4)opts.add(pick(STROOP)[0]);
-  return {q:`<span style="color:${c[1]}">${w}</span>`,cls:'stroop',raw:true,hint:askWord?'Какое слово написано? (Не смотри на цвет!)':'Какого ЦВЕТА буквы? (Не читай слово!)',ans,opts:shuffle([...opts])}}
+  return {q:`<span style="color:${c[1]}">${w}</span>`,cls:'stroop',raw:true,hint:askWord?Lx("Какое слово написано? (Не смотри на цвет!)","What word is written? (Ignore the color!)"):Lx("Какого ЦВЕТА буквы? (Не читай слово!)","What COLOR are the letters? (Don't read the word!)"),ans,opts:shuffle([...opts])}}
 function recallTask(){const n=level+2;const seq=shuffle(RECALL).slice(0,n);const showMs=1200+n*700;
   const pre=`<div class="seqshow">${seq.map(e=>`<span>${e}</span>`).join('')}</div>`;
   if(level>=2&&Math.random()<.5){const pos=rnd(0,n-1);const opts=new Set([seq[pos]]);while(opts.size<4)opts.add(pick(seq.length>3?seq:RECALL));
-    return {pre,preMs:showMs,q:`Что было на ${pos+1}-м месте?`,cls:'text center',hint:'Вспомни ряд по порядку',ans:seq[pos],opts:shuffle([...opts])}}
+    return {pre,preMs:showMs,q:`${Lx("Что было на","What was in place")} ${pos+1}${Lx("-м месте?","?")}`,cls:'text center',hint:Lx("Вспомни ряд по порядку","Remember the row in order"),ans:seq[pos],opts:shuffle([...opts])}}
   const variants=new Set([seq.join(' ')]);let t=0;
   while(variants.size<4&&t++<40){const v=[...seq];const i=rnd(0,n-1);let j=rnd(0,n-1);if(i===j)j=(i+1)%n;
     if(Math.random()<.5){[v[i],v[j]]=[v[j],v[i]]}else{v[i]=pick(RECALL.filter(e=>!seq.includes(e)))}variants.add(v.join(' '))}
-  return {pre,preMs:showMs,q:'Какой ряд ты видел?',cls:'text center',hint:'Выбери точно такой же ряд',ans:seq.join(' '),opts:shuffle([...variants])}}
+  return {pre,preMs:showMs,q:Lx("Какой ряд ты видел?","Which row did you see?"),cls:'text center',hint:Lx("Выбери точно такой же ряд","Pick exactly the same row"),ans:seq.join(' '),opts:shuffle([...variants])}}
 
 const trNext=pooled('tricky',()=>TRICKY);
-const trickyTask=()=>bankTask(trNext(),'Подумай хорошенько, тут есть подвох');
+const trickyTask=()=>bankTask(trNext(),Lx("Подумай хорошенько, тут есть подвох","Think carefully, there's a trick here"));
 
 /* Сложные */
 function chainTask(){let q,ans;
@@ -154,26 +178,26 @@ function chainTask(){let q,ans;
     if(k===0){q=`${a} × ${b} + ${c} × ${d}`;ans=a*b+c*d}else if(k===1){const dd=rnd(1,(a+b)*c);q=`(${a} + ${b}) × ${c} − ${dd}`;ans=(a+b)*c-dd}
     else if(k===2){const [p,r]=a*b>=c*d?[[a,b],[c,d]]:[[c,d],[a,b]];q=`${p[0]} × ${p[1]} − ${r[0]} × ${r[1]}`;ans=p[0]*p[1]-r[0]*r[1]}
     else{const m=rnd(2,9);q=`${a*m} ÷ ${a} + ${b} × ${c}`;ans=m+b*c}}
-  return {q:q+' = ?',cls:'multi',hint:level>=3?'Сначала скобки, потом × и ÷, потом + и −':'Считай по порядку слева направо',ans:String(ans),opts:numOpts(ans)}}
+  return {q:q+' = ?',cls:'multi',hint:level>=3?Lx("Сначала скобки, потом × и ÷, потом + и −","Brackets first, then × and ÷, then + and −"):Lx("Считай по порядку слева направо","Work from left to right"),ans:String(ans),opts:numOpts(ans)}}
 function magicTask(){let M=[[2,7,6],[9,5,1],[4,3,8]];
   for(let r=rnd(0,3);r>0;r--)M=M[0].map((_,i)=>M.map(row=>row[i]).reverse());if(Math.random()<.5)M=M.map(row=>[...row].reverse());
   const k=[1,1,rnd(1,3),rnd(2,6)][level-1],c=[0,rnd(1,5),rnd(0,10),rnd(0,20)][level-1];const V=M.flat().map(v=>v*k+c),sum=15*k+3*c;
   const ask=rnd(0,8);let other=-1;if(level>=3){do{other=rnd(0,8)}while(other===ask)}
   const cells=V.map((v,i)=>i===ask?'<div class="ask">?</div>':i===other?'<div class="hid">…</div>':`<div>${v}</div>`).join('');
-  return {q:`<div class="magic">${cells}</div>`,cls:'grid',raw:true,hint:level<=2?`В каждой строке, столбце и по диагонали сумма равна ${sum}`:'Суммы во всех строках, столбцах и диагоналях одинаковые. Найди «?»',
-    ans:String(V[ask]),opts:numOpts(V[ask]),why:`Сумма в каждой линии — ${sum}`}}
+  return {q:`<div class="magic">${cells}</div>`,cls:'grid',raw:true,hint:level<=2?`${Lx("В каждой строке, столбце и по диагонали сумма равна","Every row, column and diagonal adds up to")} ${sum}`:Lx("Суммы во всех строках, столбцах и диагоналях одинаковые. Найди «?»","All rows, columns and diagonals add up to the same number. Find the “?”"),
+    ans:String(V[ask]),opts:numOpts(V[ask]),why:`${Lx("Сумма в каждой линии —","Every line adds up to")} ${sum}`}}
 function pyramidTask(){const n=level<=2?3:4,maxB=[4,9,15,25][level-1];
   let rows=[Array.from({length:n},()=>rnd(1,maxB))];while(rows[0].length>1){const b=rows[0];rows.unshift(b.slice(1).map((x,i)=>b[i]+x))}
   const cells=[];rows.forEach((r,ri)=>r.forEach((_,ci)=>cells.push([ri,ci])));const [hr,hc]=level===1?[0,0]:pick(cells.slice(1));const ans=rows[hr][hc];
   const html=rows.map((r,ri)=>`<p>${r.map((v,ci)=>ri===hr&&ci===hc?'<div class="ask">?</div>':`<div>${v}</div>`).join('')}</p>`).join('');
-  return {q:`<div class="pyr">${html}</div>`,cls:'grid',raw:true,hint:'Каждый кирпичик равен сумме двух кирпичиков под ним',ans:String(ans),opts:numOpts(ans)}}
+  return {q:`<div class="pyr">${html}</div>`,cls:'grid',raw:true,hint:Lx("Каждый кирпичик равен сумме двух кирпичиков под ним","Each brick equals the sum of the two bricks below it"),ans:String(ans),opts:numOpts(ans)}}
 function superSeqTask(){const t=pick(level<=2?[0,2,5]:[0,1,2,3,4,5,6]);let arr=[],why;const big=level>=3;
-  if(t===0){let s=rnd(1,big?20:5),d=rnd(1,big?4:2);arr=[s];for(let i=1;i<6;i++){s+=d+i-1;arr.push(s)}why='Каждый раз прибавляем на 1 больше'}
-  else if(t===1){let s=rnd(1,4);arr=[s];for(let i=1;i<6;i++){s=s*2+1;arr.push(s)}why='Умножаем на 2 и прибавляем 1'}
-  else if(t===2){const a=rnd(3,big?9:5),b=rnd(1,a-1);let s=rnd(1,10);arr=[s];for(let i=1;i<6;i++){s+=i%2?a:-b;arr.push(s)}why=`По очереди: +${a}, −${b}`}
-  else if(t===3){const s=rnd(1,4);arr=[0,1,2,3,4,5].map(i=>(s+i)**2);why='Числа, умноженные сами на себя: 2×2, 3×3, 4×4…'}
-  else if(t===4){const a=rnd(1,9),d=rnd(2,5),x=rnd(20,40),e=rnd(1,4);arr=[a,x,a+d,x-e,a+2*d,x-2*e];why=`Два ряда вперемешку: один +${d}, другой −${e}`}
-  else if(t===5){const s=rnd(1,2);arr=[0,1,2,3,4,5].map(i=>s*3**i);if(!big)arr=arr.slice(0,5);why='Каждое следующее в 3 раза больше'}
-  else{const m=rnd(1,3);arr=[5,4,3,2,1,0].map(i=>m*2**i);why='Каждое следующее в 2 раза меньше'}
+  if(t===0){let s=rnd(1,big?20:5),d=rnd(1,big?4:2);arr=[s];for(let i=1;i<6;i++){s+=d+i-1;arr.push(s)}why=Lx("Каждый раз прибавляем на 1 больше","Each time we add 1 more")}
+  else if(t===1){let s=rnd(1,4);arr=[s];for(let i=1;i<6;i++){s=s*2+1;arr.push(s)}why=Lx("Умножаем на 2 и прибавляем 1","Multiply by 2 and add 1")}
+  else if(t===2){const a=rnd(3,big?9:5),b=rnd(1,a-1);let s=rnd(1,10);arr=[s];for(let i=1;i<6;i++){s+=i%2?a:-b;arr.push(s)}why=`${Lx("По очереди: +","Taking turns: +")}${a}, −${b}`}
+  else if(t===3){const s=rnd(1,4);arr=[0,1,2,3,4,5].map(i=>(s+i)**2);why=Lx("Числа, умноженные сами на себя: 2×2, 3×3, 4×4…","Numbers multiplied by themselves: 2×2, 3×3, 4×4…")}
+  else if(t===4){const a=rnd(1,9),d=rnd(2,5),x=rnd(20,40),e=rnd(1,4);arr=[a,x,a+d,x-e,a+2*d,x-2*e];why=`${Lx("Два ряда вперемешку: один +","Two rows mixed together: one +")}${d}${Lx(", другой −",", the other −")}${e}`}
+  else if(t===5){const s=rnd(1,2);arr=[0,1,2,3,4,5].map(i=>s*3**i);if(!big)arr=arr.slice(0,5);why=Lx("Каждое следующее в 3 раза больше","Each next number is 3 times bigger")}
+  else{const m=rnd(1,3);arr=[5,4,3,2,1,0].map(i=>m*2**i);why=Lx("Каждое следующее в 2 раза меньше","Each next number is half the previous one")}
   const hide=rnd(Math.min(3,arr.length-2),arr.length-1),ans=arr[hide];
-  return {q:arr.map((x,i)=>i===hide?'?':x).join(', '),cls:'multi',hint:'Найди правило ряда',ans:String(ans),opts:numOpts(ans),why}}
+  return {q:arr.map((x,i)=>i===hide?'?':x).join(', '),cls:'multi',hint:Lx("Найди правило ряда","Find the rule of the sequence"),ans:String(ans),opts:numOpts(ans),why}}

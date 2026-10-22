@@ -228,6 +228,8 @@ table.lb{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .genes{text-align:left;margin-top:10px}.genes h5{font-family:var(--display);font-weight:400;font-size:22px;color:var(--ink);margin:12px 0 4px}
 .gr{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);font-size:15px}.gr>span:first-child{font-weight:700;flex:none}.gr>span:last-child{text-align:right;min-width:0}
 .gr .sw{display:inline-block;width:16px;height:16px;vertical-align:middle;margin-left:3px}.genes em{font-style:normal;color:var(--muted);font-size:13px}.mut{color:var(--legend)}
+.langs{display:flex;gap:6px;width:100%;justify-content:flex-end;order:-1}.langs button{all:unset;cursor:pointer;width:34px;height:23px;border-radius:4px;overflow:hidden;box-shadow:0 0 0 2px var(--line);opacity:.55;transition:opacity .15s,transform .15s}
+.langs button svg{display:block;width:100%;height:100%}.langs button[aria-pressed="true"]{opacity:1;box-shadow:0 0 0 2px var(--ink)}.langs button:hover{opacity:1;transform:scale(1.08)}.langs button:focus-visible{outline:3px solid var(--star);outline-offset:2px}
 .evicon{font-size:64px;line-height:1;margin-top:4px}
 @media (max-width:420px){.answers button{font-size:28px}.magic{grid-template-columns:repeat(3,56px)}.magic div{height:56px}.pyr div{width:50px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

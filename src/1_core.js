@@ -1,3 +1,7 @@
+/* ===== Язык: выбирается флагом, хранится в браузере ===== */
+let lang=(()=>{try{return localStorage.getItem('ut2_lang')==='en'?'en':'ru'}catch(e){return 'ru'}})();
+const Lx=(ru,en)=>lang==='en'?en:ru;
+const gradeLabel=n=>lang==='en'?`Grade ${n}`:`${n} ${Lx("класс","grade")}`;
 /* ===== Общие помощники ===== */
 const $=s=>document.querySelector(s);
 const app=$('#app');
@@ -5,7 +9,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const pick=a=>a[rnd(0,a.length-1)];
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
-const plural=(n,f)=>{const m10=n%10,m100=n%100;return f[m10===1&&m100!==11?0:m10>=2&&m10<=4&&(m100<10||m100>=20)?1:2]};
+const plural=(n,f)=>{if(lang==='en')return f[n===1?0:2];const m10=n%10,m100=n%100;return f[m10===1&&m100!==11?0:m10>=2&&m10<=4&&(m100<10||m100>=20)?1:2]};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
@@ -26,4 +30,4 @@ let toastTimer;function toast(msg){const t=$('#toast');t.innerHTML=`<div class="
 const star5=(cx,cy,r,fill,stroke='none')=>{let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;p+=(i?'L':'M')+(cx+rr*Math.cos(a)).toFixed(1)+' '+(cy+rr*Math.sin(a)).toFixed(1)}
   return `<path d="${p}Z" fill="${fill}" stroke="${stroke}" stroke-width="2"/>`};
 const heart=(cx,cy,s,fill)=>`<path d="M${cx} ${cy+s*.9} C${cx-s*1.6} ${cy-s*.1} ${cx-s*.8} ${cy-s*1.2} ${cx} ${cy-s*.4} C${cx+s*.8} ${cy-s*1.2} ${cx+s*1.6} ${cy-s*.1} ${cx} ${cy+s*.9}Z" fill="${fill}" opacity=".92"/>`;
-const RARITY={common:{name:'Обычная',dup:2},rare:{name:'Редкая',dup:5},legend:{name:'Легендарная',dup:12}};
+const RARITY={common:{name:Lx("Обычная","Common"),dup:2},rare:{name:Lx("Редкая","Rare"),dup:5},legend:{name:Lx("Легендарная","Legendary"),dup:12}};

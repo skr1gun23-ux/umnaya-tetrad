@@ -2,9 +2,9 @@
 const HEX=/^#[0-9a-f]{6}$/i;
 const PATS=['none','tabby','bicolor','points','calico','spots','stars','rainbow','shine','flame','circuit','ghost','multi'];
 const STYLES=['soft','pixel','brick'],EAR_T=['normal','tufts','long','round','fold'],TAIL_T=['normal','fluffy','short','double'],EXTRAS=['horns','wings','star','freckles','glowspots'];
-const RU={pat:{none:'Однотонный',tabby:'Полоски',bicolor:'Белая грудка',points:'Тёмные ушки и лапки',calico:'Трёхцветный',spots:'Пятнышки',stars:'Звёздочки',rainbow:'Радуга',shine:'Блеск',flame:'Пламя',circuit:'Киберсхемы',ghost:'Призрачный',multi:'Разноцветные кирпичики'},
-  style:{soft:'Пушистый',pixel:'Пиксельный',brick:'Кирпичики'},ears:{normal:'Обычные',tufts:'С кисточками',long:'Длинные',round:'Круглые',fold:'Вислоухие'},
-  tail:{normal:'Обычный',fluffy:'Пушистый',short:'Короткий',double:'Два хвоста'},extra:{horns:'Рожки',wings:'Крылышки',star:'Звезда на лбу',freckles:'Веснушки',glowspots:'Светящиеся пятна'}};
+const RU={pat:{none:Lx("Однотонный","Solid"),tabby:Lx("Полоски","Stripes"),bicolor:Lx("Белая грудка","White chest"),points:Lx("Тёмные ушки и лапки","Dark ears and paws"),calico:Lx("Трёхцветный","Calico"),spots:Lx("Пятнышки","Spots"),stars:Lx("Звёздочки","Little stars"),rainbow:Lx("Радуга","Rainbow"),shine:Lx("Блеск","Shine"),flame:Lx("Пламя","Flame"),circuit:Lx("Киберсхемы","Cyber circuits"),ghost:Lx("Призрачный","Ghostly"),multi:Lx("Разноцветные кирпичики","Colorful bricks")},
+  style:{soft:Lx("Пушистый","Fluffy"),pixel:Lx("Пиксельный","Pixel"),brick:Lx("Кирпичики","Bricks")},ears:{normal:Lx("Обычные","Normal"),tufts:Lx("С кисточками","Tufted"),long:Lx("Длинные","Long"),round:Lx("Круглые","Round"),fold:Lx("Вислоухие","Folded")},
+  tail:{normal:Lx("Обычный","Normal"),fluffy:Lx("Пушистый","Fluffy"),short:Lx("Короткий","Short"),double:Lx("Два хвоста","Two tails")},extra:{horns:Lx("Рожки","Horns"),wings:Lx("Крылышки","Little wings"),star:Lx("Звезда на лбу","Star on the forehead"),freckles:Lx("Веснушки","Freckles"),glowspots:Lx("Светящиеся пятна","Glowing spots")}};
 const NEONS=['#00e5ff','#ff2bd6','#39ff14','#ff3355','#ffd166','#c77dff'];
 
 function cleanDna(d){if(!d||typeof d!=='object')return null;const h=(v,f)=>HEX.test(v)?v:f;
@@ -25,22 +25,22 @@ function extrasSVG(S,layer,ids,mood){const ex=S.extras||[];let o='';
   return o}
 
 const CAT_TRAITS=[
- {id:'smart',name:'Умник',icon:'🧠',desc:'+20% опыта за задания'},
- {id:'athlete',name:'Спортсмен',icon:'💪',desc:'Спорт растёт в 1,5 раза быстрее'},
- {id:'joker',name:'Весельчак',icon:'😹',desc:'Развлечение растёт в 1,5 раза быстрее'},
- {id:'glutton',name:'Обжора',icon:'🍗',desc:'Сытость падает на 30% быстрее'},
- {id:'sleepy',name:'Соня',icon:'😴',desc:'Энергия тратится на 30% медленнее'},
- {id:'clean',name:'Чистюля',icon:'🧼',desc:'Ходит в туалет реже: раз в 12–20 часов'},
- {id:'lucky',name:'Везунчик',icon:'🍀',desc:'+1 ★ в играх с котёнком'},
- {id:'fidget',name:'Непоседа',icon:'⚡',desc:'Энергия тратится на 30% быстрее, зато спорт растёт на 25% больше'},
- {id:'cuddly',name:'Ласковый',icon:'💕',desc:'Поглаживание даёт вдвое больше настроения'},
- {id:'gourmet',name:'Гурман',icon:'🍣',desc:'Еда из магазина действует на 25% сильнее'},
- {id:'starry',name:'Звёздный',icon:'⭐',desc:'+2 ★ за каждое событие'},
- {id:'lazy',name:'Лежебока',icon:'🛋️',desc:'Спорт падает на 30% быстрее'}];
+ {id:'smart',name:Lx("Умник","Smarty"),icon:'🧠',desc:Lx("+20% опыта за задания","+20% XP for tasks")},
+ {id:'athlete',name:Lx("Спортсмен","Athlete"),icon:'💪',desc:Lx("Спорт растёт в 1,5 раза быстрее","Sport grows 1.5 times faster")},
+ {id:'joker',name:Lx("Весельчак","Joker"),icon:'😹',desc:Lx("Развлечение растёт в 1,5 раза быстрее","Fun grows 1.5 times faster")},
+ {id:'glutton',name:Lx("Обжора","Glutton"),icon:'🍗',desc:Lx("Сытость падает на 30% быстрее","Fullness drops 30% faster")},
+ {id:'sleepy',name:Lx("Соня","Sleepyhead"),icon:'😴',desc:Lx("Энергия тратится на 30% медленнее","Uses energy 30% slower")},
+ {id:'clean',name:Lx("Чистюля","Neat"),icon:'🧼',desc:Lx("Ходит в туалет реже: раз в 12–20 часов","Goes potty less often: every 12–20 hours")},
+ {id:'lucky',name:Lx("Везунчик","Lucky"),icon:'🍀',desc:Lx("+1 ★ в играх с котёнком","+1 ★ in kitten games")},
+ {id:'fidget',name:Lx("Непоседа","Fidget"),icon:'⚡',desc:Lx("Энергия тратится на 30% быстрее, зато спорт растёт на 25% больше","Uses energy 30% faster, but sport grows 25% more")},
+ {id:'cuddly',name:Lx("Ласковый","Cuddly"),icon:'💕',desc:Lx("Поглаживание даёт вдвое больше настроения","Petting gives twice as much mood")},
+ {id:'gourmet',name:Lx("Гурман","Gourmet"),icon:'🍣',desc:Lx("Еда из магазина действует на 25% сильнее","Shop food works 25% better")},
+ {id:'starry',name:Lx("Звёздный","Starry"),icon:'⭐',desc:Lx("+2 ★ за каждое событие","+2 ★ for every event")},
+ {id:'lazy',name:Lx("Лежебока","Couch potato"),icon:'🛋️',desc:Lx("Спорт падает на 30% быстрее","Sport drops 30% faster")}];
 const TRAIT_BY_ID=Object.fromEntries(CAT_TRAITS.map(t=>[t.id,t]));
-const CSTATS=[['str','Сила','💪'],['agi','Ловкость','🐾'],['int','Ум','🧠'],['luck','Удача','🍀'],['cha','Обаяние','💕']];
-const CSTAT_HELP='Ум: каждый пункт выше 5 даёт +4% опыта, ниже 5 — −4%. Сила + Ловкость от 16: +1 ★ в играх с котёнком. Удача: +1 ★ за событие на каждые 4 пункта. Обаяние: поглаживание даёт больше настроения.';
-const KIT_NAMES=['Пушок','Снежок','Уголёк','Тучка','Звёздочка','Бублик','Пиксель','Кекс','Вафля','Марсик','Луна','Сырник','Мандарин','Бусинка','Шнурок','Комета','Финик','Ириска','Лапка','Персик','Фантик','Мармелад','Кнопка','Пряник'];
+const CSTATS=[['str',Lx("Сила","Strength"),'💪'],['agi',Lx("Ловкость","Agility"),'🐾'],['int',Lx("Ум","Brains"),'🧠'],['luck',Lx("Удача","Luck"),'🍀'],['cha',Lx("Обаяние","Charm"),'💕']];
+const CSTAT_HELP=Lx("Ум: каждый пункт выше 5 даёт +4% опыта, ниже 5 — −4%. Сила + Ловкость от 16: +1 ★ в играх с котёнком. Удача: +1 ★ за событие на каждые 4 пункта. Обаяние: поглаживание даёт больше настроения.","Brains: each point above 5 gives +4% XP, below 5 gives −4%. Strength + Agility of 16 or more: +1 ★ in kitten games. Luck: +1 ★ per event for every 4 points. Charm: petting gives more mood.");
+const KIT_NAMES=[Lx("Пушок","Fluffy"),Lx("Снежок","Snowball"),Lx("Уголёк","Coal"),Lx("Тучка","Cloudy"),Lx("Звёздочка","Twinkle"),Lx("Бублик","Bagel"),Lx("Пиксель","Pixel"),Lx("Кекс","Cupcake"),Lx("Вафля","Waffle"),Lx("Марсик","Mars"),Lx("Луна","Luna"),Lx("Сырник","Pancake"),Lx("Мандарин","Tangerine"),Lx("Бусинка","Bead"),Lx("Шнурок","Shoelace"),Lx("Комета","Comet"),Lx("Финик","Date"),Lx("Ириска","Toffee"),Lx("Лапка","Paws"),Lx("Персик","Peach"),Lx("Фантик","Wrapper"),Lx("Мармелад","Jelly"),Lx("Кнопка","Button"),Lx("Пряник","Gingerbread")];
 
 const seeded=str=>{let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
   return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return (h>>>0)/4294967296}};
@@ -49,7 +49,7 @@ function indFromSkin(s){const r=seeded(s.id);const t=[];while(t.length<2){const 
   return {id:'s_'+s.id,skin:s.id,name:s.name,dna:skinToDna(s),traits:t,stats,gen:0,parents:null}}
 function cleanKitten(k){if(!k||typeof k!=='object'||!/^k[a-z0-9]{4,12}$/.test(k.id))return null;const dna=cleanDna(k.dna);if(!dna)return null;
   const stats={};CSTATS.forEach(([s])=>stats[s]=clamp(Math.round(+(k.stats&&k.stats[s])||5),1,10));
-  return {id:k.id,name:String(k.name||'Котёнок').slice(0,14),dna,traits:[...new Set((Array.isArray(k.traits)?k.traits:[]).filter(t=>TRAIT_BY_ID[t]))].slice(0,3),stats,
+  return {id:k.id,name:String(k.name||Lx("Котёнок","Kitten")).slice(0,14),dna,traits:[...new Set((Array.isArray(k.traits)?k.traits:[]).filter(t=>TRAIT_BY_ID[t]))].slice(0,3),stats,
     gen:clamp(Math.floor(+k.gen||1),1,99),parents:Array.isArray(k.parents)?k.parents.slice(0,2).map(x=>String(x).slice(0,14)):null,born:+k.born||0,
     origin:k.origin&&typeof k.origin==='object'?Object.fromEntries(Object.entries(k.origin).slice(0,12).map(([a,b])=>[String(a).slice(0,10),String(b).slice(0,6)])):null}}
 function allCats(){return [...player.cat.skins.map(id=>indFromSkin(SKIN_BY_ID[id])),...player.kennel]}

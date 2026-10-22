@@ -2,15 +2,15 @@
    На claude.ai таблица общая (база артефакта). В скачанном index.html всё хранится в этом браузере. */
 const store={mode:'local',db:null,uid:null,leaders:[],writeTimer:null,writeQ:Promise.resolve(),art:undefined};
 let player=null;
-const nickKey=n=>n.trim().toLowerCase().replace(/ё/g,'е').replace(/\s+/g,' ');
+/*i18n-skip-start*/const nickKey=n=>n.trim().toLowerCase().replace(/ё/g,'е').replace(/\s+/g,' ');/*i18n-skip-end*/
 const NICK_RE=/^[A-Za-zА-Яа-яЁё0-9 _-]{2,16}$/;
 const OLD_FUR={fur_orange:'sk_orange',fur_grey:'sk_grey',fur_white:'sk_white',fur_black:'sk_black',fur_siamese:'sk_siamese',fur_pink:'sk_pink',fur_space:'sk_space'};
 
 function normalize(p){if(!p)return p;
-  p.nick=String(p.nick||'Игрок').slice(0,16);p.stars=+p.stars||0;p.spent=+p.spent||0;p.games=+p.games||0;p.xp=+p.xp||0;
+  p.nick=String(p.nick||Lx("Игрок","Player")).slice(0,16);p.stars=+p.stars||0;p.spent=+p.spent||0;p.games=+p.games||0;p.xp=+p.xp||0;
   p.best=p.best&&typeof p.best==='object'?p.best:{};p.buff={xp2:clamp(+(p.buff&&p.buff.xp2)||0,0,10)};
   if(!p.gifts||typeof p.gifts!=='object')p.gifts={clothes:p.gift!==false,cats:true,room:true};delete p.gift;
-  const c=p.cat=p.cat&&typeof p.cat==='object'?p.cat:{};c.name=String(c.name||'Мурзик').slice(0,14);
+  const c=p.cat=p.cat&&typeof p.cat==='object'?p.cat:{};c.name=String(c.name||Lx("Мурзик","Whiskers")).slice(0,14);
   const oldOwned=Array.isArray(c.owned)?c.owned:[];
   c.skins=[...new Set([...(Array.isArray(c.skins)?c.skins:[]),...oldOwned.map(x=>OLD_FUR[x]).filter(Boolean),'sk_orange'])].filter(id=>SKIN_BY_ID[id]);
   c.skin=SKIN_BY_ID[c.skin]?c.skin:OLD_FUR[c.fur]||'sk_orange';if(!c.skins.includes(c.skin))c.skins.push(c.skin);delete c.fur;
@@ -34,15 +34,15 @@ const wallet=()=>player?Math.max(0,player.stars-player.spent):0;
 /* Жизнь котёнка: всё считается по реальному времени, даже когда страница закрыта */
 const FEEDER_MAX=4,FEEDER_EVERY=3*36e5,SLEEP_H=4;
 const FOODS=[
- {id:'fish',name:'Рыбка',icon:'🐟',grade:'Обычная',r:'common',price:2,eff:{food:40,joy:5}},
- {id:'milk',name:'Сливки',icon:'🥛',grade:'Обычная',r:'common',price:2,eff:{food:20,joy:15}},
- {id:'chicken',name:'Курочка',icon:'🍗',grade:'Хорошая',r:'rare',price:4,eff:{food:60,sport:10}},
- {id:'shrimp',name:'Креветки',icon:'🍤',grade:'Хорошая',r:'rare',price:5,eff:{food:50,fun:15,joy:10}},
- {id:'vitamin',name:'Витаминки',icon:'💊',grade:'Отличная',r:'rare',price:6,eff:{food:10,energy:30,sport:15}},
- {id:'salmon',name:'Лосось',icon:'🍣',grade:'Отличная',r:'legend',price:8,eff:{food:80,joy:20,fun:10}},
- {id:'feast',name:'Королевский обед',icon:'👑',grade:'Королевская',r:'legend',price:15,eff:{food:100,joy:30,fun:30,sport:20,energy:20},xp2:2}];
+ {id:'fish',name:Lx("Рыбка","Fish"),icon:'🐟',grade:Lx("Обычная","Common"),r:'common',price:2,eff:{food:40,joy:5}},
+ {id:'milk',name:Lx("Сливки","Cream"),icon:'🥛',grade:Lx("Обычная","Common"),r:'common',price:2,eff:{food:20,joy:15}},
+ {id:'chicken',name:Lx("Курочка","Chicken"),icon:'🍗',grade:Lx("Хорошая","Good"),r:'rare',price:4,eff:{food:60,sport:10}},
+ {id:'shrimp',name:Lx("Креветки","Shrimp"),icon:'🍤',grade:Lx("Хорошая","Good"),r:'rare',price:5,eff:{food:50,fun:15,joy:10}},
+ {id:'vitamin',name:Lx("Витаминки","Vitamins"),icon:'💊',grade:Lx("Отличная","Excellent"),r:'rare',price:6,eff:{food:10,energy:30,sport:15}},
+ {id:'salmon',name:Lx("Лосось","Salmon"),icon:'🍣',grade:Lx("Отличная","Excellent"),r:'legend',price:8,eff:{food:80,joy:20,fun:10}},
+ {id:'feast',name:Lx("Королевский обед","Royal feast"),icon:'👑',grade:Lx("Королевская","Royal"),r:'legend',price:15,eff:{food:100,joy:30,fun:30,sport:20,energy:20},xp2:2}];
 const FOOD_BY_ID=Object.fromEntries(FOODS.map(f=>[f.id,f]));
-const STATS=[['food','Сытость','var(--ok)'],['joy','Настроение','var(--star)'],['fun','Развлечение','#e76f51'],['sport','Спорт','#3a86ff'],['energy','Энергия','#9b5de5']];
+const STATS=[['food',Lx("Сытость","Fullness"),'var(--ok)'],['joy',Lx("Настроение","Mood"),'var(--star)'],['fun',Lx("Развлечение","Fun"),'#e76f51'],['sport',Lx("Спорт","Sport"),'#3a86ff'],['energy',Lx("Энергия","Energy"),'#9b5de5']];
 const STAT_NAME=Object.fromEntries(STATS.map(s=>[s[0],s[1]]));
 const sleeping=()=>player&&player.cat.sleepUntil>Date.now();
 function tick(){if(!player)return;const c=player.cat,now=Date.now();if(now<=c.t){c.t=now;return}
@@ -58,11 +58,11 @@ function tick(){if(!player)return;const c=player.cat,now=Date.now();if(now<=c.t)
 function mood(){if(!player)return 'normal';const c=player.cat;if(sleeping())return 'sleep';const low=Math.min(c.food,c.joy,c.fun,c.sport,c.energy);
   return low<20||c.poops>=3?'sad':(c.food+c.joy+c.fun+c.sport+c.energy)/5>=62?'happy':'normal'}
 const emptyStat=()=>{const c=player.cat;const s=STATS.find(([k])=>c[k]<=0);return s?s[1]:null};
-function canPlayWithCat(){tick();if(sleeping())return 'Котёнок спит. Поиграть можно, когда он проснётся.';const e=emptyStat();if(e)return `Шкала «${e}» пустая. Сначала позаботься о котёнке.`;
-  if(player.cat.energy<10)return 'Котёнок слишком устал. Отправь его спать.';return null}
+function canPlayWithCat(){tick();if(sleeping())return Lx("Котёнок спит. Поиграть можно, когда он проснётся.","Your kitten is asleep. You can play when it wakes up.");const e=emptyStat();if(e)return `${Lx("Шкала «","The “")}${e}${Lx("» пустая. Сначала позаботься о котёнке.","” bar is empty. Take care of your kitten first.")}`;
+  if(player.cat.energy<10)return Lx("Котёнок слишком устал. Отправь его спать.","Your kitten is too tired. Send it to bed.");return null}
 function applyEffects(eff,gourmet){const c=player.cat;for(let [k,v] of Object.entries(eff)){if(!(k in c))continue;if(v>0){if(k==='sport')v*=(hasTr('athlete')?1.5:1)*(hasTr('fidget')?1.25:1);if(k==='fun'&&hasTr('joker'))v*=1.5;if(gourmet&&hasTr('gourmet'))v*=1.25}c[k]=clamp(c[k]+Math.round(v),0,100)}}
 
-const TITLES=[[1,'Котёнок-новичок'],[3,'Юный умник'],[6,'Знаток'],[10,'Мудрый кот'],[15,'Профессор'],[20,'Гений'],[30,'Легенда тетрадки']];
+const TITLES=[[1,Lx("Котёнок-новичок","Newbie kitten")],[3,Lx("Юный умник","Young smarty")],[6,Lx("Знаток","Expert")],[10,Lx("Мудрый кот","Wise cat")],[15,Lx("Профессор","Professor")],[20,Lx("Гений","Genius")],[30,Lx("Легенда тетрадки","Notebook legend")]];
 function lvlInfo(xp){let l=1,need=100,x=xp;while(x>=need){x-=need;l++;need=100+(l-1)*40}return {l,cur:x,need,title:TITLES.filter(t=>t[0]<=l).pop()[1]}}
 
 function localPlayers(){return LS.get('ut2_players',{})}
@@ -89,14 +89,14 @@ async function initStore(){
   store.mode='local';const cur=LS.get('ut2_current',null);const all=localPlayers();if(cur&&all[cur])player=normalize(all[cur])}
 function newPlayer(nick){return normalize({nick:nick.trim()})}
 async function claimNick(nick){const key=nickKey(nick);
-  if(store.mode==='local'){if(localPlayers()[key])return 'Такой ник уже есть. Придумай другой или нажми на свой ник ниже.';
+  if(store.mode==='local'){if(localPlayers()[key])return Lx("Такой ник уже есть. Придумай другой или нажми на свой ник ниже.","This nickname already exists. Think of another one or tap your nickname below.");
     player=newPlayer(nick);saveLocal();LS.set('ut2_current',key);return null}
   const db=store.db;const ref=db.doc('nicks/'+encodeURIComponent(key).replace(/%/g,'~'));
   try{const lease=await ref.acquire({holder:store.uid,ttlMs:5000});
-    if(!lease.acquired)return 'Этот ник прямо сейчас занимает кто-то другой. Попробуй другой.';
-    const s=await ref.get();if(s.exists&&s.data().uid&&s.data().uid!==store.uid)return 'Такой ник уже занят. Придумай другой.';
+    if(!lease.acquired)return Lx("Этот ник прямо сейчас занимает кто-то другой. Попробуй другой.","Someone is taking this nickname right now. Try another one.");
+    const s=await ref.get();if(s.exists&&s.data().uid&&s.data().uid!==store.uid)return Lx("Такой ник уже занят. Придумай другой.","This nickname is taken. Think of another one.");
     await ref.set({uid:store.uid,nick:nick.trim()});player=newPlayer(nick);await db.doc('players/'+store.uid).set({...player,updated:Date.now()});return null}
-  catch(e){store.mode='local';if(localPlayers()[key])return 'Не получилось подключиться к общей таблице. Ник уже есть на этом устройстве, выбери его ниже.';
+  catch(e){store.mode='local';if(localPlayers()[key])return Lx("Не получилось подключиться к общей таблице. Ник уже есть на этом устройстве, выбери его ниже.","Couldn't connect to the shared table. This nickname is already on this device, pick it below.");
     player=newPlayer(nick);saveLocal();LS.set('ut2_current',key);return null}}
 
 /* Награда за игру: звёзды, опыт, уровень */
@@ -111,9 +111,9 @@ function record(game,stars,xp,value,lowerBetter,bestKey=game){
   savePlayer(true);renderMe();return {xp,up,level:after,bonus,doubled:b.xp2>0}}
 
 function renderMe(){const el=$('#me');if(!player){el.innerHTML='';return}const L=lvlInfo(player.xp);
-  el.innerHTML=`<span class="chip" title="${esc(L.title)}"><i>Ур. ${L.l}</i><b>★</b>${wallet()}<span style="color:var(--text)">· ${esc(player.nick)}</span></span>
-  <button class="link" id="toCat">Котёнок</button><button class="link" id="toLeaders">Лидеры</button>${store.mode==='local'?'<button class="link" id="logout">Сменить игрока</button>':''}`;
+  el.innerHTML=`<span class="chip" title="${esc(L.title)}"><i>${Lx("Ур.","Lv.")} ${L.l}</i><b>★</b>${wallet()}<span style="color:var(--text)">· ${esc(player.nick)}</span></span>
+  <button class="link" id="toCat">${Lx("Котёнок","Kitten")}</button><button class="link" id="toLeaders">${Lx("Лидеры","Leaders")}</button>${store.mode==='local'?'<button class="link" id="logout">'+Lx("Сменить игрока","Switch player")+'</button>':''}`;
   $('#toLeaders').onclick=leaders;$('#toCat').onclick=()=>catScreen('wear');
   const lo=$('#logout');if(lo)lo.onclick=()=>{LS.set('ut2_current',null);player=null;store.art=undefined;renderMe();login()}}
-function xpBar(){const L=lvlInfo(player.xp);return `<div class="lvl"><b>Уровень ${L.l}</b><em>${esc(L.title)} · опыт ${L.cur} из ${L.need}</em></div>
+function xpBar(){const L=lvlInfo(player.xp);return `<div class="lvl"><b>${Lx("Уровень","Level")} ${L.l}</b><em>${esc(L.title)} ${Lx("· опыт","· XP")} ${L.cur} ${Lx("из","of")} ${L.need}</em></div>
   <div class="track"><div class="fill" style="width:${Math.round(L.cur/L.need*100)}%;background:var(--xp)"></div></div>`}

@@ -1,21 +1,21 @@
 /* ===== Игры с котёнком: в каждой играет котёнок игрока ===== */
 const CAT_GAMES={
- bowling:{eff:{fun:20,sport:10},rule:'Нажми, когда стрелка смотрит на кегли. 5 бросков.'},
- basket:{eff:{sport:25,fun:5},rule:'Кольцо двигается. Нажми, чтобы бросить мяч вверх. 10 бросков.'},
- penalty:{eff:{sport:20,fun:10},rule:'Нажми в ворота туда, куда бить. Вратарь бегает! 8 ударов.'},
- fishing:{eff:{fun:20,food:10},rule:'Нажми на воду над рыбкой, чтобы опустить крючок. Золотая рыбка — 3 очка. 30 секунд.'},
- laser:{eff:{fun:25,sport:5},rule:'Нажимай на красную точку, и котёнок прыгнет за ней. 20 секунд.'},
- jump:{eff:{sport:25,fun:5},rule:'Нажимай, чтобы котёнок перепрыгивал препятствия. 3 жизни, 40 секунд.'}};
+ bowling:{eff:{fun:20,sport:10},rule:Lx("Нажми, когда стрелка смотрит на кегли. 5 бросков.","Tap when the arrow points at the pins. 5 throws.")},
+ basket:{eff:{sport:25,fun:5},rule:Lx("Кольцо двигается. Нажми, чтобы бросить мяч вверх. 10 бросков.","The hoop moves. Tap to throw the ball up. 10 throws.")},
+ penalty:{eff:{sport:20,fun:10},rule:Lx("Нажми в ворота туда, куда бить. Вратарь бегает! 8 ударов.","Tap the spot in the goal where you want to shoot. The keeper moves! 8 kicks.")},
+ fishing:{eff:{fun:20,food:10},rule:Lx("Нажми на воду над рыбкой, чтобы опустить крючок. Золотая рыбка — 3 очка. 30 секунд.","Tap the water above a fish to drop the hook. A golden fish is worth 3 points. 30 seconds.")},
+ laser:{eff:{fun:25,sport:5},rule:Lx("Нажимай на красную точку, и котёнок прыгнет за ней. 20 секунд.","Tap the red dot and your kitten will pounce on it. 20 seconds.")},
+ jump:{eff:{sport:25,fun:5},rule:Lx("Нажимай, чтобы котёнок перепрыгивал препятствия. 3 жизни, 40 секунд.","Tap to make your kitten jump over obstacles. 3 lives, 40 seconds.")}};
 
 const GAME_IMPL={
  bowling(ctx,cat,W,H,st){const P=[[0,0],[-1,1],[1,1],[-2,2],[0,2],[2,2],[-3,3],[-1,3],[1,3],[3,3]];let pins,throws=0,phase='aim',ang=0,ball=null,msg='',msgT=0,before=0,wait=0;
   const reset=()=>{pins=P.map(([c,r])=>({x:180+c*15,y:140-r*18,down:false,vx:0,vy:0,a:0}))};reset();
-  return {label:()=>`Бросок ${Math.min(throws+1,5)}/5 · ${st.score}`,stars:s=>Math.floor(s/12),result:s=>`${s} ${plural(s,['кегля','кегли','кеглей'])}`,
+  return {label:()=>`${Lx("Бросок","Throw")} ${Math.min(throws+1,5)}/5 · ${st.score}`,stars:s=>Math.floor(s/12),result:s=>`${s} ${plural(s,[Lx("кегля","pin"),Lx("кегли","pins"),Lx("кеглей","pins")])}`,
    update(dt,el,tap){
     if(phase==='aim'){ang=Math.sin(el/380)*.42;if(tap){ball={x:180,y:420,vx:Math.sin(ang)*6.5,vy:-Math.cos(ang)*6.5};phase='roll';before=pins.filter(p=>p.down).length;tone(140,0,.4,'sine',.08)}}
     else if(phase==='roll'){ball.x+=ball.vx*dt/16;ball.y+=ball.vy*dt/16;if(ball.x<110||ball.x>250)ball.vx=0;
       pins.forEach(p=>{if(!p.down&&Math.hypot(p.x-ball.x,p.y-ball.y)<22){p.down=true;p.vx=(p.x-ball.x)*.18+ball.vx*.3;p.vy=-2.5;tone(300+Math.random()*200,0,.08,'triangle',.06)}});
-      if(ball.y<30){phase='wait';wait=1300;const n=pins.filter(p=>p.down).length-before;st.score+=n;msg=n===10?'СТРАЙК!':n===0?'Мимо!':`${n} ${plural(n,['кегля','кегли','кеглей'])}`;msgT=1300;throws++}}
+      if(ball.y<30){phase='wait';wait=1300;const n=pins.filter(p=>p.down).length-before;st.score+=n;msg=n===10?Lx("СТРАЙК!","STRIKE!"):n===0?Lx("Мимо!","Miss!"):`${n} ${plural(n,[Lx("кегля","pin"),Lx("кегли","pins"),Lx("кеглей","pins")])}`;msgT=1300;throws++}}
     else{wait-=dt;if(wait<=0){if(throws>=5)return true;reset();phase='aim';ball=null}}
     pins.forEach(p=>{if(p.down&&(p.vx||p.vy)){p.x+=p.vx*dt/16;p.y+=p.vy*dt/16;p.a+=p.vx*.05;p.vx*=.95;p.vy*=.95;
       pins.forEach(q=>{if(!q.down&&q!==p&&Math.hypot(p.x-q.x,p.y-q.y)<15&&Math.random()<.85){q.down=true;q.vx=(q.x-p.x)*.2;q.vy=-1.5}});if(Math.abs(p.vx)<.05&&Math.abs(p.vy)<.05)p.vx=p.vy=0}});
@@ -29,11 +29,11 @@ const GAME_IMPL={
     if(msgT>0){msgT-=dt;ctx.fillStyle='#ffd166';ctx.font='bold 34px Nunito, sans-serif';ctx.textAlign='center';ctx.fillText(msg,180,250)}
     return false}}},
  basket(ctx,cat,W,H,st){let hoop={x:180,d:1},ball=null,shots=0,msg='',msgT=0,wait=0;
-  return {label:()=>`Бросок ${Math.min(shots+1,10)}/10 · ${st.score}`,stars:s=>Math.floor(s/3),result:s=>`${s} ${plural(s,['попадание','попадания','попаданий'])}`,
+  return {label:()=>`${Lx("Бросок","Throw")} ${Math.min(shots+1,10)}/10 · ${st.score}`,stars:s=>Math.floor(s/3),result:s=>`${s} ${plural(s,[Lx("попадание","hit"),Lx("попадания","hits"),Lx("попаданий","hits")])}`,
    update(dt,el,tap){const sp=(1.4+st.score*.18)*dt/16;hoop.x+=hoop.d*sp;if(hoop.x>300||hoop.x<60)hoop.d*=-1;const cx=180+Math.sin(el/900)*90;
     if(!ball&&wait<=0&&tap&&shots<10){ball={x:cx,y:380,vy:-14.2,prevY:380,scored:false};shots++;tone(400,0,.1)}
     if(ball){ball.prevY=ball.y;ball.y+=ball.vy*dt/16;ball.vy+=.3*dt/16;
-      if(!ball.scored&&ball.vy>0&&ball.prevY<100&&ball.y>=100){if(Math.abs(ball.x-hoop.x)<22){ball.scored=true;st.score++;msg='Точно!';fanfare()}else{msg='Мимо';tone(200,0,.15,'square',.05)}msgT=900}
+      if(!ball.scored&&ball.vy>0&&ball.prevY<100&&ball.y>=100){if(Math.abs(ball.x-hoop.x)<22){ball.scored=true;st.score++;msg=Lx("Точно!","Exactly!");fanfare()}else{msg=Lx("Мимо","Miss");tone(200,0,.15,'square',.05)}msgT=900}
       if(ball.y>H+20){ball=null;wait=300;if(shots>=10)return true}}
     wait-=dt;
     ctx.fillStyle=grad(ctx,H,'#ffcf99','#f4a261');ctx.fillRect(0,0,W,H);ctx.fillStyle='#c46a28';ctx.fillRect(0,420,W,60);ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(180,480,70,Math.PI,0);ctx.stroke();
@@ -45,10 +45,10 @@ const GAME_IMPL={
     if(msgT>0){msgT-=dt;ctx.fillStyle='#1f3a8a';ctx.font='bold 30px Nunito, sans-serif';ctx.textAlign='center';ctx.fillText(msg,180,250)}
     return false}}},
  penalty(ctx,cat,W,H,st){let keeper={x:180,t:180},kicks=0,ball=null,msg='',msgT=0,wait=0,nextT=0;
-  return {label:()=>`Удар ${Math.min(kicks+1,8)}/8 · ${st.score}`,stars:s=>Math.floor(s/2),result:s=>`${s} ${plural(s,['гол','гола','голов'])}`,
+  return {label:()=>`${Lx("Удар","Kick")} ${Math.min(kicks+1,8)}/8 · ${st.score}`,stars:s=>Math.floor(s/2),result:s=>`${s} ${plural(s,[Lx("гол","goal"),Lx("гола","goals"),Lx("голов","goals")])}`,
    update(dt,el,tap){nextT-=dt;if(nextT<=0){keeper.t=rnd(80,280);nextT=rnd(400,800)}keeper.x+=clamp(keeper.t-keeper.x,-1,1)*(2.2+kicks*.25)*dt/16;
     if(!ball&&wait<=0&&tap&&kicks<8&&tap[1]<220&&tap[0]>60&&tap[0]<300){ball={sx:180,sy:420,tx:tap[0],ty:clamp(tap[1],70,165),t:0};kicks++;tone(200,0,.1,'triangle')}
-    if(ball){ball.t+=dt/500;if(ball.t>=1&&!ball.done){ball.done=true;if(Math.abs(keeper.x-ball.tx)<38){msg='Вратарь поймал!';tone(200,0,.2,'square',.05)}else{st.score++;msg='ГОЛ!';fanfare()}msgT=1000;wait=1100}
+    if(ball){ball.t+=dt/500;if(ball.t>=1&&!ball.done){ball.done=true;if(Math.abs(keeper.x-ball.tx)<38){msg=Lx("Вратарь поймал!","Saved by the keeper!");tone(200,0,.2,'square',.05)}else{st.score++;msg=Lx("ГОЛ!","GOAL!");fanfare()}msgT=1000;wait=1100}
       if(ball.done){wait-=dt;if(wait<=0){ball=null;if(kicks>=8)return true}}}
     ctx.fillStyle='#4caf50';ctx.fillRect(0,0,W,H);ctx.fillStyle='#43a047';for(let i=0;i<8;i++)ctx.fillRect(0,i*60,W,30);
     ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.strokeRect(60,60,240,110);ctx.lineWidth=1;for(let i=0;i<12;i++){ctx.beginPath();ctx.moveTo(60+i*20,60);ctx.lineTo(60+i*20,170);ctx.stroke()}for(let j=0;j<6;j++){ctx.beginPath();ctx.moveTo(60,60+j*20);ctx.lineTo(300,60+j*20);ctx.stroke()}
@@ -59,7 +59,7 @@ const GAME_IMPL={
     if(msgT>0){msgT-=dt;ctx.fillStyle='#fff';ctx.font='bold 32px Nunito, sans-serif';ctx.textAlign='center';ctx.fillText(msg,180,260)}
     return false}}},
  fishing(ctx,cat,W,H,st){let fish=[],hook=null,spawn=0;const DUR=30000;
-  return {label:()=>`${st.score} · ${Math.max(0,Math.ceil((DUR-(st.el||0))/1000))} с`,stars:s=>Math.floor(s/3),result:s=>`${s} ${plural(s,['очко','очка','очков'])}`,
+  return {label:()=>`${st.score} · ${Math.max(0,Math.ceil((DUR-(st.el||0))/1000))} ${Lx("с","s")}`,stars:s=>Math.floor(s/3),result:s=>`${s} ${plural(s,[Lx("очко","point"),Lx("очка","points"),Lx("очков","points")])}`,
    update(dt,el,tap){st.el=el;spawn-=dt;if(spawn<=0&&el<DUR){spawn=rnd(600,1000);const left=Math.random()<.5,gold=Math.random()<.15;fish.push({x:left?-30:W+30,y:rnd(220,450),vx:(left?1:-1)*(1+Math.random()*1.6+(gold?1:0)),gold})}
     fish.forEach(f=>f.x+=f.vx*dt/16);fish=fish.filter(f=>f.x>-50&&f.x<W+50);
     if(!hook&&tap&&tap[1]>150&&el<DUR){hook={x:tap[0],y:160,d:1};tone(500,0,.06)}
@@ -74,7 +74,7 @@ const GAME_IMPL={
     fish.forEach(f=>{ctx.save();ctx.translate(f.x,f.y);if(f.vx>0)ctx.scale(-1,1);emo(ctx,f.gold?'🐠':'🐟',0,0,f.gold?30:26);ctx.restore()});
     return el>=DUR&&!hook}}},
  laser(ctx,cat,W,H,st){let dot={x:180,y:200,tx:180,ty:200},cx=180,cy=400,jump=0,missT=0;const DUR=20000;
-  return {label:()=>`${st.score} · ${Math.max(0,Math.ceil((DUR-(st.el||0))/1000))} с`,stars:s=>Math.floor(s/5),result:s=>`${s} ${plural(s,['прыжок','прыжка','прыжков'])}`,
+  return {label:()=>`${st.score} · ${Math.max(0,Math.ceil((DUR-(st.el||0))/1000))} ${Lx("с","s")}`,stars:s=>Math.floor(s/5),result:s=>`${s} ${plural(s,[Lx("прыжок","jump"),Lx("прыжка","jumps"),Lx("прыжков","jumps")])}`,
    update(dt,el,tap){st.el=el;if(Math.hypot(dot.tx-dot.x,dot.ty-dot.y)<5){dot.tx=rnd(40,320);dot.ty=rnd(60,420)}const sp=(1.5+st.score*.12)*dt/16;const d=Math.hypot(dot.tx-dot.x,dot.ty-dot.y)||1;dot.x+=(dot.tx-dot.x)/d*sp;dot.y+=(dot.ty-dot.y)/d*sp;
     const r=Math.max(10,18-st.score*.4);
     if(tap){if(Math.hypot(tap[0]-dot.x,tap[1]-dot.y)<r+14){st.score++;jump=1;cx=dot.x;cy=Math.min(470,dot.y+60);tone(800,0,.08,'triangle');dot.x=rnd(40,320);dot.y=rnd(60,420);dot.tx=dot.x;dot.ty=dot.y}else missT=300}
@@ -82,10 +82,10 @@ const GAME_IMPL={
     ctx.fillStyle='#f3e6d3';ctx.fillRect(0,0,W,H);ctx.fillStyle='#c89566';ctx.fillRect(0,380,W,100);
     drawCatImg(ctx,cat,cx,cy-jump*40,80,Math.sin(el/120)*.08);
     ctx.fillStyle='rgba(255,0,0,.25)';ctx.beginPath();ctx.arc(dot.x,dot.y,r+8,0,7);ctx.fill();ctx.fillStyle='#ff1f3d';ctx.beginPath();ctx.arc(dot.x,dot.y,r*.55,0,7);ctx.fill();
-    if(missT>0){ctx.fillStyle='#d62839';ctx.font='bold 22px Nunito, sans-serif';ctx.textAlign='center';ctx.fillText('Мимо!',180,40)}
+    if(missT>0){ctx.fillStyle='#d62839';ctx.font='bold 22px Nunito, sans-serif';ctx.textAlign='center';ctx.fillText(Lx("Мимо!","Miss!"),180,40)}
     return el>=DUR}}},
  jump(ctx,cat,W,H,st){let y=0,vy=0,obs=[],spawn=800,lives=3,hurt=0;const G=420,DUR=40000;
-  return {label:()=>`${'❤️'.repeat(lives)} · ${st.score}`,stars:s=>Math.floor(s/4),result:s=>`${s} ${plural(s,['прыжок','прыжка','прыжков'])}`,
+  return {label:()=>`${'❤️'.repeat(lives)} · ${st.score}`,stars:s=>Math.floor(s/4),result:s=>`${s} ${plural(s,[Lx("прыжок","jump"),Lx("прыжка","jumps"),Lx("прыжков","jumps")])}`,
    update(dt,el,tap){if(tap&&y>=0){vy=-12.5;tone(520,0,.08)}vy+=.6*dt/16;y=Math.min(0,y+vy*dt/16);if(y>=0)vy=0;
     spawn-=dt;if(spawn<=0){spawn=rnd(900,1500)-Math.min(500,el/60);obs.push({x:W+30,e:pick(['📦','🧶','🪴','🧸']),passed:false})}
     const sp=(4+el/9000)*dt/16;obs.forEach(o=>o.x-=sp);
@@ -99,7 +99,7 @@ const GAME_IMPL={
 
 async function catGame(key){screen='cg';stopTimer();const g=GAMES[key],C=CAT_GAMES[key];const stamp=Symbol();catGame.cur=stamp;
   app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${g.ic} ${g.title}</h2><span class="timer" id="cgS"></span></div><p class="hint">${C.rule}</p>
-  <div class="draw"><canvas id="cgc" width="360" height="480" aria-label="Игровое поле" style="cursor:pointer"></canvas></div></section>`;
+  <div class="draw"><canvas id="cgc" width="360" height="480" aria-label="${Lx("Игровое поле","Game field")}" style="cursor:pointer"></canvas></div></section>`;
   $('#back').onclick=menu;
   const cat=await svgImage(catSVG(player.cat,'happy'));const cv=$('#cgc');if(!cv||catGame.cur!==stamp)return;const ctx=cv.getContext('2d');const W=360,H=480;
   const alive=()=>catGame.cur===stamp&&screen==='cg'&&document.body.contains(cv);
@@ -110,5 +110,5 @@ async function catGame(key){screen='cg';stopTimer();const g=GAMES[key],C=CAT_GAM
   requestAnimationFrame(frame);
   function finish(){screen='result';const s=st.score;const stars=game.stars(s)+(s>0&&hasTr('lucky')?1:0)+(s>0&&cstat('str')+cstat('agi')>=16?1:0);tick();applyEffects(C.eff);
     player.cat.energy=clamp(player.cat.energy-10,0,100);player.cat.food=clamp(player.cat.food-5,0,100);const info=record(key,stars,20+s*3,s,false);
-    resultScreen(game.result(s),stars,s>0?'Котёнок в восторге!':'Котёнку всё равно понравилось',()=>start(key),info,
-      `<p class="tag">${Object.entries(C.eff).map(([k,v])=>`${STAT_NAME[k]} +${v}`).join(' · ')} · Энергия −10</p>`)}}
+    resultScreen(game.result(s),stars,s>0?Lx("Котёнок в восторге!","Your kitten is thrilled!"):Lx("Котёнку всё равно понравилось","Your kitten still had fun"),()=>start(key),info,
+      `<p class="tag">${Object.entries(C.eff).map(([k,v])=>`${STAT_NAME[k]} +${v}`).join(' · ')} ${Lx("· Энергия −10","· Energy −10")}</p>`)}}
