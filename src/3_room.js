@@ -72,7 +72,8 @@ function roomSVG(pl,art){const R=pl.room;const id=uid('r'),fid=uid('f');
   <path d="M200 30 V120 M150 75 H250" stroke="#8b5a2b" stroke-width="4"/>
   ${win&&!win.view?at('window'):''}
   ${art?`<rect x="268" y="34" width="84" height="66" fill="#fff" stroke="#8b5a2b" stroke-width="4"/><image href="${art}" x="272" y="38" width="76" height="58" preserveAspectRatio="xMidYMid slice"/>`:''}
-  ${at('wall')}${at('lamp')}${at('rug')}${at('tower')}${at('bed')}${at('plant')}${at('bowl')}${cat}</svg>`}
+  ${at('wall')}${at('lamp')}${at('rug')}${at('tower')}${at('bed')}${at('plant')}${at('bowl')}${cat}
+  ${[[92,268],[262,272],[118,236],[300,276],[60,262]].slice(0,pl.cat.poops||0).map(([x,y])=>`<text x="${x}" y="${y}" font-size="20" text-anchor="middle">💩</text>`).join('')}</svg>`}
 function furnPreview(f){const fid=uid('f');const [x,y,w,h]=f.box;
   const bg=f.slot==='window'?`<rect x="146" y="26" width="108" height="98" fill="#fff" stroke="#8b5a2b" stroke-width="4"/>${f.view?'':'<rect x="150" y="30" width="100" height="90" fill="#9fd8ff"/>'}`:'';
   return `<svg viewBox="${x-6} ${y-6} ${w+12} ${h+12}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(f.name)}"><defs><filter id="${fid}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>${bg}${f.svg.replace(/FID/g,fid)}</svg>`}

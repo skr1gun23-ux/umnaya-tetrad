@@ -16,16 +16,47 @@ function normalize(p){if(!p)return p;
   c.skin=SKIN_BY_ID[c.skin]?c.skin:OLD_FUR[c.fur]||'sk_orange';if(!c.skins.includes(c.skin))c.skins.push(c.skin);delete c.fur;
   c.owned=[...new Set(oldOwned.filter(id=>WEAR_BY_ID[id]))];
   const wear={};if(c.wear&&typeof c.wear==='object')for(const [s,id] of Object.entries(c.wear)){const w=WEAR_BY_ID[id];if(w&&w.slot===s&&c.owned.includes(id))wear[s]=id}c.wear=wear;
-  c.food=c.food==null?80:clamp(+c.food||0,0,100);c.joy=c.joy==null?70:clamp(+c.joy||0,0,100);c.t=+c.t||Date.now();
+  const N=(v,d)=>v==null?d:clamp(+v||0,0,100);c.food=N(c.food,80);c.joy=N(c.joy,70);c.fun=N(c.fun,70);c.sport=N(c.sport,60);c.energy=N(c.energy,90);
+  const now0=Date.now();c.t=+c.t||now0;c.sleepUntil=+c.sleepUntil||0;c.poops=clamp(Math.floor(+c.poops||0),0,5);c.bag=Math.max(0,Math.floor(+c.bag||0));
+  c.poopNext=+c.poopNext||now0+rnd(8,15)*36e5;
+  c.feeder=c.feeder&&typeof c.feeder==='object'?{n:clamp(Math.floor(+c.feeder.n||0),0,FEEDER_MAX),next:+c.feeder.next||now0+FEEDER_EVERY}:{n:2,next:now0+FEEDER_EVERY};
+  const inv={};if(c.inv&&typeof c.inv==='object')for(const [k,n] of Object.entries(c.inv))if(FOOD_BY_ID[k]&&+n>0)inv[k]=Math.min(99,Math.floor(+n));c.inv=inv;
+  p.nextEv=+p.nextEv||now0+5*60e3;p.tDate=typeof p.tDate==='string'?p.tDate:'';p.tClass=+p.tClass||0;p.tScore=+p.tScore||0;
   const r=p.room=p.room&&typeof p.room==='object'?p.room:{};
   r.owned=[...new Set([...(Array.isArray(r.owned)?r.owned:[]),'wp_plain','fl_wood'])].filter(id=>FURN_BY_ID[id]||WALL_BY_ID[id]||FLOOR_BY_ID[id]);
   r.wp=WALL_BY_ID[r.wp]&&r.owned.includes(r.wp)?r.wp:'wp_plain';r.fl=FLOOR_BY_ID[r.fl]&&r.owned.includes(r.fl)?r.fl:'fl_wood';
   const place={};if(r.place&&typeof r.place==='object')for(const [s,id] of Object.entries(r.place)){const f=FURN_BY_ID[id];if(f&&f.slot===s&&r.owned.includes(id))place[s]=id}r.place=place;
   return p}
 const wallet=()=>player?Math.max(0,player.stars-player.spent):0;
-function tick(){if(!player)return;const c=player.cat,now=Date.now(),h=(now-c.t)/36e5;
-  if(h>0){c.food=clamp(c.food-6*h,0,100);c.joy=clamp(c.joy-5*h,0,100);c.t=now}}
-function mood(){if(!player)return 'normal';const c=player.cat;return c.food<25||c.joy<25?'sad':c.joy>=65&&c.food>=40?'happy':'normal'}
+/* Жизнь котёнка: всё считается по реальному времени, даже когда страница закрыта */
+const FEEDER_MAX=4,FEEDER_EVERY=3*36e5,SLEEP_H=4;
+const FOODS=[
+ {id:'fish',name:'Рыбка',icon:'🐟',grade:'Обычная',r:'common',price:2,eff:{food:40,joy:5}},
+ {id:'milk',name:'Сливки',icon:'🥛',grade:'Обычная',r:'common',price:2,eff:{food:20,joy:15}},
+ {id:'chicken',name:'Курочка',icon:'🍗',grade:'Хорошая',r:'rare',price:4,eff:{food:60,sport:10}},
+ {id:'shrimp',name:'Креветки',icon:'🍤',grade:'Хорошая',r:'rare',price:5,eff:{food:50,fun:15,joy:10}},
+ {id:'vitamin',name:'Витаминки',icon:'💊',grade:'Отличная',r:'rare',price:6,eff:{food:10,energy:30,sport:15}},
+ {id:'salmon',name:'Лосось',icon:'🍣',grade:'Отличная',r:'legend',price:8,eff:{food:80,joy:20,fun:10}},
+ {id:'feast',name:'Королевский обед',icon:'👑',grade:'Королевская',r:'legend',price:15,eff:{food:100,joy:30,fun:30,sport:20,energy:20},xp2:2}];
+const FOOD_BY_ID=Object.fromEntries(FOODS.map(f=>[f.id,f]));
+const STATS=[['food','Сытость','var(--ok)'],['joy','Настроение','var(--star)'],['fun','Развлечение','#e76f51'],['sport','Спорт','#3a86ff'],['energy','Энергия','#9b5de5']];
+const STAT_NAME=Object.fromEntries(STATS.map(s=>[s[0],s[1]]));
+const sleeping=()=>player&&player.cat.sleepUntil>Date.now();
+function tick(){if(!player)return;const c=player.cat,now=Date.now();if(now<=c.t){c.t=now;return}
+  const from=c.t,sleepEnd=Math.max(from,Math.min(now,c.sleepUntil));const hs=(sleepEnd-from)/36e5,ha=(now-sleepEnd)/36e5;
+  if(hs>0){c.energy=clamp(c.energy+100/SLEEP_H*hs,0,100);c.food=clamp(c.food-3*hs,0,100);c.joy=clamp(c.joy-1*hs,0,100);c.fun=clamp(c.fun-1*hs,0,100);c.sport=clamp(c.sport-1*hs,0,100)}
+  if(ha>0){c.food=clamp(c.food-6*ha,0,100);c.joy=clamp(c.joy-(4+2*c.poops)*ha,0,100);c.fun=clamp(c.fun-5*ha,0,100);c.sport=clamp(c.sport-4*ha,0,100);c.energy=clamp(c.energy-5*ha,0,100)}
+  while(c.poopNext<=now){c.poops=Math.min(5,c.poops+1);c.poopNext+=rnd(8,15)*36e5}
+  while(c.feeder.next<=now){c.feeder.n=Math.min(FEEDER_MAX,c.feeder.n+1);c.feeder.next+=FEEDER_EVERY}
+  while(c.food<40&&c.feeder.n>0){c.food=clamp(c.food+30,0,100);c.feeder.n--}
+  if(c.energy<=0&&c.sleepUntil<now)c.sleepUntil=now+SLEEP_H*36e5;
+  c.t=now}
+function mood(){if(!player)return 'normal';const c=player.cat;if(sleeping())return 'sleep';const low=Math.min(c.food,c.joy,c.fun,c.sport,c.energy);
+  return low<20||c.poops>=3?'sad':(c.food+c.joy+c.fun+c.sport+c.energy)/5>=62?'happy':'normal'}
+const emptyStat=()=>{const c=player.cat;const s=STATS.find(([k])=>c[k]<=0);return s?s[1]:null};
+function canPlayWithCat(){tick();if(sleeping())return 'Котёнок спит. Поиграть можно, когда он проснётся.';const e=emptyStat();if(e)return `Шкала «${e}» пустая. Сначала позаботься о котёнке.`;
+  if(player.cat.energy<10)return 'Котёнок слишком устал. Отправь его спать.';return null}
+function applyEffects(eff){const c=player.cat;for(const [k,v] of Object.entries(eff))if(k in c)c[k]=clamp(c[k]+v,0,100)}
 
 const TITLES=[[1,'Котёнок-новичок'],[3,'Юный умник'],[6,'Знаток'],[10,'Мудрый кот'],[15,'Профессор'],[20,'Гений'],[30,'Легенда тетрадки']];
 function lvlInfo(xp){let l=1,need=100,x=xp;while(x>=need){x-=need;l++;need=100+(l-1)*40}return {l,cur:x,need,title:TITLES.filter(t=>t[0]<=l).pop()[1]}}

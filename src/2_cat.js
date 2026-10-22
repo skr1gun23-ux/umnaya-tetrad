@@ -111,6 +111,7 @@ const SLOTS=[['hat','Голова'],['glasses','Очки'],['eyes','Глаза']
 
 /* ===== Рисуем котёнка ===== */
 function eyesSVG(mood,eye,F,fid){const L=F.light?'#f2f2ff':'#2b2230';
+  if(mood==='sleep')return `<path d="M70 96 Q80 104 90 96 M110 96 Q120 104 130 96" fill="none" stroke="${L}" stroke-width="4" stroke-linecap="round"/>`;
   if(eye.kind==='star'){const s=star5(80,96,11,'#ffd166','#c99700')+star5(120,96,11,'#ffd166','#c99700');return `<g filter="url(#${fid})" opacity=".8">${s}</g>${s}`}
   if(eye.kind==='heart')return heart(80,99,9,'#ff4d6d')+heart(120,99,9,'#ff4d6d');
   if(eye.kind==='glow'){const c=eye.color;
@@ -170,7 +171,7 @@ const PIX=["","","","","...oo..........oo...","...opo........opo...","...oppoooo
 "....oooooooooooo....","....ommmmmmmmmmo....","...ommmbbbbbbmmmo...","...ommmbbbbbbmmmo...","...ommmbbbbbbmmmo...","...ommmmmmmmmmmmo...","...ommmo....ommmo...","...ooooo....ooooo..."];
 const PIX_TAIL=[[13,18],[14,18],[15,18],[16,18],[17,18],[18,17],[19,17]];
 function pixelCat(S,F,mood,eye,ids){
-  const glowCol=eye.kind==='glow'?eye.color:eye.kind==='star'?'#ffd166':eye.kind==='heart'?'#ff4d6d':null;
+  const glowCol=mood==='sleep'?null:eye.kind==='glow'?eye.color:eye.kind==='star'?'#ffd166':eye.kind==='heart'?'#ff4d6d':null;
   const col={o:F.line,m:F.main,d:F.dark,b:F.belly,n:'#f48fb1',p:'#ffb3c7',e:glowCol||'#2b2230'};
   const cell=(r,c,fill)=>`<rect x="${c*10}" y="${r*10-10}" width="10.4" height="10.4" fill="${fill}"/>`;
   let body='',head='',eyes='';
@@ -212,7 +213,7 @@ function catSVG(cat,mood){const S=SKIN_BY_ID[cat&&cat.skin]||SKINS[0];const F=S.
   <filter id="${ids.f}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
   ${fx(it('back'))}${parts.under}
   ${body&&body.clip?`<g clip-path="url(#${ids.b})">${body.clip}</g>`:''}${body&&body.svg?body.svg:''}
-  ${parts.over}${parts.head}${fx(it('neck'))}${fx(it('glasses'))}${fx(it('hat'))}${fx(it('toy'))}</svg>`}
+  ${parts.over}${parts.head}${fx(it('neck'))}${mood==='sleep'?'':fx(it('glasses'))}${fx(it('hat'))}${fx(it('toy'))}${mood==='sleep'?'<text x="146" y="30" font-family="Nunito,sans-serif" font-size="22" font-weight="900" fill="#7a8bb5">z</text><text x="164" y="12" font-family="Nunito,sans-serif" font-size="30" font-weight="900" fill="#7a8bb5">Z</text>':''}</svg>`}
 
 function wearPreview(w){return catSVG({skin:'sk_orange',wear:{[w.slot]:w.id}},'normal')}
 function skinPreview(s,mood='normal'){return catSVG({skin:s.id,wear:{}},mood)}

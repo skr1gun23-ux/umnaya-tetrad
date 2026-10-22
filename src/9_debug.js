@@ -12,7 +12,10 @@ function debugMenu(confirmReset){const m=$('#modal');
     <button class="btn" id="db1000" ${p?'':'disabled'}>+1000 звёзд</button>
     <button class="btn alt" id="dbAll" ${p?'':'disabled'}>Открыть все вещи, котят и мебель</button>
     <button class="btn alt" id="dbLvl" ${p?'':'disabled'}>+1 уровень</button>
-    <button class="btn alt" id="dbFeed" ${p?'':'disabled'}>Сытость и настроение 100%</button>
+    <button class="btn alt" id="dbFeed" ${p?'':'disabled'}>Все шкалы 100% и разбудить</button>
+    <button class="btn alt" id="dbPoop" ${p?'':'disabled'}>Добавить какашку</button>
+    <button class="btn alt" id="dbEvNow" ${p?'':'disabled'}>Событие прямо сейчас (на главной)</button>
+    <button class="btn alt" id="dbTour" ${p?'':'disabled'}>Сбросить попытку турнира</button>
     <p class="tag" style="margin:6px 0 0">Запустить ивент:</p><div class="row" style="margin:0">${Object.entries(EVENTS).map(([k,e])=>`<button class="btn alt small" data-ev="${k}" ${p?'':'disabled'} title="${e.name}">${e.icon}</button>`).join('')}</div>
     <button class="btn alt" id="dbRestart">Перезапуск</button>
     <button class="btn alt" id="dbReset" style="color:var(--bad);border-color:var(--bad)">Сброс прогресса</button>
@@ -24,7 +27,10 @@ function debugMenu(confirmReset){const m=$('#modal');
   on('db1000',()=>{p.spent-=1000;savePlayer(true);refresh();toast('+1000 ★ в кошелёк');debugMenu()});
   on('dbAll',()=>{p.cat.owned=WEAR.map(x=>x.id);p.cat.skins=SKINS.map(x=>x.id);p.room.owned=[...FURN.map(x=>x.id),...WALLS.map(x=>x.id),...FLOORS.map(x=>x.id)];savePlayer(true);refresh();toast('Всё открыто');debugMenu()});
   on('dbLvl',()=>{const L=lvlInfo(p.xp);p.xp+=L.need-L.cur;savePlayer(true);refresh();toast(`Уровень ${lvlInfo(p.xp).l}`);debugMenu()});
-  on('dbFeed',()=>{p.cat.food=100;p.cat.joy=100;p.cat.t=Date.now();savePlayer(true);refresh();toast('Котёнок сыт и счастлив');debugMenu()});
+  on('dbFeed',()=>{tick();Object.assign(p.cat,{food:100,joy:100,fun:100,sport:100,energy:100,sleepUntil:0,t:Date.now()});savePlayer(true);refresh();toast('Все шкалы 100%, котёнок проснулся');debugMenu()});
+  on('dbPoop',()=>{p.cat.poops=Math.min(5,p.cat.poops+1);savePlayer(true);refresh();toast('Появилась какашка');debugMenu()});
+  on('dbEvNow',()=>{p.nextEv=Date.now();savePlayer(true);refresh();toast('Событие готово');debugMenu()});
+  on('dbTour',()=>{p.tDate='';savePlayer(true);refresh();toast('Попытка турнира снова доступна');debugMenu()});
   on('dbRestart',async()=>{close();stopTimer();clearTimeout(store.writeTimer);await store.writeQ;player=null;store.art=undefined;app.innerHTML='<p class="empty">Перезапускаем…</p>';
     await initStore();renderMe();player?menu():login();toast('Перезапущено')});
   on('dbReset',()=>debugMenu('reset'));
