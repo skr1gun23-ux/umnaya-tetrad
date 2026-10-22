@@ -324,10 +324,10 @@ const EARS={
  bat:{o:'M-22 8 L-20 -40 L-6 -24 L4 -44 L22 8 Z',i:'M-12 2 L-12 -26 L-2 -14 L4 -30 L12 2 Z'}};
 /* Тела: где передние лапки, задние лапки, грудь (украшения и спина) и хвост */
 const BODIES={
- round:{path:'M56 172 A44 40 0 1 0 144 172 A44 40 0 1 0 56 172 Z',pawL:[80,184],pawR:[120,184],feet:[[78,210],[122,210]],chest:[100,148],tail:[136,194]},
- slim:{path:'M66 172 A34 42 0 1 0 134 172 A34 42 0 1 0 66 172 Z',pawL:[84,184],pawR:[116,184],feet:[[82,212],[118,212]],chest:[100,146],tail:[128,198]},
- chubby:{path:'M48 176 A52 38 0 1 0 152 176 A52 38 0 1 0 48 176 Z',pawL:[78,186],pawR:[122,186],feet:[[74,211],[126,211]],chest:[100,152],tail:[144,196]},
- square:{path:'M60 152 Q60 136 76 136 L124 136 Q140 136 140 152 L140 194 Q140 210 124 210 L76 210 Q60 210 60 194 Z',pawL:[80,184],pawR:[120,184],feet:[[78,212],[122,212]],chest:[100,150],tail:[136,196]}};
+ round:{path:'M56 172 A44 40 0 1 0 144 172 A44 40 0 1 0 56 172 Z',pawL:[80,184],pawR:[120,184],feet:[[78,210],[122,210]],chest:[100,148],tail:[136,194],w:44},
+ slim:{path:'M66 172 A34 42 0 1 0 134 172 A34 42 0 1 0 66 172 Z',pawL:[84,184],pawR:[116,184],feet:[[82,212],[118,212]],chest:[100,146],tail:[128,198],w:34},
+ chubby:{path:'M48 176 A52 38 0 1 0 152 176 A52 38 0 1 0 48 176 Z',pawL:[78,186],pawR:[122,186],feet:[[74,211],[126,211]],chest:[100,152],tail:[144,196],w:52},
+ square:{path:'M60 152 Q60 136 76 136 L124 136 Q140 136 140 152 L140 194 Q140 210 124 210 L76 210 Q60 210 60 194 Z',pawL:[80,184],pawR:[120,184],feet:[[78,212],[122,212]],chest:[100,150],tail:[136,196],w:40}};
 const TAILS={
  thin:{d:['M0 0 C40 2 50 -36 32 -68'],w:[15,9]},
  fluffy:{d:['M0 0 C40 2 50 -36 32 -68'],w:[30,23]},
@@ -551,26 +551,26 @@ function catSVG(cat,mood){const G=catGenes(cat);const wear=(cat&&cat.wear)||{};
   const hold=(w,P,flip)=>w?`${at([P[0],P[1]-6],fx(w),flip)}<g${ghost}><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${L}" stroke-width="15" stroke-linecap="round"/><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${pt}" stroke-width="10" stroke-linecap="round"/>${paw(P)}</g>${wr?at([P[0]+(flip?6:-6),P[1]+9],fx(wr)):''}`:'';
   const CO=COSTUMES[G.costume],hc=(H.top+144)/2,htop=hc-(hc-H.top)*1.22,cid=uid('k');
   const hoodT=`translate(100 ${hc}) scale(1.22) translate(-100 ${-hc})`;
-  const hood=CO?`<defs><clipPath id="${cid}"><path d="${H.path}" transform="${hoodT}"/></clipPath></defs><path d="${H.path}" transform="${hoodT}" fill="${CO.hood}"/><g clip-path="url(#${cid})">${CO.hd}<ellipse cx="70" cy="${htop+26}" rx="20" ry="9" fill="#fff" opacity=".18" transform="rotate(-24 70 ${htop+26})"/></g><path d="${H.path}" transform="${hoodT}" fill="none" stroke="${CO.edge}" stroke-width="2.6"/><g transform="translate(100 ${htop+2})">${CO.top}</g>`:'';
+  const hood=CO&&CO.kind!=='dress'?`<defs><clipPath id="${cid}"><path d="${H.path}" transform="${hoodT}"/></clipPath></defs><path d="${H.path}" transform="${hoodT}" fill="${CO.hood}"/><g clip-path="url(#${cid})">${CO.hd}<ellipse cx="70" cy="${htop+26}" rx="20" ry="9" fill="#fff" opacity=".18" transform="rotate(-24 70 ${htop+26})"/></g><path d="${H.path}" transform="${hoodT}" fill="none" stroke="${CO.edge}" stroke-width="2.6"/><g transform="translate(100 ${htop+2})">${CO.top}</g>`:'';
   const extras=G.extras||[];const blush=mood==='happy'||mood==='sleep';
   return `<svg viewBox="0 -20 200 248" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${Lx('Котёнок','Kitten')}">
   <defs><clipPath id="${id}"><path d="${B.path}"/></clipPath><clipPath id="${hid}"><path d="${H.path}"/></clipPath>
   <radialGradient id="${gb}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${light}"/><stop offset=".55" stop-color="${G.main}"/><stop offset="1" stop-color="${edge}"/></radialGradient>
   <filter id="${fid}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
   <ellipse cx="100" cy="221" rx="56" ry="7" fill="#000" opacity=".12"/>
-  ${back?at([100,148+cy],fx(back)):''}
+  ${back?at([100,148+cy],fx(back)):''}${CO&&CO.wings?at([100,148+cy],CO.wings.replace(/FID/g,fid)):''}
   <g${ghost}>${T.d.map(d=>`<g transform="translate(${B.tail[0]} ${B.tail[1]})"><path d="${d}" fill="none" stroke="${L}" stroke-width="${T.w[0]}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${tailC}" stroke-width="${T.w[1]}" stroke-linecap="round" stroke-linejoin="round"/></g>`).join('')}
   <path d="${B.path}" fill="url(#${gb})"/>
   <g clip-path="url(#${id})">${patternSVG(G,'body',dark)}<ellipse cx="100" cy="190" rx="${G.pat==='bicolor'?32:26}" ry="${G.pat==='bicolor'?30:26}" fill="${G.belly}"/>${CO?`<rect x="30" y="120" width="140" height="102" fill="${CO.body}"/>${CO.bd}`:''}${body&&body.clip?body.clip:''}</g>
   <path d="${B.path}" fill="none" stroke="${L}" stroke-width="3"/>
   ${extras.includes('glowspots')?`<g filter="url(#${fid})">${[[76,166],[124,182],[106,158]].map(([x,y])=>`<circle cx="${x}" cy="${y+cy}" r="6" fill="${G.eyeColor}"/>`).join('')}</g>`:''}
-  ${B.feet.map(foot).join('')}</g>
+  ${B.feet.map(foot).join('')}</g>${CO&&CO.skirt?CO.skirt(B.chest[1]+30,B.w+10):''}
   ${chest?at([100,148+cy],fx(chest)):''}
   <g${ghost}>${hL?'':paw(PL)}${hR?'':paw(PR)}</g>
   ${wr&&!hL?at([PL[0],PL[1]+8],fx(wr)):''}${wr&&!hR?at([PR[0],PR[1]+8],fx(wr)):''}
-  <g${ghost}>${CO?hood:ear(H.earL,1)+ear(H.earR,-1)}
+  <g${ghost}>${hood||ear(H.earL,1)+ear(H.earR,-1)}
   <path d="${H.path}" fill="url(#${gb})"/><g clip-path="url(#${hid})">${patternSVG(G,'head',dark)}<ellipse cx="74" cy="${70+dy}" rx="18" ry="9" fill="#fff" opacity=".22" transform="rotate(-20 74 ${70+dy})"/></g>
-  <path d="${H.path}" fill="none" stroke="${L}" stroke-width="3"/></g>
+  <path d="${H.path}" fill="none" stroke="${L}" stroke-width="3"/></g>${CO&&CO.head?`<g transform="translate(100 ${H.top+2}) scale(1.4)">${CO.head.replace(/FID/g,fid)}</g>`:''}
   ${extras.includes('horns')?`<path d="M78 ${62+dy} Q72 ${40+dy} 84 ${34+dy} Q84 ${48+dy} 92 ${58+dy} Z M122 ${62+dy} Q128 ${40+dy} 116 ${34+dy} Q116 ${48+dy} 108 ${58+dy} Z" fill="#f4e3c1" stroke="#8a6a3a" stroke-width="2.5"/>`:''}
   ${extras.includes('star')?star5(100,70+dy*.5,8,'#ffd166','#c99700'):''}
   <circle cx="${H.cheek}" cy="114" r="${blush?8:6}" fill="#ff8fab" opacity="${blush?.5:.3}"/><circle cx="${200-H.cheek}" cy="114" r="${blush?8:6}" fill="#ff8fab" opacity="${blush?.5:.3}"/>
@@ -585,6 +585,86 @@ function catSVG(cat,mood){const G=catGenes(cat);const wear=(cat&&cat.wear)||{};
 
 function wearPreview(w){const wear=w.slot==='hand'?{handR:w.id}:{[w.slot]:w.id};return catSVG({skin:'sk_orange',wear},'normal')}
 function skinPreview(s,mood='normal'){return catSVG({skin:s.id,wear:{}},mood)}
+
+/* ===== Феи и котики для девочек: платья, юбочки, крылья, украшения на голове (свои, оригинальные) ===== */
+const fairyWings=(c1,c2,s)=>`<g opacity=".85"><ellipse cx="-48" cy="-14" rx="22" ry="40" fill="${c1}" stroke="${s}" stroke-width="2.5" transform="rotate(-30 -48 -14)"/><ellipse cx="48" cy="-14" rx="22" ry="40" fill="${c1}" stroke="${s}" stroke-width="2.5" transform="rotate(30 48 -14)"/>
+  <ellipse cx="-42" cy="34" rx="14" ry="24" fill="${c2}" stroke="${s}" stroke-width="2.5" transform="rotate(24 -42 34)"/><ellipse cx="42" cy="34" rx="14" ry="24" fill="${c2}" stroke="${s}" stroke-width="2.5" transform="rotate(-24 42 34)"/></g>
+  <path d="M-48 -40 Q-52 -14 -46 10 M48 -40 Q52 -14 46 10" stroke="#fff" stroke-width="2" opacity=".7" fill="none"/>`;
+const sparkle=(x,y,r,c='#fff')=>`<path d="M${x} ${y-r} L${x+r*.3} ${y-r*.3} L${x+r} ${y} L${x+r*.3} ${y+r*.3} L${x} ${y+r} L${x-r*.3} ${y+r*.3} L${x-r} ${y} L${x-r*.3} ${y-r*.3} Z" fill="${c}"/>`;
+/* Юбочка вокруг талии: y — талия, rx — полуширина, подстраивается под любое тело */
+const skirt=(c,edge,light,kind='bell')=>(y,rx)=>kind==='tutu'
+  ?`<ellipse cx="100" cy="${y+4}" rx="${rx+6}" ry="13" fill="${c}" stroke="${edge}" stroke-width="2"/><ellipse cx="100" cy="${y}" rx="${rx}" ry="10" fill="${light}" stroke="${edge}" stroke-width="2"/>${[-.7,-.35,0,.35,.7].map(k=>`<path d="M${100+k*rx} ${y-4} L${100+k*rx*1.15} ${y+14}" stroke="${edge}" stroke-width="1.5" opacity=".5"/>`).join('')}`
+  :kind==='petals'?[-1,-.5,0,.5,1].map(k=>`<ellipse cx="${100+k*(rx-6)}" cy="${y+8}" rx="14" ry="18" fill="${k%1?light:c}" stroke="${edge}" stroke-width="2" transform="rotate(${k*28} ${100+k*(rx-6)} ${y+8})"/>`).join('')
+  :`<path d="M${100-rx+10} ${y-6} L${100+rx-10} ${y-6} L${100+rx+4} ${y+16} Q100 ${y+26} ${100-rx-4} ${y+16} Z" fill="${c}" stroke="${edge}" stroke-width="2.5" stroke-linejoin="round"/><path d="M${100-rx} ${y+12} Q100 ${y+22} ${100+rx} ${y+12}" fill="none" stroke="${light}" stroke-width="3"/>`;
+const tiara=(c,gem)=>`<path d="M-22 6 L-18 -12 L-9 -2 L0 -20 L9 -2 L18 -12 L22 6 Z" fill="${c}" stroke="#a57c00" stroke-width="2" stroke-linejoin="round"/><circle cx="0" cy="-4" r="3.6" fill="${gem}"/><circle cx="-12" cy="0" r="2" fill="#fff"/><circle cx="12" cy="0" r="2" fill="#fff"/>`;
+const bodice=(c,trim)=>`<path d="M60 150 Q100 162 140 150" fill="none" stroke="${trim}" stroke-width="4"/>`;
+
+Object.assign(COSTUMES,{
+ fairy_flower:{kind:'dress',cat:'girl',name:Lx('Фея цветов','Flower fairy'),body:'#ff8fc1',bd:bodice('#ff8fc1','#3fb071')+sparkle(84,184,4)+sparkle(118,170,3),
+   wings:fairyWings('#b8f2c4','#ffc8e4','#3fb071'),skirt:skirt('#ff8fc1','#c2185b','#ffd6ea','petals'),
+   head:[[-28,8],[-14,0],[0,-4],[14,0],[28,8]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="7" fill="${['#ff8fc1','#ffd166','#c77dff','#ffd166','#ff8fc1'][i]}" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="2.4" fill="#fff3a0"/>`).join('')},
+ fairy_ice:{kind:'dress',cat:'girl',name:Lx('Ледяная фея','Ice fairy'),body:'#a8dcff',bd:bodice('#a8dcff','#ffffff')+sparkle(80,172,6,'#ffffff')+sparkle(120,190,5,'#ffffff')+sparkle(104,160,4,'#e8f7ff'),
+   wings:fairyWings('#dff4ff','#b8e6ff','#5aaee0'),skirt:skirt('#7cc4f0','#2f7fb8','#e0f4ff'),
+   head:`<path d="M-20 6 L-14 -10 L-8 2 L0 -22 L8 2 L14 -10 L20 6 Z" fill="#dff4ff" stroke="#5aaee0" stroke-width="2" stroke-linejoin="round"/>`},
+ fairy_star:{kind:'dress',cat:'girl',name:Lx('Звёздная фея','Star fairy'),body:'#9b6ad6',bd:bodice('#9b6ad6','#ffd166')+star5(86,178,6,'#ffd166')+star5(118,192,5,'#ffd166')+star5(108,160,4,'#fff3c4'),
+   wings:`<g filter="url(#FID)" opacity=".5">${fairyWings('#ffd166','#ffe9a3','#ffd166')}</g>`+fairyWings('#ffe9a3','#fff3c4','#d99a00'),skirt:skirt('#7a4fd6','#4a2a99','#c9b3ff'),
+   head:star5(0,-6,11,'#ffd166','#c99700')},
+ fairy_sea:{kind:'dress',cat:'girl',name:Lx('Морская фея','Sea fairy'),body:'#2ec4b6',bd:bodice('#2ec4b6','#fff')+[[82,176,4],[116,166,3],[104,194,5]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#e0fffb" stroke-width="2"/>`).join(''),
+   wings:fairyWings('#9ff0e6','#c8f7ff','#159a8c'),skirt:skirt('#2ec4b6','#127a70','#c8fff6'),
+   head:`<path d="M-14 6 Q-14 -14 0 -16 Q14 -14 14 6 Z" fill="#ffc8dd" stroke="#d9668f" stroke-width="2"/><path d="M-8 4 L-4 -12 M0 4 V-14 M8 4 L4 -12" stroke="#d9668f" stroke-width="1.5"/>`},
+ fairy_sun:{kind:'dress',cat:'girl',name:Lx('Солнечная фея','Sun fairy'),body:'#ffb347',bd:bodice('#ffb347','#e63946')+`<circle cx="100" cy="178" r="10" fill="#ffd166"/>`,
+   wings:`<g filter="url(#FID)" opacity=".5">${fairyWings('#ff8c1a','#ffd166','#ff8c1a')}</g>`+fairyWings('#ffd166','#ffb347','#e05a00'),skirt:skirt('#ff8c1a','#c2410c','#ffe066'),
+   head:`<circle cx="0" cy="-4" r="8" fill="#ffd166" stroke="#e05a00" stroke-width="2"/>`+[0,1,2,3,4,5,6].map(i=>{const a=Math.PI*(1+i/6);return `<path d="M${(12*Math.cos(a)).toFixed(1)} ${(-4+12*Math.sin(a)).toFixed(1)} L${(20*Math.cos(a)).toFixed(1)} ${(-4+20*Math.sin(a)).toFixed(1)}" stroke="#ffb347" stroke-width="3.5" stroke-linecap="round"/>`}).join('')},
+ fairy_moon:{kind:'dress',cat:'girl',name:Lx('Лунная фея','Moon fairy'),body:'#3b3f8f',bd:bodice('#3b3f8f','#c9d1ff')+[[80,170],[118,180],[100,196],[90,158]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.8" fill="#fff"/>`).join(''),
+   wings:`<g filter="url(#FID)" opacity=".45">${fairyWings('#c9d1ff','#eef1ff','#c9d1ff')}</g>`+fairyWings('#e3e7ff','#c9d1ff','#7a84d6'),skirt:skirt('#2b2f6b','#14164a','#9aa4ff'),
+   head:`<path d="M4 -24 A14 14 0 1 0 4 6 A11 11 0 1 1 4 -24 Z" fill="#fff3c4" stroke="#c9a200" stroke-width="2"/>`},
+ princess:{kind:'dress',cat:'girl',name:Lx('Принцесса','Princess'),body:'#ff9ecb',bd:bodice('#ff9ecb','#ffd166')+`<path d="M100 150 V214" stroke="#ffd166" stroke-width="3" stroke-dasharray="2 6"/>`,
+   skirt:skirt('#ff7ab6','#c2185b','#ffd166'),head:tiara('#ffd166','#ff4d8d')},
+ ballerina:{kind:'dress',cat:'girl',name:Lx('Балерина','Ballerina'),body:'#ffd6e7',bd:bodice('#ffd6e7','#ff8fc1'),
+   skirt:skirt('#ffc2dc','#e0457b','#fff0f6','tutu'),head:`<circle cx="0" cy="-6" r="9" fill="#ff8fc1" stroke="#e0457b" stroke-width="2"/><circle cx="-8" cy="-12" r="5" fill="#ffc2dc"/><circle cx="8" cy="-12" r="5" fill="#ffc2dc"/><circle cx="0" cy="-6" r="3" fill="#fff"/>`},
+ butterfly:{kind:'dress',cat:'girl',name:Lx('Бабочка','Butterfly'),body:'#c77dff',bd:bodice('#c77dff','#ffd166')+`<path d="M100 150 V214" stroke="#7b2cbf" stroke-width="5"/>`,
+   wings:`<path d="M0 -10 Q-40 -64 -84 -40 Q-90 -6 -60 4 Q-88 20 -70 52 Q-30 58 0 14 Z M0 -10 Q40 -64 84 -40 Q90 -6 60 4 Q88 20 70 52 Q30 58 0 14 Z" fill="#ff8fc1" stroke="#7b2cbf" stroke-width="3" stroke-linejoin="round" opacity=".92"/>`+[[-56,-28,10,'#ffd166'],[56,-28,10,'#ffd166'],[-52,30,7,'#7fc8f8'],[52,30,7,'#7fc8f8']].map(([x,y,r,c])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="#7b2cbf" stroke-width="2"/>`).join(''),
+   head:`<path d="M-8 4 Q-12 -14 -22 -22 M8 4 Q12 -14 22 -22" fill="none" stroke="#3b2a6b" stroke-width="2.5" stroke-linecap="round"/><circle cx="-22" cy="-22" r="4" fill="#ff8fc1"/><circle cx="22" cy="-22" r="4" fill="#ff8fc1"/>`},
+ mermaid:{kind:'dress',cat:'girl',name:Lx('Русалочка','Little mermaid'),body:'#2ec4b6',bd:Array.from({length:6},(_,r)=>Array.from({length:7},(_,i)=>`<path d="M${46+i*18+(r%2)*9} ${150+r*12} q9 10 18 0" fill="none" stroke="#127a70" stroke-width="2"/>`).join('')).join('')+`<path d="M58 150 Q100 140 142 150" fill="none" stroke="#c77dff" stroke-width="7"/>`,
+   head:`<path d="M-14 6 Q-14 -14 0 -16 Q14 -14 14 6 Z" fill="#c77dff" stroke="#7b2cbf" stroke-width="2"/><path d="M-8 4 L-4 -12 M0 4 V-14 M8 4 L4 -12" stroke="#7b2cbf" stroke-width="1.5"/><circle cx="18" cy="2" r="4" fill="#fff" stroke="#c9d1ff" stroke-width="1.5"/>`},
+ unicorn:{cat:'girl',name:Lx('Единорожка','Unicorn'),hood:'#ffffff',edge:'#c9b3ff',body:'#ffffff',hd:`<path d="M56 54 Q50 90 40 120" fill="none" stroke="#ffc2dc" stroke-width="10" stroke-linecap="round"/><path d="M68 44 Q60 84 52 112" fill="none" stroke="#c9b3ff" stroke-width="8" stroke-linecap="round"/><path d="M144 54 Q150 90 160 120" fill="none" stroke="#a8e6ff" stroke-width="10" stroke-linecap="round"/>`,
+   top:`<path d="M-7 8 L0 -34 L7 8 Z" fill="#ffd166" stroke="#c99700" stroke-width="2" stroke-linejoin="round"/><path d="M-5 -2 L5 -6 M-3 -14 L4 -17" stroke="#c99700" stroke-width="1.5"/><circle cx="-16" cy="4" r="6" fill="#ff8fc1"/><circle cx="16" cy="4" r="6" fill="#a8e6ff"/>`,
+   bd:`<path d="M30 200 Q100 214 170 200 L170 222 L30 222 Z" fill="#ffc2dc"/>`+sparkle(84,172,5,'#ffd166')+sparkle(118,186,4,'#c9b3ff')},
+ cupcake:{cat:'girl',name:Lx('Кексик','Cupcake'),hood:'#ffb3d1',edge:'#e0457b',body:'#f4c27a',hd:[[60,70,'#7fc8f8'],[84,52,'#ffd166'],[116,52,'#8ac926'],[140,70,'#c77dff'],[54,104,'#ffd166'],[146,104,'#7fc8f8'],[100,42,'#ff595e']].map(([x,y,c],i)=>`<rect x="${x-5}" y="${y-2}" width="10" height="4" rx="2" fill="${c}" transform="rotate(${i*40} ${x} ${y})"/>`).join(''),
+   top:`<circle cx="0" cy="-8" r="10" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><path d="M2 -16 Q6 -28 14 -30" fill="none" stroke="#6b3d1f" stroke-width="2.5"/><circle cx="-3" cy="-11" r="3" fill="#fff" opacity=".6"/>`,
+   bd:Array.from({length:9},(_,i)=>`<rect x="${34+i*16}" y="120" width="8" height="102" fill="#e0a85a"/>`).join('')+`<path d="M30 140 Q50 152 70 140 Q90 152 110 140 Q130 152 150 140 Q160 146 170 140 L170 120 L30 120 Z" fill="#ffb3d1"/>`}});
+
+const gS=(id,ru,en,r,genes)=>({id,name:Lx(ru,en),r,g:genes});
+SKINS.push(
+ gS('sk_princess','Принцесса Мурлыся','Princess Purrly','rare',g('heart','round','round','big','#7a4fd6','fluffy','#ffffff','#ffffff','#7a6a7a',{costume:'princess'})),
+ gS('sk_ballerina','Балерина Пуанта','Ballerina Pointe','rare',g('heart','slim','pointed','almond','#3a86ff','curly','#f6a6c8','#ffe1ee','#7a2e50',{costume:'ballerina'})),
+ gS('sk_mermaid','Русалочка Жемчужинка','Pearl the mermaid','epic',g('round','slim','fold','big','#2ec4b6','fluffy','#f3d9b1','#fff3e0','#6b5134',{costume:'mermaid',tailColor:'#2ec4b6'})),
+ gS('sk_butterfly','Бабочка Порхушка','Flutter the butterfly','epic',g('heart','round','round','big','#c77dff','curly','#c3b1e1','#efe8fa','#4d3a73',{costume:'butterfly',extras:['freckles']})),
+ gS('sk_unicorn','Единорожка Искорка','Sparkle the unicorn','epic',g('round','round','pointed','star','#c77dff','fluffy','#f7f5f0','#ffffff','#6b6458',{costume:'unicorn',tailColor:'#ffc2dc'})),
+ gS('sk_cupcake','Кексик','Cupcake kitty','uncommon',g('round','chubby','round','big','#8b5a2b','short','#f3d9b1','#fff3e0','#6b5134',{costume:'cupcake'})),
+ gS('sk_fairy_flower','Фея цветов Ромашка','Daisy the flower fairy','rare',g('heart','slim','pointed','big','#57c785','thin','#f7f5f0','#ffffff','#6b6458',{costume:'fairy_flower'})),
+ gS('sk_fairy_ice','Ледяная фея Снежинка','Snowflake the ice fairy','epic',g('heart','slim','pointed','almond','#7fd8ff','fluffy','#e9edf3','#ffffff','#4a5270',{glow:true,costume:'fairy_ice'})),
+ gS('sk_fairy_sea','Морская фея Волна','Wave the sea fairy','epic',g('round','slim','long','big','#2ec4b6','curly','#9fe3c9','#e3fbf1','#2c6b55',{costume:'fairy_sea'})),
+ gS('sk_fairy_sun','Солнечная фея Лучик','Sunbeam the sun fairy','legend',g('heart','slim','pointed','star','#ffe066','fluffy','#f4a259','#fde3c4','#6b3d1f',{glow:true,costume:'fairy_sun',pat:'shine'})),
+ gS('sk_fairy_moon','Лунная фея Ночка','Nightly the moon fairy','legend',g('heart','slim','bat','slit','#c9d1ff','thin','#2e2e38','#45454f','#0a0a0e',{glow:true,costume:'fairy_moon',pat:'stars'})),
+ gS('sk_fairy_star','Звёздная фея Сияна','Shimmer the star fairy','mythic',g('heart','slim','long','star','#ffd166','fluffy','#c3b1e1','#efe8fa','#4d3a73',{glow:true,costume:'fairy_star',pat:'stars',tailColor:'#ffd166',extras:['star']})));
+for(const s of SKINS)SKIN_BY_ID[s.id]=s;
+
+/* Вещи для девочек в сундуки с одеждой */
+WEAR.push(
+ {id:'hat_bowband',slot:'hat',name:Lx('Ободок с бантом','Bow headband'),r:'common',svg:`<path d="M58 64 Q100 34 142 64" fill="none" stroke="#ff8fc1" stroke-width="6" stroke-linecap="round"/><path d="M100 42 L80 30 L82 54 Z M100 42 L120 30 L118 54 Z" fill="#c77dff" stroke="#7b2cbf" stroke-width="2"/><circle cx="100" cy="42" r="5" fill="#e0b3ff" stroke="#7b2cbf" stroke-width="2"/>`},
+ {id:'hat_flowercrown',slot:'hat',name:Lx('Венок из цветов','Flower crown'),r:'uncommon',svg:[[62,62],[76,52],[92,46],[108,46],[124,52],[138,62]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="8" fill="${['#ff8fc1','#ffd166','#c77dff','#ff8fc1','#7fc8f8','#ffd166'][i]}" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="2.5" fill="#fff3a0"/>`).join('')+`<path d="M58 66 Q100 40 142 66" fill="none" stroke="#3fb071" stroke-width="3" opacity=".7"/>`},
+ {id:'hat_tiara',slot:'hat',name:Lx('Диадема','Tiara'),r:'rare',svg:`<g transform="translate(100 52)">${tiara('#e8ecf3','#c77dff')}</g>`},
+ {id:'hat_princess',slot:'hat',name:Lx('Колпак принцессы','Princess hennin'),r:'epic',svg:`<path d="M100 -10 L80 54 L120 54 Z" fill="#ff9ecb" stroke="#c2185b" stroke-width="3"/><path d="M100 -10 Q130 20 150 60" fill="none" stroke="#e0b3ff" stroke-width="5" opacity=".8"/><ellipse cx="100" cy="54" rx="24" ry="6" fill="#ffd166" stroke="#c99700" stroke-width="2"/>${star5(100,24,6,'#fff')}`},
+ HAND('ty_purse',Lx('Сумочка','Little purse'),'uncommon',`<path d="M-8 -26 Q0 -40 8 -26" fill="none" stroke="#c2185b" stroke-width="3"/><rect x="-14" y="-28" width="28" height="22" rx="7" fill="#ff8fc1" stroke="#c2185b" stroke-width="2"/>${heart(0,-15,6,'#fff')}`),
+ HAND('ty_mirror',Lx('Зеркальце','Hand mirror'),'rare',`<rect x="-3" y="-14" width="6" height="22" rx="3" fill="#c77dff"/><ellipse cx="0" cy="-30" rx="14" ry="16" fill="#e0f4ff" stroke="#c77dff" stroke-width="4"/><path d="M-6 -36 L2 -28" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`),
+ {id:'nk_pearls',slot:'chest',name:Lx('Жемчужные бусы','Pearl necklace'),r:'uncommon',svg:Array.from({length:11},(_,i)=>{const x=-30+i*6,y=-16+Math.sin(i/10*Math.PI)*14;return `<circle cx="${x}" cy="${y.toFixed(1)}" r="3.6" fill="#fffaf0" stroke="#d9cbb0" stroke-width="1"/>`}).join('')},
+ {id:'wr_charms',slot:'wrist',name:Lx('Браслет с подвесками','Charm bracelet'),r:'rare',svg:`<rect x="-12" y="-2" width="24" height="4" rx="2" fill="#e8ecf3"/>${heart(-6,6,4,'#ff8fc1')}${star5(6,6,4,'#ffd166')}`},
+ {id:'bd_tutu',slot:'body',name:Lx('Пачка балерины','Tutu'),r:'rare',clip:`<rect x="30" y="150" width="140" height="22" fill="#ffc2dc"/><rect x="30" y="170" width="140" height="10" fill="#ffe1ee"/><path d="M30 150 Q100 140 170 150" fill="none" stroke="#e0457b" stroke-width="3"/>`},
+ {id:'bd_gown',slot:'body',name:Lx('Бальное платье','Ball gown'),r:'epic',clip:`<rect x="30" y="140" width="140" height="82" fill="#c77dff"/><path d="M30 140 Q100 156 170 140" fill="none" stroke="#ffd166" stroke-width="5"/><path d="M60 222 Q80 180 100 222 Q120 180 140 222" fill="#e0b3ff"/>${sparkle(80,168,5)}${sparkle(124,180,4)}`},
+ {id:'bk_butterfly',slot:'back',name:Lx('Крылья бабочки','Butterfly wings'),r:'epic',svg:`<path d="M0 -10 Q-40 -60 -80 -36 Q-84 -6 -56 4 Q-82 18 -66 48 Q-30 52 0 12 Z M0 -10 Q40 -60 80 -36 Q84 -6 56 4 Q82 18 66 48 Q30 52 0 12 Z" fill="#7fc8f8" stroke="#2f6fdc" stroke-width="3" opacity=".9"/><circle cx="-52" cy="-24" r="9" fill="#ffd166"/><circle cx="52" cy="-24" r="9" fill="#ffd166"/>`},
+ {id:'bk_rainbowwings',slot:'back',name:Lx('Радужные крылья феи','Rainbow fairy wings'),r:'legend',glowy:true,svg:`<g filter="url(#FID)" opacity=".5">${fairyWings('#ff8fc1','#7fc8f8','#ffd166')}</g>${fairyWings('#ffc2dc','#c8f0ff','#c77dff')}${['#ff595e','#ffca3a','#8ac926','#1982c4'].map((c,i)=>`<path d="M${-30-i*6} -${36-i*4} Q-60 -20 -${56-i*4} ${10-i*2} M${30+i*6} -${36-i*4} Q60 -20 ${56-i*4} ${10-i*2}" fill="none" stroke="${c}" stroke-width="3" opacity=".7"/>`).join('')}`});
+for(const w of WEAR)WEAR_BY_ID[w.id]=w;
 
 /* ===== Генетика котят: гены внешности, свойства, характеристики, скрещивание ===== */
 const HEX=/^#[0-9a-f]{6}$/i;
@@ -1447,14 +1527,14 @@ function kennelHTML(){const n=player.nest,now=Date.now(),cats=allCats(),act=acti
     nest=`<div class="nest"><div class="pair">${slot('slA',A,Lx("Родитель 1","Parent 1"))}<span class="heart">💞</span>${slot('slB',B,Lx("Родитель 2","Parent 2"))}</div>
     <div class="btns"><button class="btn" id="doBreed" ${A&&B&&!full&&wallet()>=BREED_COST?'':'disabled'}>${Lx("Скрестить за ★","Breed for ★")} ${BREED_COST}</button></div>
     <p class="note" style="margin:6px 0 0">${full?`${Lx("В питомнике уже","The cattery already has")} ${KENNEL_MAX} ${Lx("рождённых котят. Отдай кого-нибудь в добрые руки, чтобы освободить место.","born kittens. Give one to a loving home to make room.")}`:Lx("Нажми на кота ниже и выбери его родителем. Котёнок получит гены от обоих и родится через 20 минут. Иногда случаются мутации!","Tap a cat below and choose it as a parent. The kitten gets genes from both and is born in 20 minutes. Sometimes mutations happen!")}</p></div>`}
-  const KF={all:()=>true,born:i=>!i.skin,veg:i=>!!i.dna.costume,cyber:i=>i.dna.pat==='circuit',glow:i=>i.dna.glow,top:i=>['epic','legend','mythic'].includes(indRarity(i))};
+  const KF={all:()=>true,born:i=>!i.skin,veg:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat!=='girl',girl:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat==='girl',cyber:i=>i.dna.pat==='circuit',glow:i=>i.dna.glow,top:i=>['epic','legend','mythic'].includes(indRarity(i))};
   const f=KF[skinFilter]?skinFilter:'all';const shown=cats.filter(KF[f]);
   const grid=shown.map(ind=>`<button class="item r-${indRarity(ind)}${ind.id===act?' on':''}" data-cat="${ind.id}">${ind.skin?cntBadge('cats',ind.skin):''}${catPic(ind)}<span>${esc(ind.name)}</span>
     <span class="tag" style="font-size:12px">${ind.gen?`${Lx("Поколение","Generation")} ${ind.gen}`:`<span class="rt r-${indRarity(ind)}">${RARITY[indRarity(ind)].name}</span>`}</span><span style="font-size:18px">${ind.traits.map(t=>TRAIT_BY_ID[t].icon).join(' ')}</span></button>`).join('');
   const owned=new Set(player.cat.skins);const locked=f==='born'?[]:SKINS.filter(s=>!owned.has(s.id)&&KF[f]({skin:s.id,dna:s.g}));
   return `<h4 style="margin-top:14px">${Lx("Гнёздышко","Nest")}</h4>${nest}<h4>${Lx("Твои коты (","Your cats (")}${cats.length})</h4>
   <p class="note" style="margin:0">${Lx("Пород из сундуков:","Breeds from chests:")} ${player.cat.skins.length} ${Lx("из","of")} ${SKINS.length}${Lx(". Рождённых:",". Born here:")} ${player.kennel.length} ${Lx("из","of")} ${KENNEL_MAX}${Lx(". Нажми на кота, чтобы сделать его главным, посмотреть гены или выбрать родителем.",". Tap a cat to make it your main cat, see its genes or choose it as a parent.")}</p>
-  <div class="tabs" style="margin-top:10px" role="group" aria-label="${Lx("Фильтр","Filter")}">${[['all',Lx("Все","All")],['born',Lx("Рождённые","Born here")],['veg',Lx("Овощи и фрукты","Veggies and fruits")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${f===k}">${n}</button>`).join('')}</div>
+  <div class="tabs" style="margin-top:10px" role="group" aria-label="${Lx("Фильтр","Filter")}">${[['all',Lx("Все","All")],['born',Lx("Рождённые","Born here")],['girl',Lx("Феи и принцессы","Fairies and princesses")],['veg',Lx("Овощи и фрукты","Veggies and fruits")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${f===k}">${n}</button>`).join('')}</div>
   <div class="items">${grid}${locked.map(s=>lockedCard(s.r,skinPreview(s))).join('')}</div>
   ${shown.length||locked.length?'':'<p class="empty">'+Lx("Здесь пока никого нет.","Nobody here yet.")+'</p>'}`}
 
