@@ -181,6 +181,15 @@ input.field:focus{outline:3px solid var(--star);border-color:var(--ink)}
 .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin-top:12px}
 .item{all:unset;cursor:pointer;border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;background:var(--paper);min-width:0;display:flex;flex-direction:column;gap:2px}
 .item svg{width:100%;height:auto;display:block}
+.item{position:relative}.cnt{position:absolute!important;top:5px;right:5px;background:var(--ink);color:var(--paper);border-radius:10px;padding:1px 7px!important;font-size:12px!important;font-weight:900!important;z-index:1}
+.item.picked{outline:3px solid var(--xp);outline-offset:1px}
+.forge{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0}
+.forge .fs{width:92px;min-height:118px;border:2px dashed var(--line);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;background:var(--paper);cursor:pointer;font:inherit;color:inherit}
+.forge .fs svg{width:84px;height:auto}.forge .fs em{font-style:normal;font-size:12px;font-weight:700}.forge .q{font-size:40px;font-weight:900;color:var(--muted)}
+.forge .arrow{font-size:30px;font-weight:900;color:var(--muted)}
+.fx-ok{animation:pop .6s ease}@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.fx-bad{animation:crumble 1s ease forwards}@keyframes crumble{0%{opacity:1;transform:none}100%{opacity:.15;transform:translateY(16px) rotate(8deg) scale(.8)}}
+@media (prefers-reduced-motion:reduce){.fx-ok,.fx-bad{animation:none}}
 .item span{display:block;font-size:13px;font-weight:700;line-height:1.2}
 .item.on{border-color:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 35%,transparent)}
 .item.locked{cursor:default;opacity:.55}
@@ -188,8 +197,8 @@ input.field:focus{outline:3px solid var(--star);border-color:var(--ink)}
 .item:focus-visible{outline:3px solid var(--star)}
 .item .price{color:var(--star);font-weight:900}
 .r-common{border-color:var(--common)} .r-uncommon{border-color:var(--uncommon)} .r-rare{border-color:var(--rare)} .r-epic{border-color:var(--epic)} .r-legend{border-color:var(--legend)} .r-mythic{border-color:var(--mythic)}
-.item.r-uncommon{background:color-mix(in srgb,var(--uncommon) 7%,var(--card))} .item.r-rare{background:color-mix(in srgb,var(--rare) 8%,var(--card))} .item.r-epic{background:color-mix(in srgb,var(--epic) 9%,var(--card))}
-.item.r-legend{background:color-mix(in srgb,var(--legend) 11%,var(--card))} .item.r-mythic{background:color-mix(in srgb,var(--mythic) 11%,var(--card));box-shadow:0 0 0 1px var(--mythic),0 0 14px color-mix(in srgb,var(--mythic) 45%,transparent)}
+.item.r-uncommon{background:color-mix(in srgb,var(--uncommon) 7%,var(--paper))} .item.r-rare{background:color-mix(in srgb,var(--rare) 8%,var(--paper))} .item.r-epic{background:color-mix(in srgb,var(--epic) 9%,var(--paper))}
+.item.r-legend{background:color-mix(in srgb,var(--legend) 11%,var(--paper))} .item.r-mythic{background:color-mix(in srgb,var(--mythic) 11%,var(--paper));box-shadow:0 0 0 1px var(--mythic),0 0 14px color-mix(in srgb,var(--mythic) 45%,transparent)}
 .rt.r-common{color:var(--muted)} .rt.r-uncommon{color:var(--uncommon)} .rt.r-rare{color:var(--rare)} .rt.r-epic{color:var(--epic)} .rt.r-mythic{color:var(--mythic)}
 .side{display:flex;gap:8px;margin:10px 0 0;flex-wrap:wrap}
 .rt{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:900}
@@ -328,8 +337,26 @@ const TAILS={
  zigzag:{d:['M0 0 L22 -10 L12 -26 L34 -38 L22 -56 L42 -66'],w:[14,8]}};
 const EYE_SHAPES=['round','almond','big','sleepy','slit','star'];
 
+/* Костюмы овощей и фруктов: капюшон вокруг любой головы, комбинезон на тело, листики сверху */
+const COSTUMES={
+ carrot:{name:Lx('Морковка','Carrot'),hood:'#ff8c1a',edge:'#b35900',body:'#ff8c1a',hd:`<path d="M44 84 L58 86 M142 86 L156 84 M50 116 L62 114 M138 114 L150 116 M72 48 L78 58 M128 48 L122 58" stroke="#c96a00" stroke-width="4" stroke-linecap="round"/>`,top:`<path d="M-12 6 Q-24 -18 -10 -30 Q-6 -12 0 4 Q2 -26 10 -34 Q14 -14 4 6 Q14 -16 26 -18 Q22 -2 6 8 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/>`,bd:`<path d="M60 150 L74 152 M126 152 L140 150 M56 180 L70 180 M130 180 L144 180 M80 204 L92 204 M108 204 L120 204" stroke="#c96a00" stroke-width="4" stroke-linecap="round"/>`},
+ banana:{name:Lx('Банан','Banana'),hood:'#ffe45c',edge:'#c9a200',body:'#ffe45c',hd:`<path d="M54 64 Q100 32 146 64" fill="none" stroke="#f0c400" stroke-width="5"/><circle cx="56" cy="110" r="3" fill="#8a6a1a" opacity=".6"/><circle cx="146" cy="120" r="2.5" fill="#8a6a1a" opacity=".6"/>`,top:`<path d="M-5 6 Q-4 -14 6 -22 L11 -16 Q3 -10 4 6 Z" fill="#8a6a1a" stroke="#5c4510" stroke-width="2"/>`,bd:`<path d="M76 136 Q68 176 82 216 M124 136 Q132 176 118 216" fill="none" stroke="#e0b400" stroke-width="4"/><circle cx="92" cy="170" r="3" fill="#8a6a1a" opacity=".5"/><circle cx="112" cy="194" r="2.5" fill="#8a6a1a" opacity=".5"/>`},
+ lemon:{name:Lx('Лимон','Lemon'),hood:'#fff066',edge:'#c9b400',body:'#fff066',hd:`<circle cx="60" cy="70" r="1.8" fill="#d9c400"/><circle cx="84" cy="56" r="1.8" fill="#d9c400"/><circle cx="116" cy="56" r="1.8" fill="#d9c400"/><circle cx="140" cy="70" r="1.8" fill="#d9c400"/><circle cx="52" cy="98" r="1.8" fill="#d9c400"/><circle cx="148" cy="98" r="1.8" fill="#d9c400"/><circle cx="58" cy="128" r="1.8" fill="#d9c400"/><circle cx="142" cy="128" r="1.8" fill="#d9c400"/><circle cx="100" cy="44" r="1.8" fill="#d9c400"/>`,top:`<path d="M0 6 L0 -6" stroke="#6b3d1f" stroke-width="4"/><g transform="translate(0 -4)"><path d="M2 -6 Q16 -22 30 -12 Q16 -2 2 -6 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/></g>`,bd:`<circle cx="100" cy="176" r="22" fill="#fff8b0" stroke="#e0c800" stroke-width="4"/><path d="M100 176 L119.0 176.0" stroke="#f0dc40" stroke-width="2"/><path d="M100 176 L109.5 192.5" stroke="#f0dc40" stroke-width="2"/><path d="M100 176 L90.5 192.5" stroke="#f0dc40" stroke-width="2"/><path d="M100 176 L81.0 176.0" stroke="#f0dc40" stroke-width="2"/><path d="M100 176 L90.5 159.5" stroke="#f0dc40" stroke-width="2"/><path d="M100 176 L109.5 159.5" stroke="#f0dc40" stroke-width="2"/>`},
+ peas:{name:Lx('Горошек','Peas'),hood:'#6abf4b',edge:'#2f7a1f',body:'#a8e07a',hd:`<path d="M48 80 Q100 40 152 80" fill="none" stroke="#2f7a1f" stroke-width="3" opacity=".5"/>`,top:`<path d="M0 6 Q-2 -10 8 -14 Q18 -18 14 -28 Q10 -34 4 -28" fill="none" stroke="#3fb071" stroke-width="3.5" stroke-linecap="round"/>`,bd:`<circle cx="64" cy="172" r="9" fill="#5aa83a" stroke="#2f7a1f" stroke-width="2"/><circle cx="61" cy="169" r="2.5" fill="#c8f0a8"/><circle cx="84" cy="172" r="9" fill="#5aa83a" stroke="#2f7a1f" stroke-width="2"/><circle cx="81" cy="169" r="2.5" fill="#c8f0a8"/><circle cx="104" cy="172" r="9" fill="#5aa83a" stroke="#2f7a1f" stroke-width="2"/><circle cx="101" cy="169" r="2.5" fill="#c8f0a8"/><circle cx="124" cy="172" r="9" fill="#5aa83a" stroke="#2f7a1f" stroke-width="2"/><circle cx="121" cy="169" r="2.5" fill="#c8f0a8"/><circle cx="144" cy="172" r="9" fill="#5aa83a" stroke="#2f7a1f" stroke-width="2"/><circle cx="141" cy="169" r="2.5" fill="#c8f0a8"/>`},
+ strawberry:{name:Lx('Клубника','Strawberry'),hood:'#e63946',edge:'#9d1b28',body:'#e63946',hd:`<ellipse cx="60" cy="70" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="84" cy="56" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="116" cy="56" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="140" cy="70" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="52" cy="98" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="148" cy="98" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="58" cy="128" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="142" cy="128" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="100" cy="44" rx="2.2" ry="3.2" fill="#ffe066"/>`,top:`<path d="M-26 8 L-16 -6 L-6 4 L0 -12 L6 4 L16 -6 L26 8 Q0 0 -26 8 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2" stroke-linejoin="round"/>`,bd:`<ellipse cx="70" cy="150" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="92" cy="162" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="116" cy="152" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="132" cy="174" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="78" cy="186" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="104" cy="196" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="124" cy="198" rx="2.2" ry="3.2" fill="#ffe066"/><ellipse cx="96" cy="140" rx="2.2" ry="3.2" fill="#ffe066"/>`},
+ cherry:{name:Lx('Вишня','Cherry'),hood:'#d62839',edge:'#7a0f1c',body:'#d62839',hd:`<ellipse cx="66" cy="62" rx="10" ry="6" fill="#fff" opacity=".35" transform="rotate(-30 66 62)"/>`,top:`<path d="M0 6 Q2 -16 12 -28" fill="none" stroke="#5c3a17" stroke-width="3.5" stroke-linecap="round"/><g transform="translate(10 -26)"><path d="M2 -6 Q16 -22 30 -12 Q16 -2 2 -6 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/></g>`,bd:`<ellipse cx="74" cy="156" rx="8" ry="14" fill="#fff" opacity=".3"/>`},
+ eggplant:{name:Lx('Баклажан','Eggplant'),hood:'#6a2c91',edge:'#3b1252',body:'#7b3fa0',hd:`<ellipse cx="66" cy="66" rx="12" ry="6" fill="#fff" opacity=".25" transform="rotate(-30 66 66)"/>`,top:`<path d="M-34 10 Q-24 -8 -10 2 L0 -12 L10 2 Q24 -8 34 10 Q0 2 -34 10 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2" stroke-linejoin="round"/><rect x="-4" y="-24" width="8" height="14" rx="3" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/>`,bd:`<ellipse cx="74" cy="160" rx="8" ry="18" fill="#fff" opacity=".2"/>`},
+ corn:{name:Lx('Кукуруза','Corn'),hood:'#7cc95a',edge:'#3d7a2a',body:'#ffd23f',hd:`<path d="M60 40 Q54 100 66 160 M100 28 V172 M140 40 Q146 100 134 160" fill="none" stroke="#3d7a2a" stroke-width="3" opacity=".6"/>`,top:`<path d="M-10 6 Q-14 -10 -22 -18 M0 6 Q0 -12 -2 -24 M10 6 Q14 -10 22 -18" fill="none" stroke="#b5762a" stroke-width="3" stroke-linecap="round"/>`,bd:`<rect x="57" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="71" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="85" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="99" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="113" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="127" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="141" y="133" width="12" height="10" rx="4" fill="#f5b800"/><rect x="50" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="64" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="78" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="92" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="106" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="120" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="134" y="147" width="12" height="10" rx="4" fill="#f5b800"/><rect x="57" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="71" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="85" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="99" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="113" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="127" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="141" y="161" width="12" height="10" rx="4" fill="#f5b800"/><rect x="50" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="64" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="78" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="92" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="106" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="120" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="134" y="175" width="12" height="10" rx="4" fill="#f5b800"/><rect x="57" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="71" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="85" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="99" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="113" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="127" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="141" y="189" width="12" height="10" rx="4" fill="#f5b800"/><rect x="50" y="203" width="12" height="10" rx="4" fill="#f5b800"/><rect x="64" y="203" width="12" height="10" rx="4" fill="#f5b800"/><rect x="78" y="203" width="12" height="10" rx="4" fill="#f5b800"/><rect x="92" y="203" width="12" height="10" rx="4" fill="#f5b800"/><rect x="106" y="203" width="12" height="10" rx="4" fill="#f5b800"/><rect x="120" y="203" width="12" height="10" rx="4" fill="#f5b800"/><rect x="134" y="203" width="12" height="10" rx="4" fill="#f5b800"/>`},
+ watermelon:{name:Lx('Арбуз','Watermelon'),hood:'#2e9e5b',edge:'#17602f',body:'#ff5d73',hd:`<path d="M62 34 Q48 100 64 162 M100 24 V172 M138 34 Q152 100 136 162" fill="none" stroke="#17602f" stroke-width="8"/>`,top:`<path d="M0 6 Q0 -6 6 -12" fill="none" stroke="#6b3d1f" stroke-width="4" stroke-linecap="round"/>`,bd:`<rect x="30" y="198" width="140" height="24" fill="#2e9e5b"/><rect x="30" y="191" width="140" height="8" fill="#eaffd9"/><ellipse cx="80" cy="150" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="100" cy="162" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="120" cy="150" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="72" cy="174" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="128" cy="174" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="100" cy="182" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="90" cy="140" rx="2.4" ry="4" fill="#2b1a12"/><ellipse cx="112" cy="140" rx="2.4" ry="4" fill="#2b1a12"/>`},
+ pineapple:{name:Lx('Ананас','Pineapple'),hood:'#f4b942',edge:'#a06c00',body:'#f4b942',hd:`<path d="M30 60 L130 160 M50 40 L150 140 M80 30 L170 120 M30 100 L90 160 M170 60 L70 160 M150 40 L50 140 M120 30 L30 120 M170 100 L110 160" stroke="#c98a00" stroke-width="3"/>`,top:`<path d="M-18 8 L-16 -20 L-6 -4 L-2 -36 L4 -4 L14 -26 L18 8 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2" stroke-linejoin="round"/>`,bd:`<path d="M30 130 L120 220 M60 130 L150 220 M90 130 L170 210 M170 130 L80 220 M140 130 L50 220 M110 130 L30 210" stroke="#c98a00" stroke-width="3"/>`},
+ avocado:{name:Lx('Авокадо','Avocado'),hood:'#2f5d1f',edge:'#1a3610',body:'#d4ec8f',hd:`<circle cx="60" cy="74" r="2" fill="#4d8a33"/><circle cx="142" cy="92" r="2" fill="#4d8a33"/><circle cx="80" cy="50" r="2" fill="#4d8a33"/>`,top:`<path d="M0 6 Q-2 -8 4 -16" fill="none" stroke="#6b3d1f" stroke-width="5" stroke-linecap="round"/>`,bd:`<rect x="30" y="120" width="140" height="100" fill="none" stroke="#a8cf5a" stroke-width="10"/><circle cx="100" cy="182" r="20" fill="#9b5f2e" stroke="#5c3a17" stroke-width="3"/><ellipse cx="93" cy="175" rx="5" ry="7" fill="#fff" opacity=".25"/>`},
+ broccoli:{name:Lx('Брокколи','Broccoli'),hood:'#3f8f3a',edge:'#245c20',body:'#a5d66a',hd:`<circle cx="56" cy="72" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="78" cy="52" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="100" cy="46" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="122" cy="52" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="144" cy="72" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="48" cy="100" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="152" cy="100" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="54" cy="128" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="146" cy="128" r="9" fill="#4caf50" stroke="#245c20" stroke-width="2"/>`,top:`<circle cx="-16" cy="0" r="10" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="0" cy="-8" r="12" fill="#4caf50" stroke="#245c20" stroke-width="2"/><circle cx="16" cy="0" r="10" fill="#4caf50" stroke="#245c20" stroke-width="2"/>`,bd:`<path d="M84 140 Q90 180 82 216 M116 140 Q110 180 118 216 M100 150 V216" fill="none" stroke="#7cb342" stroke-width="5"/>`},
+ pumpkin:{name:Lx('Тыква','Pumpkin'),hood:'#ff9f1c',edge:'#b35900',body:'#ff9f1c',hd:`<path d="M70 38 Q56 100 70 162 M100 28 V172 M130 38 Q144 100 130 162" fill="none" stroke="#d97706" stroke-width="5"/>`,top:`<rect x="-5" y="-16" width="10" height="22" rx="3" fill="#6b3d1f"/><g transform="translate(2 -10)"><path d="M2 -6 Q16 -22 30 -12 Q16 -2 2 -6 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/></g><path d="M-4 -12 Q-16 -18 -12 -26 Q-6 -30 -8 -22" fill="none" stroke="#3fb071" stroke-width="2.5"/>`,bd:`<path d="M70 130 Q60 175 70 220 M100 130 V220 M130 130 Q140 175 130 220" fill="none" stroke="#d97706" stroke-width="5"/>`},
+ grapes:{name:Lx('Виноград','Grapes'),hood:'#7b3fa0',edge:'#43195e',body:'#8e4fb8',hd:`<circle cx="54" cy="80" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="51" cy="76" r="3" fill="#fff" opacity=".4"/><circle cx="80" cy="54" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="77" cy="50" r="3" fill="#fff" opacity=".4"/><circle cx="120" cy="54" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="117" cy="50" r="3" fill="#fff" opacity=".4"/><circle cx="146" cy="80" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="143" cy="76" r="3" fill="#fff" opacity=".4"/><circle cx="50" cy="114" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="47" cy="110" r="3" fill="#fff" opacity=".4"/><circle cx="150" cy="114" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="147" cy="110" r="3" fill="#fff" opacity=".4"/><circle cx="100" cy="42" r="11" fill="#9b5fc0" stroke="#43195e" stroke-width="2"/><circle cx="97" cy="38" r="3" fill="#fff" opacity=".4"/>`,top:`<path d="M0 6 L0 -12" stroke="#6b3d1f" stroke-width="4" stroke-linecap="round"/><g transform="translate(0 -10)"><path d="M2 -6 Q16 -22 30 -12 Q16 -2 2 -6 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/></g>`,bd:`<circle cx="76" cy="150" r="11" fill="#a56ccc" stroke="#43195e" stroke-width="2"/><circle cx="73" cy="146" r="3" fill="#fff" opacity=".4"/><circle cx="100" cy="146" r="11" fill="#a56ccc" stroke="#43195e" stroke-width="2"/><circle cx="97" cy="142" r="3" fill="#fff" opacity=".4"/><circle cx="124" cy="150" r="11" fill="#a56ccc" stroke="#43195e" stroke-width="2"/><circle cx="121" cy="146" r="3" fill="#fff" opacity=".4"/><circle cx="88" cy="172" r="11" fill="#a56ccc" stroke="#43195e" stroke-width="2"/><circle cx="85" cy="168" r="3" fill="#fff" opacity=".4"/><circle cx="112" cy="172" r="11" fill="#a56ccc" stroke="#43195e" stroke-width="2"/><circle cx="109" cy="168" r="3" fill="#fff" opacity=".4"/><circle cx="100" cy="194" r="11" fill="#a56ccc" stroke="#43195e" stroke-width="2"/><circle cx="97" cy="190" r="3" fill="#fff" opacity=".4"/>`},
+ goldapple:{name:Lx('Золотое яблоко','Golden apple'),hood:'#ffd166',edge:'#c99700',body:'#ffd166',hd:`<ellipse cx="64" cy="64" rx="14" ry="7" fill="#fff" opacity=".45" transform="rotate(-30 64 64)"/><path d="M140 56 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 Z" fill="#fff"/>`,top:`<path d="M0 6 Q-2 -8 4 -16" fill="none" stroke="#6b3d1f" stroke-width="5" stroke-linecap="round"/><g transform="translate(2 -10)"><path d="M2 -6 Q16 -22 30 -12 Q16 -2 2 -6 Z" fill="#3fb071" stroke="#1b6b3a" stroke-width="2"/></g>`,bd:`<path d="M128 156 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 Z M70 190 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2 Z" fill="#fff"/><ellipse cx="74" cy="156" rx="8" ry="16" fill="#fff" opacity=".35"/>`}};
+
 /* ===== Породы (выпадают из сундуков с котятами) ===== */
-const g=(head,body,ears,eyes,eyeColor,tail,main,belly,line,more={})=>({head,body,ears,eyes,eyeColor,tail,main,belly,line,glow:false,tailColor:null,pat:'none',neon:null,extras:[],hetero:null,...more});
+const g=(head,body,ears,eyes,eyeColor,tail,main,belly,line,more={})=>({head,body,ears,eyes,eyeColor,tail,main,belly,line,glow:false,tailColor:null,pat:'none',neon:null,extras:[],hetero:null,costume:null,...more});
 const SKINS=[
  {id:'sk_orange',name:Lx('Рыжик','Ginger'),r:'common',start:true,g:g('round','round','pointed','round','#5aa05a','thin','#f4a259','#fde3c4','#6b3d1f')},
  {id:'sk_grey',name:Lx('Серый','Grey'),r:'common',g:g('round','round','pointed','almond','#e0a200','thin','#a7adb8','#e6e8ec','#3d424d')},
@@ -368,6 +395,21 @@ const SKINS=[
  {id:'sk_toxic',name:Lx('Киберкот Токсик','Cyber Cat Toxic'),r:'legend',g:g('square','chubby','bat','slit','#39ff14','zigzag','#1f2a1f','#2f3f2f','#060a06',{glow:true,pat:'circuit',neon:'#39ff14',tailColor:'#39ff14'})},
  {id:'px_emerald',name:Lx('Изумрудный дракончик','Emerald dragonling'),r:'legend',g:g('heart','round','bat','star','#eaffb0','zigzag','#3ccf8e','#a8f0cf','#0d3d26',{glow:true,extras:['horns']})},
  {id:'br_rainbow',name:Lx('Радужный кубик','Rainbow cubie'),r:'legend',g:g('square','square','round','big','#2f6fdc','curly','#ffffff','#ffffff','#3a1a10',{pat:'rainbow',tailColor:'#ff924c'})},
+ {id:'sk_carrot',name:Lx('Морковкин','Carroty'),r:'uncommon',g:g('round','round','pointed','round','#5aa05a','thin','#f4a259','#fde3c4','#6b3d1f',{costume:'carrot'})},
+ {id:'sk_banana',name:Lx('Бананчик','Banana kitty'),r:'uncommon',g:g('round','slim','pointed','almond','#e0a200','thin','#a7adb8','#e6e8ec','#3d424d',{costume:'banana'})},
+ {id:'sk_lemon',name:Lx('Лимонка','Lemony'),r:'uncommon',g:g('heart','round','round','big','#3a86ff','thin','#f7f5f0','#ffffff','#6b6458',{costume:'lemon'})},
+ {id:'sk_peas',name:Lx('Горошек','Pea pod'),r:'uncommon',g:g('wide','chubby','fold','sleepy','#8b5a2b','fluffy','#f3d9b1','#fff3e0','#6b5134',{costume:'peas'})},
+ {id:'sk_strawberry',name:Lx('Клубничка','Strawberry kitty'),r:'rare',g:g('heart','round','round','big','#7a4fd6','curly','#f7f5f0','#ffffff','#6b6458',{costume:'strawberry'})},
+ {id:'sk_cherry',name:Lx('Вишенка','Cherry kitty'),r:'rare',g:g('round','slim','pointed','big','#ffd166','thin','#3a3a44','#55555f','#111116',{costume:'cherry'})},
+ {id:'sk_eggplant',name:Lx('Баклажанчик','Eggplant kitty'),r:'rare',g:g('square','square','pointed','sleepy','#57c785','thin','#a7adb8','#e6e8ec','#3d424d',{costume:'eggplant'})},
+ {id:'sk_corn',name:Lx('Кукурузка','Corny'),r:'rare',g:g('round','round','long','round','#5aa05a','short','#f4a259','#fde3c4','#6b3d1f',{pat:'tabby',costume:'corn'})},
+ {id:'sk_watermelon',name:Lx('Арбузик','Watermelon kitty'),r:'epic',g:g('wide','chubby','pointed','big','#57c785','fluffy','#a7adb8','#e6e8ec','#3d424d',{pat:'tabby',costume:'watermelon'})},
+ {id:'sk_pineapple',name:Lx('Ананасик','Pineapple kitty'),r:'epic',g:g('round','round','pointed','star','#e0a200','curly','#f4c542','#ffe9a3','#7a5a00',{costume:'pineapple'})},
+ {id:'sk_avocado',name:Lx('Авокотик','Avocato'),r:'epic',g:g('wide','chubby','round','round','#2e9e5b','short','#7b4a2e','#a9714c','#2e1a0e',{costume:'avocado'})},
+ {id:'sk_broccoli',name:Lx('Брокколи','Broccoli kitty'),r:'epic',g:g('square','round','pointed','almond','#2e9e5b','thin','#efe2cc','#fff7ea','#4a3122',{pat:'points',costume:'broccoli'})},
+ {id:'sk_pumpkin',name:Lx('Тыковка','Pumpkin kitty'),r:'legend',g:g('round','chubby','bat','slit','#ff8c1a','zigzag','#26262e','#3a3a46','#0a0a0e',{glow:true,costume:'pumpkin'})},
+ {id:'sk_grapes',name:Lx('Виноградинка','Grape kitty'),r:'legend',g:g('heart','round','fold','big','#c77dff','fluffy','#c3b1e1','#efe8fa','#4d3a73',{glow:true,costume:'grapes',extras:['freckles']})},
+ {id:'sk_goldapple',name:Lx('Золотое яблочко','Golden apple kitty'),r:'mythic',g:g('heart','round','round','star','#ffd166','fluffy','#ffffff','#ffffff','#7a6a4a',{glow:true,pat:'shine',costume:'goldapple',tailColor:'#ffd166',extras:['star']})},
  {id:'sk_phoenix',name:Lx('Фениксик','Little phoenix'),r:'mythic',g:g('heart','slim','long','star','#fff3a0','double','#ff4d2e','#ffc46b','#5a0c00',{glow:true,pat:'flame',tailColor:'#ffd166',extras:['star']})},
  {id:'sk_galaxy',name:Lx('Хранитель галактики','Galaxy keeper'),r:'mythic',g:g('round','chubby','bat','big','#ff7ae6','curly','#1b1f4d','#3a3f8f','#05061a',{glow:true,pat:'stars',neon:'#c77dff',tailColor:'#c77dff',extras:['horns','glowspots'],hetero:'#7ff2ff'})}];
 const SKIN_BY_ID=Object.fromEntries(SKINS.map(s=>[s.id,s]));
@@ -507,6 +549,9 @@ function catSVG(cat,mood){const G=catGenes(cat);const wear=(cat&&cat.wear)||{};
   const foot=([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="15" ry="9" fill="${pt}" stroke="${L}" stroke-width="3"/><circle cx="${x-5}" cy="${y+1}" r="2" fill="#ffb3c7"/><circle cx="${x}" cy="${y+2}" r="2" fill="#ffb3c7"/><circle cx="${x+5}" cy="${y+1}" r="2" fill="#ffb3c7"/>`;
   const PL=hL?[B.pawL[0]-30,B.pawL[1]-14]:B.pawL,PR=hR?[B.pawR[0]+30,B.pawR[1]-14]:B.pawR;
   const hold=(w,P,flip)=>w?`${at([P[0],P[1]-6],fx(w),flip)}<g${ghost}><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${L}" stroke-width="15" stroke-linecap="round"/><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${pt}" stroke-width="10" stroke-linecap="round"/>${paw(P)}</g>${wr?at([P[0]+(flip?6:-6),P[1]+9],fx(wr)):''}`:'';
+  const CO=COSTUMES[G.costume],hc=(H.top+144)/2,htop=hc-(hc-H.top)*1.22,cid=uid('k');
+  const hoodT=`translate(100 ${hc}) scale(1.22) translate(-100 ${-hc})`;
+  const hood=CO?`<defs><clipPath id="${cid}"><path d="${H.path}" transform="${hoodT}"/></clipPath></defs><path d="${H.path}" transform="${hoodT}" fill="${CO.hood}"/><g clip-path="url(#${cid})">${CO.hd}<ellipse cx="70" cy="${htop+26}" rx="20" ry="9" fill="#fff" opacity=".18" transform="rotate(-24 70 ${htop+26})"/></g><path d="${H.path}" transform="${hoodT}" fill="none" stroke="${CO.edge}" stroke-width="2.6"/><g transform="translate(100 ${htop+2})">${CO.top}</g>`:'';
   const extras=G.extras||[];const blush=mood==='happy'||mood==='sleep';
   return `<svg viewBox="0 -20 200 248" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${Lx('Котёнок','Kitten')}">
   <defs><clipPath id="${id}"><path d="${B.path}"/></clipPath><clipPath id="${hid}"><path d="${H.path}"/></clipPath>
@@ -516,14 +561,14 @@ function catSVG(cat,mood){const G=catGenes(cat);const wear=(cat&&cat.wear)||{};
   ${back?at([100,148+cy],fx(back)):''}
   <g${ghost}>${T.d.map(d=>`<g transform="translate(${B.tail[0]} ${B.tail[1]})"><path d="${d}" fill="none" stroke="${L}" stroke-width="${T.w[0]}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${tailC}" stroke-width="${T.w[1]}" stroke-linecap="round" stroke-linejoin="round"/></g>`).join('')}
   <path d="${B.path}" fill="url(#${gb})"/>
-  <g clip-path="url(#${id})">${patternSVG(G,'body',dark)}<ellipse cx="100" cy="190" rx="${G.pat==='bicolor'?32:26}" ry="${G.pat==='bicolor'?30:26}" fill="${G.belly}"/>${body&&body.clip?body.clip:''}</g>
+  <g clip-path="url(#${id})">${patternSVG(G,'body',dark)}<ellipse cx="100" cy="190" rx="${G.pat==='bicolor'?32:26}" ry="${G.pat==='bicolor'?30:26}" fill="${G.belly}"/>${CO?`<rect x="30" y="120" width="140" height="102" fill="${CO.body}"/>${CO.bd}`:''}${body&&body.clip?body.clip:''}</g>
   <path d="${B.path}" fill="none" stroke="${L}" stroke-width="3"/>
   ${extras.includes('glowspots')?`<g filter="url(#${fid})">${[[76,166],[124,182],[106,158]].map(([x,y])=>`<circle cx="${x}" cy="${y+cy}" r="6" fill="${G.eyeColor}"/>`).join('')}</g>`:''}
   ${B.feet.map(foot).join('')}</g>
   ${chest?at([100,148+cy],fx(chest)):''}
   <g${ghost}>${hL?'':paw(PL)}${hR?'':paw(PR)}</g>
   ${wr&&!hL?at([PL[0],PL[1]+8],fx(wr)):''}${wr&&!hR?at([PR[0],PR[1]+8],fx(wr)):''}
-  <g${ghost}>${ear(H.earL,1)}${ear(H.earR,-1)}
+  <g${ghost}>${CO?hood:ear(H.earL,1)+ear(H.earR,-1)}
   <path d="${H.path}" fill="url(#${gb})"/><g clip-path="url(#${hid})">${patternSVG(G,'head',dark)}<ellipse cx="74" cy="${70+dy}" rx="18" ry="9" fill="#fff" opacity=".22" transform="rotate(-20 74 ${70+dy})"/></g>
   <path d="${H.path}" fill="none" stroke="${L}" stroke-width="3"/></g>
   ${extras.includes('horns')?`<path d="M78 ${62+dy} Q72 ${40+dy} 84 ${34+dy} Q84 ${48+dy} 92 ${58+dy} Z M122 ${62+dy} Q128 ${40+dy} 116 ${34+dy} Q116 ${48+dy} 108 ${58+dy} Z" fill="#f4e3c1" stroke="#8a6a3a" stroke-width="2.5"/>`:''}
@@ -551,6 +596,7 @@ const RU={pat:{none:Lx("Однотонный","Solid"),tabby:Lx("Полоски"
   ears:{pointed:Lx("Острые","Pointed"),round:Lx("Круглые","Round"),long:Lx("С кисточками","Tufted"),fold:Lx("Вислоухие","Folded"),bat:Lx("Как у летучей мыши","Bat ears")},
   eyes:{round:Lx("Круглые","Round"),almond:Lx("Миндальные","Almond"),big:Lx("Большие","Big"),sleepy:Lx("Сонные","Sleepy"),slit:Lx("Хищные","Hunter"),star:Lx("Звёздные","Starry")},
   tail:{thin:Lx("Тонкий","Thin"),fluffy:Lx("Пушистый","Fluffy"),short:Lx("Короткий","Short"),curly:Lx("Колечком","Curly"),double:Lx("Два хвоста","Two tails"),zigzag:Lx("Молния","Zigzag")},
+  costume:Object.fromEntries(Object.entries(COSTUMES).map(([k,v])=>[k,v.name])),
   extra:{horns:Lx("Рожки","Horns"),star:Lx("Звезда на лбу","Star on the forehead"),freckles:Lx("Веснушки","Freckles"),glowspots:Lx("Светящиеся пятна","Glowing spots")}};
 const NEONS=['#00e5ff','#ff2bd6','#39ff14','#ff3355','#ffd166','#c77dff'];
 const EYE_COLORS=['#5aa05a','#e0a200','#3a86ff','#8b5a2b','#57c785','#7a4fd6','#2f6fdc','#ffd166'];
@@ -562,7 +608,7 @@ function cleanDna(d){if(!d||typeof d!=='object')return null;const h=(v,f)=>HEX.t
       eyeColor:HEX.test(d.glow)?d.glow:'#5aa05a',glow:HEX.test(d.glow),pat:d.pat==='multi'?'rainbow':d.pat}}
   return {head:one(d.head,HEAD_T,'round'),body:one(d.body,BODY_T,'round'),ears:one(d.ears,EAR_T,'pointed'),eyes:one(d.eyes,EYE_T,'round'),eyeColor:h(d.eyeColor,'#5aa05a'),glow:d.glow===true,
     tail:one(d.tail,TAIL_T,'thin'),tailColor:HEX.test(d.tailColor)?d.tailColor:null,main:h(d.main,'#f4a259'),belly:h(d.belly,'#fde3c4'),line:h(d.line,'#6b3d1f'),
-    pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
+    costume:COSTUMES[d.costume]?d.costume:null,pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
 function skinToDna(s){return cleanDna(s.g)}
 
 const CAT_TRAITS=[
@@ -617,6 +663,8 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   if(Math.random()<.06){d.glow=true;d.eyeColor=pick(NEONS);O.eyeColor='mut'}
   else{const s=from();d.glow=s[1].glow;d.eyeColor=Math.random()<.2?mixHex(a.eyeColor,b.eyeColor):s[1].eyeColor;O.eyeColor=s[0]}
   if(Math.random()<.05){d.tailColor=pick([...NEONS,'#ffffff','#3a3a44']);O.tail='mut'}else d.tailColor=from()[1].tailColor;
+  if(Math.random()<.03){d.costume=pick(Object.keys(COSTUMES));O.costume='mut'}
+  else{const has=[['A',a],['B',b]].filter(x=>x[1].costume);if(has.length&&Math.random()<.5){const x=pick(has);d.costume=x[1].costume;O.costume=x[0]}else d.costume=null}
   d.neon=a.neon||b.neon||(d.pat==='circuit'?pick(NEONS):null);
   d.extras=[...new Set([...a.extras,...b.extras])].filter(()=>Math.random()<.5);if(Math.random()<.08){const n=pick(EXTRAS.filter(x=>!d.extras.includes(x)));if(n){d.extras.push(n);O.extras='mut'}}
   if(Math.random()<.05){d.hetero=pick(['#3a86ff','#2e9e5b','#ffd166','#c77dff','#e63946']);O.hetero='mut'}else d.hetero=(a.hetero||b.hetero)&&Math.random()<.4?(a.hetero||b.hetero):null;
@@ -625,7 +673,7 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   const stats={};CSTATS.forEach(([k])=>{let v=(Math.random()<.5?A:B).stats[k]+rnd(-1,1);if(Math.random()<.04){v+=2;O['s_'+k]='mut'}stats[k]=clamp(v,1,10)});
   return cleanKitten({id:'k'+Date.now().toString(36)+rnd(10,99),name:pick(KIT_NAMES),dna:d,traits,stats,gen:Math.max(A.gen,B.gen)+1,parents:[A.name,B.name],born:Date.now(),origin:O})}
 const kitRarity=k=>{const d=k.dna;const s=d.extras.length+(d.glow?1:0)+(d.hetero?1:0)+(d.tailColor?.5:0)+(['rainbow','flame','circuit','ghost','stars','shine'].includes(d.pat)?1:0)
-  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0);
+  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0)+(d.costume?1:0)+(d.costume==='goldapple'?2:0);
   return s>=6?'mythic':s>=4.5?'legend':s>=3?'epic':s>=1.5?'rare':s>=.5?'uncommon':'common'};
 const BREED_COST=10,BREED_TIME=20*60e3,KENNEL_MAX=24;
 
@@ -996,6 +1044,7 @@ function normalize(p){if(!p)return p;
   p.nest=p.nest&&typeof p.nest==='object'&&typeof p.nest.a==='string'&&typeof p.nest.b==='string'?{a:p.nest.a.slice(0,40),b:p.nest.b.slice(0,40),until:+p.nest.until||0}:null;
   if(c.kid){const k=p.kennel.find(x=>x.id===c.kid);if(k)c.dna=k.dna;else{delete c.kid;delete c.dna}}else delete c.dna;
   p.nextEv=+p.nextEv||now0+5*60e3;p.tDate=typeof p.tDate==='string'?p.tDate:'';p.tClass=+p.tClass||0;p.tScore=+p.tScore||0;
+  const cards={};if(p.cards&&typeof p.cards==='object')for(const [k,n] of Object.entries(p.cards))if((WEAR_BY_ID[k]||SKIN_BY_ID[k]||FURN_BY_ID[k])&&+n>0)cards[k]=Math.min(999,Math.floor(+n));p.cards=cards;
   const r=p.room=p.room&&typeof p.room==='object'?p.room:{};
   r.owned=[...new Set([...(Array.isArray(r.owned)?r.owned:[]),'wp_plain','fl_wood'])].filter(id=>FURN_BY_ID[id]||WALL_BY_ID[id]||FLOOR_BY_ID[id]);
   r.wp=WALL_BY_ID[r.wp]&&r.owned.includes(r.wp)?r.wp:'wp_plain';r.fl=FLOOR_BY_ID[r.fl]&&r.owned.includes(r.fl)?r.fl:'fl_wood';
@@ -1246,8 +1295,8 @@ function bindStage(){const c=player.cat;
   $('#rename').onclick=()=>{const v=$('#catname').value.trim().replace(/\s+/g,' ');if(!v)return;c.name=v.slice(0,14);savePlayer(true);catScreen()}}
 const effText=f=>Object.entries(f.eff).map(([k,v])=>`${STAT_NAME[k]} +${v}`).join(', ')+(f.xp2?`${Lx(", двойной опыт на",", double XP for")} ${f.xp2} ${Lx("игры","games")}`:'');
 
-async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;const c=player.cat,R=player.room;
-  const tabs=`<div class="tabs big" role="group" aria-label="${Lx("Раздел","Section")}">${[['care',Lx("Уход и еда","Care and food")],['wear',Lx("Гардероб","Wardrobe")],['skins',Lx("Породы","Breeds")],['kennel',Lx("Питомник","Cattery")+(player.nest&&player.nest.until<=Date.now()?' '+Lx("· котёнок!","· kitten!"):'')],['room',Lx("Комната","Room")],['chest',Lx("Сундуки","Chests")+(anyGift()?' '+Lx("· подарки!","· gifts!"):'')]].map(([k,n])=>`<button data-t="${k}" aria-pressed="${catTab===k}">${n}</button>`).join('')}</div>`;
+async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;if(catTab==='skins'||catTab==='kennel')catTab='cats';const c=player.cat,R=player.room;
+  const tabs=`<div class="tabs big" role="group" aria-label="${Lx("Раздел","Section")}">${[['care',Lx("Уход и еда","Care and food")],['wear',Lx("Гардероб","Wardrobe")],['cats',Lx("Котята","Kittens")+(player.nest&&player.nest.until<=Date.now()?' '+Lx("· родился!","· born!"):'')],['merge',Lx("Слияние","Merge")],['room',Lx("Комната","Room")],['chest',Lx("Сундуки","Chests")+(anyGift()?' '+Lx("· подарки!","· gifts!"):'')]].map(([k,n])=>`<button data-t="${k}" aria-pressed="${catTab===k}">${n}</button>`).join('')}</div>`;
   let body='';
   if(catTab==='care'){const now=Date.now();
     body=`<div class="catpage">${stageHTML()}<div>
@@ -1261,18 +1310,14 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
   else if(catTab==='wear'){const owned=new Set(c.owned);
     body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="${Lx("Вещи","Items")}">${SLOTS.map(([s,n])=>`<button data-s="${s}" aria-pressed="${s===wearSlot}">${n}</button>`).join('')}</div>
     ${wearSlot==='hand'?`<div class="side" role="group" aria-label="${Lx("Какая лапка","Which paw")}">${[['handL',Lx("🐾 Левая лапка","🐾 Left paw")],['handR',Lx("Правая лапка 🐾","Right paw 🐾")]].map(([k,n])=>`<button class="btn small ${handSide===k?'':'alt'}" data-hs="${k}" aria-pressed="${handSide===k}">${n}${c.wear[k]?' · '+esc(WEAR_BY_ID[c.wear[k]].name):''}</button>`).join('')}</div>`:''}
-    <div class="items">${WEAR.filter(x=>x.slot===wearSlot).map(x=>owned.has(x.id)?`<button class="item r-${x.r}${(x.slot==='hand'?c.wear[handSide]===x.id:c.wear[x.slot]===x.id)?' on':''}" data-w="${x.id}">${wearPreview(x)}<span>${esc(x.name)}</span><span class="rt r-${x.r}">${RARITY[x.r].name}</span></button>`:lockedCard(x.r,wearPreview(x))).join('')}</div>
+    <div class="items">${WEAR.filter(x=>x.slot===wearSlot).map(x=>owned.has(x.id)?`<button class="item r-${x.r}${(x.slot==='hand'?c.wear[handSide]===x.id:c.wear[x.slot]===x.id)?' on':''}" data-w="${x.id}">${cntBadge('clothes',x.id)}${wearPreview(x)}<span>${esc(x.name)}</span><span class="rt r-${x.r}">${RARITY[x.r].name}</span></button>`:lockedCard(x.r,wearPreview(x))).join('')}</div>
     <p class="note">${Lx("Нажми на вещь, чтобы надеть или снять. Серые вещи ждут в сундуках с одеждой. Собрано","Tap an item to put it on or take it off. Grey items are waiting in clothes chests. Collected")} ${c.owned.length} ${Lx("из","of")} ${WEAR.length}.</p></div></div>`}
-  else if(catTab==='skins'){const owned=new Set(c.skins);const SF={all:()=>true,round:s=>s.g.head!=='square',square:s=>s.g.head==='square',cyber:s=>s.g.pat==='circuit',glow:s=>s.g.glow,top:s=>['epic','legend','mythic'].includes(s.r)};
-    const list=SKINS.filter(SF[skinFilter]||SF.all);
-    body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="${Lx("Котята","Kittens")}">${[['all',Lx("Все","All")],['round',Lx("Круглоголовые","Round heads")],['square',Lx("Квадратные","Square heads")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${skinFilter===k}">${n}</button>`).join('')}</div>
-    <div class="items">${list.map(s=>owned.has(s.id)?`<button class="item r-${s.r}${c.skin===s.id&&!c.kid?' on':''}" data-k="${s.id}">${skinPreview(s)}<span>${esc(s.name)}</span><span class="rt r-${s.r}">${RARITY[s.r].name}</span></button>`:lockedCard(s.r,skinPreview(s))).join('')}</div>
-    <p class="note">${Lx("Нажми на котёнка, чтобы играть им. Новые котята выпадают из сундуков с котятами. Собрано","Tap a kitten to play as it. New kittens come from kitten chests. Collected")} ${c.skins.length} ${Lx("из","of")} ${SKINS.length}.</p></div></div>`}
-  else if(catTab==='kennel')body=kennelHTML();
+  else if(catTab==='cats')body=kennelHTML();
+  else if(catTab==='merge')body=mergeHTML();
   else if(catTab==='room'){const art=await loadArt();if(screen!=='cat'||catTab!=='room')return;const owned=new Set(R.owned);const w=wallet();let grid='';
     if(roomSlot==='wp'||roomSlot==='fl'){const list=roomSlot==='wp'?WALLS:FLOORS;const cur=roomSlot==='wp'?R.wp:R.fl;
       grid=list.map(o=>{const has=owned.has(o.id);return `<button class="item${cur===o.id?' on':''}" data-o="${o.id}" ${!has&&w<o.price?'aria-disabled="true"':''}>${swatchSVG(o)}<span>${esc(o.name)}</span><span class="${has?'rt r-common':'price'}">${has?(cur===o.id?Lx("выбрано","selected"):Lx("есть","owned")):'★ '+o.price}</span></button>`}).join('')}
-    else grid=FURN.filter(f=>f.slot===roomSlot).map(f=>owned.has(f.id)?`<button class="item r-${f.r}${R.place[f.slot]===f.id?' on':''}" data-p="${f.id}">${furnPreview(f)}<span>${esc(f.name)}</span><span class="rt r-${f.r}">${RARITY[f.r].name}</span></button>`:lockedCard(f.r,furnPreview(f))).join('');
+    else grid=FURN.filter(f=>f.slot===roomSlot).map(f=>owned.has(f.id)?`<button class="item r-${f.r}${R.place[f.slot]===f.id?' on':''}" data-p="${f.id}">${cntBadge('room',f.id)}${furnPreview(f)}<span>${esc(f.name)}</span><span class="rt r-${f.r}">${RARITY[f.r].name}</span></button>`:lockedCard(f.r,furnPreview(f))).join('');
     const furnCount=R.owned.filter(id=>FURN_BY_ID[id]).length;
     body=`<div class="roomview" style="margin-top:14px" id="roomv">${roomSVG(player,art)}</div>
     <div class="row">${c.poops?`<button class="btn small" id="cleanAll">${Lx("Убрать какашки (","Clean up poop (")}${c.poops})</button>`:''}<button class="btn alt small" id="photo2">${Lx("📷 Фото комнаты","📷 Room photo")}</button></div>
@@ -1284,19 +1329,18 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
     ${Object.entries(S.tiers).map(([t,T])=>{const ten=Math.round(T.cost*9);return `<div class="chest">${chestSVG(t,k)}<h5>${T.name}</h5><p>${T.desc}</p>
       <button class="btn small" data-c="${k}:${t}:1" ${wallet()<T.cost?'disabled':''}>★ ${T.cost}</button>
       <button class="btn alt small" data-c="${k}:${t}:10" ${wallet()<ten?'disabled':''}>${Lx("×10 за ★","×10 for ★")} ${ten} <span class="tag" style="color:var(--ok)">−10%</span></button></div>`}).join('')}</div>`).join('')+
-    `<p class="note">${Lx("У тебя ★","You have ★")} ${wallet()}${Lx(". Если выпадет то, что уже есть, часть звёзд вернётся.",". If you get something you already have, you get some stars back.")}</p>`}
+    `<p class="note">${Lx("У тебя ★","You have ★")} ${wallet()}${Lx(". Повторы складываются в стопки, а три одинаковые по редкости карты можно слить во вкладке «Слияние».",". Duplicates stack up, and three cards of the same rarity can be merged on the Merge tab.")}</p>`}
   app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${catTab==='room'?Lx("Комната","Room"):Lx("Котёнок","Kitten")} ${esc(c.name)}</h2><span class="chip"><b>★</b>${wallet()}</span></div>${tabs}${body}</section>`;
   $('#back').onclick=menu;
   app.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>catScreen(b.dataset.t));
-  if(catTab==='care'||catTab==='wear'||catTab==='skins')bindStage();
-  if(catTab==='kennel')bindKennel();
+  if(catTab==='care'||catTab==='wear')bindStage();
+  if(catTab==='cats')bindKennel();
+  if(catTab==='merge')bindMerge();
   app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{wearSlot=b.dataset.s;catScreen()});
-  app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{skinFilter=b.dataset.f;catScreen()});
   app.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{roomSlot=b.dataset.r;catScreen()});
   app.querySelectorAll('[data-hs]').forEach(b=>b.onclick=()=>{handSide=b.dataset.hs;catScreen()});
   app.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const x=WEAR_BY_ID[b.dataset.w];const k=x.slot==='hand'?handSide:x.slot;c.wear={...c.wear,[k]:c.wear[k]===x.id?null:x.id};if(!c.wear[k])delete c.wear[k];
     c.joy=clamp(c.joy+2,0,100);tone(740,0,.12,'triangle');savePlayer();catScreen()});
-  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{setActive(indFromSkin(SKIN_BY_ID[b.dataset.k]));tone(740,0,.12,'triangle');savePlayer();catScreen()});
   app.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const f=FURN_BY_ID[b.dataset.p];if(R.place[f.slot]===f.id)delete R.place[f.slot];else R.place[f.slot]=f.id;tone(620,0,.1,'triangle');savePlayer();catScreen()});
   app.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{const id=b.dataset.o;const o=WALL_BY_ID[id]||FLOOR_BY_ID[id];const isW=!!WALL_BY_ID[id];
     if(!R.owned.includes(id)){if(wallet()<o.price){toast(`${Lx("Нужно ещё ★","You need ★")} ${o.price-wallet()}`);return}player.spent+=o.price;R.owned=[...R.owned,id];fanfare();toast(`${Lx("Куплено:","Bought:")} ${esc(o.name)}`)}
@@ -1336,7 +1380,7 @@ const CHEST_SETS={
     preview:wearPreview,equip:it=>{const k=it.slot==='hand'?handSide:it.slot;player.cat.wear={...player.cat.wear,[k]:it.id};wearSlot=it.slot;return 'wear'},gift:{common:55,uncommon:35,rare:10},
     tiers:{small:{name:Lx("Деревянный сундук","Wooden chest"),cost:5,desc:Lx("Чаще всего обычные вещи","Mostly common items"),w:{common:58,uncommon:28,rare:10,epic:3,legend:1,mythic:0}},rare:{name:Lx("Волшебный сундук","Magic chest"),cost:15,desc:Lx("Много редких вещей","Lots of rare items"),w:{common:8,uncommon:28,rare:36,epic:20,legend:7,mythic:1}},royal:{name:Lx("Королевский сундук","Royal chest"),cost:40,desc:Lx("Эпические, легендарные и мифические вещи","Epic, legendary and mythic items"),w:{common:0,uncommon:4,rare:24,epic:36,legend:28,mythic:8}}}},
   cats:{title:Lx("Сундуки с котятами","Kitten chests"),note:Lx("Разные головы, тела, уши, глаза и хвосты: пушистые, кибер, кубики, драконы и мифические котята","Different heads, bodies, ears, eyes and tails: fluffy, cyber, cubies, dragons and mythic kittens"),pool:SKINS,get:()=>player.cat.skins,add:id=>player.cat.skins=[...player.cat.skins,id],
-    preview:s=>skinPreview(s,'happy'),equip:it=>{setActive(indFromSkin(it));return 'skins'},gift:{common:55,uncommon:35,rare:10},
+    preview:s=>skinPreview(s,'happy'),equip:it=>{setActive(indFromSkin(it));return 'cats'},gift:{common:55,uncommon:35,rare:10},
     tiers:{small:{name:Lx("Коробка с котёнком","Kitten box"),cost:10,desc:Lx("Обычные породы","Common breeds"),w:{common:58,uncommon:28,rare:10,epic:3,legend:1,mythic:0}},rare:{name:Lx("Волшебная корзинка","Magic basket"),cost:25,desc:Lx("Редкие, эпические и кибер-котята","Rare, epic and cyber kittens"),w:{common:8,uncommon:28,rare:36,epic:20,legend:7,mythic:1}},royal:{name:Lx("Королевская переноска","Royal carrier"),cost:60,desc:Lx("Эпические, легендарные и мифические котята","Epic, legendary and mythic kittens"),w:{common:0,uncommon:4,rare:24,epic:36,legend:28,mythic:8}}}},
   room:{title:Lx("Сундуки обустройства","Furniture chests"),note:Lx("Лежанки, когтеточки, лампы, коврики, растения и окна для комнаты","Beds, scratching posts, lamps, rugs, plants and windows for the room"),pool:FURN,get:()=>player.room.owned,add:id=>player.room.owned=[...player.room.owned,id],
     preview:furnPreview,equip:it=>{player.room.place={...player.room.place,[it.slot]:it.id};roomSlot=it.slot;return 'room'},gift:{common:55,uncommon:35,rare:10},
@@ -1360,9 +1404,8 @@ function openChest(setKey,tier,count=1){const S=CHEST_SETS[setKey];const gift=ti
   const cost=gift?0:count===10?Math.round(T.cost*9):T.cost;
   if(gift&&!player.gifts[setKey])return;if(!gift&&wallet()<cost)return;
   if(gift)player.gifts={...player.gifts,[setKey]:false};else player.spent+=cost;
-  const got=[];let refund=0;
-  for(let i=0;i<count;i++){const r=rollItem(S,gift?S.gift:T.w);if(r.dupe){r.refund=RARITY[r.item.r].dup;refund+=r.refund}else S.add(r.item.id);got.push(r)}
-  player.spent=Math.max(-1e9,player.spent-refund);
+  const got=[];
+  for(let i=0;i<count;i++){const r=rollItem(S,gift?S.gift:T.w);r.dupe=addCard(setKey,r.item.id);got.push(r)}
   player.cat.joy=clamp(player.cat.joy+10,0,100);savePlayer(true);renderMe();
   const m=$('#modal');
   m.innerHTML=`<div class="overlay" role="dialog" aria-modal="true" aria-label="${Lx("Открываем сундук","Opening a chest")}"><div class="modal"><h3>${Lx("Открываем","Opening")}${count>1?` ${count} ${Lx("сундуков","chests")}`:''}…</h3>${chestSVG(tier,setKey).replace('<svg','<svg class="chestbig"')}</div></div>`;
@@ -1370,12 +1413,13 @@ function openChest(setKey,tier,count=1){const S=CHEST_SETS[setKey];const gift=ti
   setTimeout(()=>{fanfare();const md=m.querySelector('.modal');if(!md)return;
     if(count===1){const {item,dupe}=got[0];
       md.innerHTML=`<p class="rt r-${item.r}" style="margin:0">${RARITY[item.r].name}${setKey==='cats'?' '+Lx("порода","breed"):' '+Lx("вещь","item")}</p><h3>${esc(item.name)}</h3>
-      <div class="prize glow">${S.preview(item)}</div><p>${dupe?`${Lx("Такое уже есть. Возвращаем ★","You already have this. Refunding ★")} ${got[0].refund}.`:setKey==='cats'?Lx("Новый котёнок в коллекции!","New kitten in your collection!"):Lx("Новая вещь в коллекции!","New item in your collection!")}</p>
-      <div class="btns">${dupe?'':`<button class="btn" id="useNow">${setKey==='cats'?Lx("Играть им","Play as it"):setKey==='room'?Lx("Поставить","Place it"):Lx("Надеть","Wear it")}</button>`}<button class="btn alt" id="closeM">${Lx("Отлично!","Great!")}</button></div>`;
+      <div class="prize glow">${S.preview(item)}</div><p>${dupe?`${Lx("Такая карта уже есть — она легла в стопку","You already have this card, so it went onto the stack")} (×${cardCount(setKey,item.id)}). ${Lx("Три повтора можно попробовать слить в карту редкостью выше!","Try merging three duplicates into a card of a higher rarity!")}`:setKey==='cats'?Lx("Новый котёнок в коллекции!","New kitten in your collection!"):Lx("Новая вещь в коллекции!","New item in your collection!")}</p>
+      <div class="btns">${dupe?`<button class="btn" id="toMerge">${Lx("К слиянию","Go to merge")}</button>`:`<button class="btn" id="useNow">${setKey==='cats'?Lx("Играть им","Play as it"):setKey==='room'?Lx("Поставить","Place it"):Lx("Надеть","Wear it")}</button>`}<button class="btn alt" id="closeM">${Lx("Отлично!","Great!")}</button></div>`;
+      const tm=$('#toMerge');if(tm)tm.onclick=()=>{m.innerHTML='';mergeSet=setKey;mergeSel=[];catScreen('merge')};
       const u=$('#useNow');if(u)u.onclick=()=>{const tab=S.equip(item);savePlayer(true);m.innerHTML='';catScreen(tab)}}
     else{const fresh=got.filter(g=>!g.dupe).length;
-      md.classList.add('wide');md.innerHTML=`<h3>${Lx("10 сундуков открыто!","10 chests opened!")}</h3><p>${Lx("Новых:","New:")} <b>${fresh}</b>${refund?` ${Lx("· вернули ★","· refunded ★")} ${refund} ${Lx("за повторы","for duplicates")}`:''}</p>
-      <div class="items ten">${got.map(({item,dupe})=>`<div class="item r-${item.r} glow">${S.preview(item)}<span>${esc(item.name)}</span><span class="rt ${dupe?'':'r-'+item.r}">${dupe?Lx("повтор","duplicate"):Lx("новое!","new!")}</span></div>`).join('')}</div>
+      md.classList.add('wide');md.innerHTML=`<h3>${Lx("10 сундуков открыто!","10 chests opened!")}</h3><p>${Lx("Новых:","New:")} <b>${fresh}</b>${got.length-fresh?` ${Lx("· повторов в стопки:","· duplicates stacked:")} <b>${got.length-fresh}</b>`:''}</p>
+      <div class="items ten">${got.map(({item,dupe})=>`<div class="item r-${item.r} glow">${S.preview(item)}<span>${esc(item.name)}</span><span class="rt ${dupe?'':'r-'+item.r}">${dupe?Lx("в стопку","stacked"):Lx("новое!","new!")}</span></div>`).join('')}</div>
       <div class="btns"><button class="btn" id="closeM">${Lx("Отлично!","Great!")}</button></div>`}
     $('#closeM').onclick=()=>{m.innerHTML='';catScreen('chest')};$('#closeM').focus()},reduced?100:1300)}
 
@@ -1403,10 +1447,16 @@ function kennelHTML(){const n=player.nest,now=Date.now(),cats=allCats(),act=acti
     nest=`<div class="nest"><div class="pair">${slot('slA',A,Lx("Родитель 1","Parent 1"))}<span class="heart">💞</span>${slot('slB',B,Lx("Родитель 2","Parent 2"))}</div>
     <div class="btns"><button class="btn" id="doBreed" ${A&&B&&!full&&wallet()>=BREED_COST?'':'disabled'}>${Lx("Скрестить за ★","Breed for ★")} ${BREED_COST}</button></div>
     <p class="note" style="margin:6px 0 0">${full?`${Lx("В питомнике уже","The cattery already has")} ${KENNEL_MAX} ${Lx("рождённых котят. Отдай кого-нибудь в добрые руки, чтобы освободить место.","born kittens. Give one to a loving home to make room.")}`:Lx("Нажми на кота ниже и выбери его родителем. Котёнок получит гены от обоих и родится через 20 минут. Иногда случаются мутации!","Tap a cat below and choose it as a parent. The kitten gets genes from both and is born in 20 minutes. Sometimes mutations happen!")}</p></div>`}
-  const grid=cats.map(ind=>`<button class="item r-${indRarity(ind)}${ind.id===act?' on':''}" data-cat="${ind.id}">${catPic(ind)}<span>${esc(ind.name)}</span>
-    <span class="tag" style="font-size:12px">${ind.gen?`${Lx("Поколение","Generation")} ${ind.gen}`:Lx("Из сундука","From a chest")}</span><span style="font-size:18px">${ind.traits.map(t=>TRAIT_BY_ID[t].icon).join(' ')}</span></button>`).join('');
+  const KF={all:()=>true,born:i=>!i.skin,veg:i=>!!i.dna.costume,cyber:i=>i.dna.pat==='circuit',glow:i=>i.dna.glow,top:i=>['epic','legend','mythic'].includes(indRarity(i))};
+  const f=KF[skinFilter]?skinFilter:'all';const shown=cats.filter(KF[f]);
+  const grid=shown.map(ind=>`<button class="item r-${indRarity(ind)}${ind.id===act?' on':''}" data-cat="${ind.id}">${ind.skin?cntBadge('cats',ind.skin):''}${catPic(ind)}<span>${esc(ind.name)}</span>
+    <span class="tag" style="font-size:12px">${ind.gen?`${Lx("Поколение","Generation")} ${ind.gen}`:`<span class="rt r-${indRarity(ind)}">${RARITY[indRarity(ind)].name}</span>`}</span><span style="font-size:18px">${ind.traits.map(t=>TRAIT_BY_ID[t].icon).join(' ')}</span></button>`).join('');
+  const owned=new Set(player.cat.skins);const locked=f==='born'?[]:SKINS.filter(s=>!owned.has(s.id)&&KF[f]({skin:s.id,dna:s.g}));
   return `<h4 style="margin-top:14px">${Lx("Гнёздышко","Nest")}</h4>${nest}<h4>${Lx("Твои коты (","Your cats (")}${cats.length})</h4>
-  <p class="note" style="margin:0">${Lx("Из сундуков:","From chests:")} ${player.cat.skins.length}${Lx(". Рождённых:",". Born here:")} ${player.kennel.length} ${Lx("из","of")} ${KENNEL_MAX}${Lx(". Нажми на кота, чтобы посмотреть его гены и свойства.",". Tap a cat to see its genes and traits.")}</p><div class="items">${grid}</div>`}
+  <p class="note" style="margin:0">${Lx("Пород из сундуков:","Breeds from chests:")} ${player.cat.skins.length} ${Lx("из","of")} ${SKINS.length}${Lx(". Рождённых:",". Born here:")} ${player.kennel.length} ${Lx("из","of")} ${KENNEL_MAX}${Lx(". Нажми на кота, чтобы сделать его главным, посмотреть гены или выбрать родителем.",". Tap a cat to make it your main cat, see its genes or choose it as a parent.")}</p>
+  <div class="tabs" style="margin-top:10px" role="group" aria-label="${Lx("Фильтр","Filter")}">${[['all',Lx("Все","All")],['born',Lx("Рождённые","Born here")],['veg',Lx("Овощи и фрукты","Veggies and fruits")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${f===k}">${n}</button>`).join('')}</div>
+  <div class="items">${grid}${locked.map(s=>lockedCard(s.r,skinPreview(s))).join('')}</div>
+  ${shown.length||locked.length?'':'<p class="empty">'+Lx("Здесь пока никого нет.","Nobody here yet.")+'</p>'}`}
 
 function bindKennel(){const nl=$('#nestLeft');if(nl){const iv=setInterval(()=>{if(!document.body.contains(nl)){clearInterval(iv);return}const left=player.nest?player.nest.until-Date.now():0;
     if(left<=0){clearInterval(iv);catScreen()}else nl.textContent=fmtLeft(left)},1000)}
@@ -1416,6 +1466,7 @@ function bindKennel(){const nl=$('#nestLeft');if(nl){const iv=setInterval(()=>{i
   const sa=$('#slA'),sb=$('#slB');if(sa)sa.onclick=()=>pickSlot('A');if(sb)sb.onclick=()=>pickSlot('B');
   const db=$('#doBreed');if(db)db.onclick=()=>{if(!selA||!selB||selA===selB||wallet()<BREED_COST)return;player.spent+=BREED_COST;
     player.nest={a:selA,b:selB,until:Date.now()+BREED_TIME};selA=selB=null;savePlayer(true);renderMe();tone(660,0,.15);tone(880,.15,.2);catScreen()};
+  app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{skinFilter=b.dataset.f;catScreen()});
   app.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{const ind=findCat(b.dataset.cat);if(!ind)return;
     if(pendingSlot&&!player.nest){setParent(pendingSlot,ind);pendingSlot=null;return}catDetail(ind)})}
 let pendingSlot=null;
@@ -1428,6 +1479,7 @@ function catDetail(ind,newborn){const m=$('#modal');const O=ind.origin||{},d=ind
     [Lx("Голова","Head"),RU.head[d.head]+src('head')],[Lx("Тело","Body"),RU.body[d.body]+src('body')],[Lx("Уши","Ears"),RU.ears[d.ears]+src('ears')],
     [Lx("Глаза","Eyes"),`${RU.eyes[d.eyes]}${src('eyes')} ${sw(d.eyeColor)}${d.glow?' '+Lx("светятся","glowing"):''}${src('eyeColor')}`+(d.hetero?` ${Lx("· разного цвета","· different colors")} ${sw(d.hetero)}${src('hetero')}`:'')],
     [Lx("Хвост","Tail"),RU.tail[d.tail]+(d.tailColor?' '+sw(d.tailColor):'')+src('tail')],
+    ...(d.costume?[[Lx("Костюм","Costume"),RU.costume[d.costume]+src('costume')]]:[]),
     [Lx("Особенности","Features"),(d.extras.length?d.extras.map(x=>RU.extra[x]).join(', '):Lx("нет","none"))+src('extras')]];
   const inNest=player.nest&&(player.nest.a===ind.id||player.nest.b===ind.id);
   m.innerHTML=evOverlay(`${newborn?'<p class="rt r-legend" style="margin:0">'+Lx("Новый котёнок!","New kitten!")+'</p>':''}<div class="prize ${newborn?'glow':''}" style="width:150px;margin:0 auto">${catPic(ind,'happy')}</div>
@@ -1445,10 +1497,75 @@ function catDetail(ind,newborn){const m=$('#modal');const O=ind.origin||{},d=ind
   const on=(id,f)=>{const b=$('#'+id);if(b)b.onclick=f};
   on('kClose',()=>{m.innerHTML='';if(screen==='cat')catScreen()});
   on('kMain',()=>{setActive(ind);savePlayer(true);m.innerHTML='';toast(`${esc(ind.name)} ${Lx("теперь главный кот","is now your main cat")}`);catScreen()});
-  on('kA',()=>{m.innerHTML='';catTab='kennel';setParent('A',ind)});on('kB',()=>{m.innerHTML='';catTab='kennel';setParent('B',ind)});
+  on('kA',()=>{m.innerHTML='';catTab='cats';setParent('A',ind)});on('kB',()=>{m.innerHTML='';catTab='cats';setParent('B',ind)});
   on('kRename',()=>{const v=$('#kName').value.trim().replace(/\s+/g,' ').slice(0,14);if(!v)return;player.kennel=player.kennel.map(k=>k.id===ind.id?{...k,name:v}:k);ind.name=v;savePlayer(true);toast(Lx("Имя сохранено","Name saved"));catDetail({...ind},false)});
   on('kGive',()=>{m.querySelector('.btns').innerHTML=`<p class="err" style="margin:0">${Lx("Отдать","Give")} ${esc(ind.name)} ${Lx("в добрые руки? Котёнок уйдёт навсегда, а ты получишь 3 ★.","to a loving home? The kitten leaves forever, and you get 3 ★.")}</p><button class="btn" id="kGiveYes" style="background:var(--bad)">${Lx("Да, отдать","Yes, give away")}</button><button class="btn alt" id="kClose2">${Lx("Отмена","Cancel")}</button>`;
     on('kClose2',()=>catDetail(ind));on('kGiveYes',()=>{player.kennel=player.kennel.filter(k=>k.id!==ind.id);if(selA===ind.id)selA=null;if(selB===ind.id)selB=null;player.stars+=3;savePlayer(true);renderMe();m.innerHTML='';toast(Lx("Котёнок нашёл новый дом. +3 ★","The kitten found a new home. +3 ★"));catScreen()})})}
+
+/* ===== Стопки карт и слияние 3 → 1 ===== */
+const CARD_SETS={
+  clothes:{name:Lx("Одежда","Clothes"),pool:WEAR,byId:WEAR_BY_ID,get:()=>player.cat.owned,set:a=>player.cat.owned=a,preview:wearPreview,
+    locked:id=>Object.values(player.cat.wear).includes(id)},
+  cats:{name:Lx("Котята","Kittens"),pool:SKINS,byId:SKIN_BY_ID,get:()=>player.cat.skins,set:a=>player.cat.skins=a,preview:s=>skinPreview(s),
+    locked:id=>id==='sk_orange'||(!player.cat.kid&&player.cat.skin===id)||(player.nest&&(player.nest.a==='s_'+id||player.nest.b==='s_'+id))||selA==='s_'+id||selB==='s_'+id},
+  room:{name:Lx("Мебель","Furniture"),pool:FURN,byId:FURN_BY_ID,get:()=>player.room.owned,set:a=>player.room.owned=a,preview:furnPreview,
+    locked:id=>Object.values(player.room.place).includes(id)}};
+/* Шанс, что 3 карты превратятся в одну карту редкостью выше */
+const MERGE_CHANCE={common:60,uncommon:50,rare:40,epic:30,legend:20};
+const cardCount=(set,id)=>CARD_SETS[set].get().includes(id)?1+(player.cards[id]||0):0;
+const cardFree=(set,id)=>Math.max(0,cardCount(set,id)-(CARD_SETS[set].locked(id)?1:0));
+function addCard(set,id){const S=CARD_SETS[set];if(S.get().includes(id)){player.cards={...player.cards,[id]:(player.cards[id]||0)+1};return true}S.set([...S.get(),id]);return false}
+function takeCard(set,id){const S=CARD_SETS[set];if(player.cards[id]>0){const c={...player.cards};if(--c[id]<=0)delete c[id];player.cards=c}
+  else{S.set(S.get().filter(x=>x!==id));
+    if(set==='clothes'){const w={...player.cat.wear};for(const k in w)if(w[k]===id)delete w[k];player.cat.wear=w}
+    if(set==='room'){const p={...player.room.place};for(const k in p)if(p[k]===id)delete p[k];player.room.place=p}}}
+const cntBadge=(set,id)=>{const n=cardCount(set,id);return n>1?`<span class="cnt">×${n}</span>`:''};
+
+let mergeSet='clothes',mergeSel=[];
+function mergeHTML(){const S=CARD_SETS[mergeSet];const tier=mergeSel.length?S.byId[mergeSel[0]].r:null;
+  const next=tier?RAR_ORDER[RAR_ORDER.indexOf(tier)+1]:null;const chance=tier?MERGE_CHANCE[tier]:null;
+  const used=id=>mergeSel.filter(x=>x===id).length;
+  const slots=[0,1,2].map(i=>{const id=mergeSel[i];const it=id&&S.byId[id];
+    return `<button class="fs ${it?'r-'+it.r:''}" data-ms="${i}" ${it?`aria-label="${Lx("Убрать","Remove")} ${esc(it.name)}"`:''}>${it?S.preview(it)+`<em>${esc(it.name)}</em>`:'<span class="q">+</span><em>'+Lx("карта","card")+' '+(i+1)+'</em>'}</button>`}).join('');
+  const target=`<div class="fs ${next?'r-'+next:''}" style="cursor:default"><span class="q" style="${next?`color:var(--${next})`:''}">?</span><em>${next?RARITY[next].name:Lx("редкость выше","higher rarity")}</em></div>`;
+  const list=S.pool.filter(x=>cardCount(mergeSet,x.id)>0).sort((a,b)=>RAR_ORDER.indexOf(a.r)-RAR_ORDER.indexOf(b.r));
+  const grid=list.map(x=>{const free=cardFree(mergeSet,x.id)-used(x.id);const ok=free>0&&x.r!=='mythic'&&(!tier||x.r===tier)&&mergeSel.length<3;
+    return `<button class="item r-${x.r}${used(x.id)?' picked':''}" data-mc="${x.id}" ${ok?'':'aria-disabled="true"'}>${cntBadge(mergeSet,x.id)}${S.preview(x)}<span>${esc(x.name)}</span>
+      <span class="rt r-${x.r}">${RARITY[x.r].name}</span><span style="font-size:12px;color:var(--muted);font-weight:400">${x.r==='mythic'?Lx("выше некуда","already the top"):free>0?`${Lx("можно взять:","can use:")} ${free}`:S.locked(x.id)&&cardCount(mergeSet,x.id)-used(x.id)>=1?Lx("используется","in use"):Lx("все в слиянии","all in the merge")}</span></button>`}).join('');
+  return `<h4 style="margin-top:14px">${Lx("Слияние карт","Card merge")}</h4>
+  <p class="note" style="margin:0">${Lx("Положи 3 карты одной редкости. Если повезёт, получишь новую карту редкостью выше. Если нет — карты рассыпятся. Повторы из сундуков складываются в стопки (×2, ×3…), их удобно сливать. Надетые вещи, поставленную мебель и главного кота взять нельзя.","Put in 3 cards of the same rarity. If you're lucky, you get a new card of a higher rarity. If not, the cards crumble. Duplicates from chests stack up (×2, ×3…), so they're great for merging. Items you wear, placed furniture and your main cat can't be used.")}</p>
+  <div class="tabs" style="margin-top:10px" role="group" aria-label="${Lx("Какие карты","Which cards")}">${Object.entries(CARD_SETS).map(([k,v])=>`<button data-mset="${k}" aria-pressed="${mergeSet===k}">${v.name}</button>`).join('')}</div>
+  <div class="forge" id="forge">${slots}<span class="arrow">→</span>${target}</div>
+  <p class="note" style="text-align:center;margin:0">${chance?`${Lx("Шанс успеха:","Success chance:")} <b>${chance}%</b> · ${RARITY[tier].name} → <span class="rt r-${next}">${RARITY[next].name}</span>`:Lx("Шансы: обычная → необычная 60%, необычная → редкая 50%, редкая → эпическая 40%, эпическая → легендарная 30%, легендарная → мифическая 20%.","Chances: common → uncommon 60%, uncommon → rare 50%, rare → epic 40%, epic → legendary 30%, legendary → mythic 20%.")}</p>
+  <div class="btns"><button class="btn" id="doMerge" ${mergeSel.length===3?'':'disabled'}>${Lx("Объединить","Merge")}</button>${mergeSel.length?`<button class="btn alt" id="mClear">${Lx("Очистить","Clear")}</button>`:''}</div>
+  ${list.length?`<div class="items">${grid}</div>`:'<p class="empty">'+Lx("Карт пока нет. Открой сундуки!","No cards yet. Open some chests!")+'</p>'}`}
+
+function bindMerge(){
+  app.querySelectorAll('[data-mset]').forEach(b=>b.onclick=()=>{mergeSet=b.dataset.mset;mergeSel=[];catScreen()});
+  app.querySelectorAll('[data-ms]').forEach(b=>b.onclick=()=>{const i=+b.dataset.ms;if(mergeSel[i]){mergeSel.splice(i,1);tone(440,0,.06);catScreen()}});
+  app.querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>{if(b.getAttribute('aria-disabled'))return;mergeSel=[...mergeSel,b.dataset.mc];tone(520+mergeSel.length*80,0,.08,'triangle');catScreen()});
+  const c=$('#mClear');if(c)c.onclick=()=>{mergeSel=[];catScreen()};
+  const d=$('#doMerge');if(d)d.onclick=doMerge}
+
+function doMerge(){const set=mergeSet,S=CARD_SETS[set];if(mergeSel.length!==3)return;const tier=S.byId[mergeSel[0]].r;
+  const ok=mergeSel.every(id=>S.byId[id]&&S.byId[id].r===tier)&&MERGE_CHANCE[tier]&&mergeSel.every(id=>cardFree(set,id)>=mergeSel.filter(x=>x===id).length);
+  if(!ok){mergeSel=[];catScreen();return}
+  const inputs=mergeSel.map(id=>S.byId[id]);mergeSel.forEach(id=>takeCard(set,id));mergeSel=[];
+  const win=Math.random()*100<MERGE_CHANCE[tier];let item=null,dupe=false;
+  if(win){const next=RAR_ORDER[RAR_ORDER.indexOf(tier)+1];const all=S.pool.filter(x=>x.r===next);const fresh=all.filter(x=>!S.get().includes(x.id));
+    item=pick(fresh.length&&Math.random()<.7?fresh:all);dupe=addCard(set,item.id)}
+  savePlayer(true);
+  const m=$('#modal');
+  m.innerHTML=evOverlay(`<h3>${Lx("Слияние…","Merging…")}</h3><div class="forge">${inputs.map(x=>`<div class="fs r-${x.r}" style="cursor:default">${S.preview(x)}</div>`).join('')}</div>`);
+  tone(300,0,.12,'square',.05);tone(380,.3,.12,'square',.05);tone(460,.6,.12,'square',.05);
+  setTimeout(()=>{const md=m.querySelector('.modal');if(!md)return;
+    if(win){fanfare();md.innerHTML=`<p class="rt r-${item.r}" style="margin:0">${RARITY[item.r].name}</p><h3>${Lx("Получилось!","It worked!")}</h3>
+      <div class="prize glow fx-ok">${S.preview(item)}</div><p><b>${esc(item.name)}</b>${dupe?` — ${Lx("такая уже была, карта легла в стопку","you already had it, the card went onto the stack")} (×${cardCount(set,item.id)})`:' — '+Lx("новая карта в коллекции!","a new card in your collection!")}</p>
+      <div class="btns"><button class="btn" id="closeM">${Lx("Ура!","Hooray!")}</button></div>`}
+    else{tone(330,0,.25,'sawtooth',.05);tone(220,.25,.4,'sawtooth',.05);
+      md.innerHTML=`<h3>${Lx("Не повезло…","No luck…")}</h3><div class="forge">${inputs.map(x=>`<div class="fs r-${x.r} fx-bad" style="cursor:default">${S.preview(x)}</div>`).join('')}</div>
+      <p>${Lx("Карты рассыпались. Попробуй ещё раз с другими повторами!","The cards crumbled. Try again with other duplicates!")}</p><div class="btns"><button class="btn" id="closeM">${Lx("Ладно","Okay")}</button></div>`}
+    $('#closeM').onclick=()=>{m.innerHTML='';catScreen('merge')};$('#closeM').focus()},reduced?100:1300)}
 
 /* ===== Движок вопросов ===== */
 const lvlTag=g=>g.levels?` <span class="tag">· ${gradeLabel(level)}</span>`:'';
