@@ -11,17 +11,17 @@
 :root{
   --paper:#fbfcf7; --grid:#d6e2ef; --ink:#1f3a8a; --text:#1d2433; --muted:#5a6478;
   --margin:#e0525a; --star:#d99a00; --ok:#2e9e5b; --bad:#d64545; --card:#ffffff; --line:#c9d3e2; --me:#fff4c7;
-  --common:#6f7f9c; --rare:#7a4fd6; --legend:#d99a00; --hard:#3b2a6b; --xp:#2fa6c9;
+  --common:#9aa6b8; --uncommon:#2e9e5b; --rare:#2f6fdc; --epic:#8b3fd9; --legend:#d99a00; --mythic:#e5243b; --hard:#3b2a6b; --xp:#2fa6c9;
   --display:"Neucha","Comic Sans MS",cursive; --body:"Nunito",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#141a26; --grid:#212b3d; --ink:#8fb0ff; --text:#e6ebf5; --muted:#9aa6bd;
   --margin:#ff7a80; --star:#ffc93c; --ok:#4fd18a; --bad:#ff7070; --card:#1b2333; --line:#2e3a52; --me:#3a3420;
-  --common:#9aa8c4; --rare:#b394ff; --legend:#ffc93c; --hard:#8f7ad9; --xp:#5fd0f0; color-scheme:dark}}
+  --common:#e8ecf3; --uncommon:#4fd38a; --rare:#5b9bff; --epic:#b98cff; --legend:#ffc93c; --mythic:#ff5468; --hard:#8f7ad9; --xp:#5fd0f0; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#141a26; --grid:#212b3d; --ink:#8fb0ff; --text:#e6ebf5; --muted:#9aa6bd;
   --margin:#ff7a80; --star:#ffc93c; --ok:#4fd18a; --bad:#ff7070; --card:#1b2333; --line:#2e3a52; --me:#3a3420;
-  --common:#9aa8c4; --rare:#b394ff; --legend:#ffc93c; --hard:#8f7ad9; --xp:#5fd0f0; color-scheme:dark}
+  --common:#e8ecf3; --uncommon:#4fd38a; --rare:#5b9bff; --epic:#b98cff; --legend:#ffc93c; --mythic:#ff5468; --hard:#8f7ad9; --xp:#5fd0f0; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--text);font-family:var(--body);font-size:17px;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
@@ -187,9 +187,13 @@ input.field:focus{outline:3px solid var(--star);border-color:var(--ink)}
 .item.locked svg{filter:grayscale(1) brightness(.45)}
 .item:focus-visible{outline:3px solid var(--star)}
 .item .price{color:var(--star);font-weight:900}
-.r-common{border-color:var(--common)} .r-rare{border-color:var(--rare)} .r-legend{border-color:var(--legend)}
+.r-common{border-color:var(--common)} .r-uncommon{border-color:var(--uncommon)} .r-rare{border-color:var(--rare)} .r-epic{border-color:var(--epic)} .r-legend{border-color:var(--legend)} .r-mythic{border-color:var(--mythic)}
+.item.r-uncommon{background:color-mix(in srgb,var(--uncommon) 7%,var(--card))} .item.r-rare{background:color-mix(in srgb,var(--rare) 8%,var(--card))} .item.r-epic{background:color-mix(in srgb,var(--epic) 9%,var(--card))}
+.item.r-legend{background:color-mix(in srgb,var(--legend) 11%,var(--card))} .item.r-mythic{background:color-mix(in srgb,var(--mythic) 11%,var(--card));box-shadow:0 0 0 1px var(--mythic),0 0 14px color-mix(in srgb,var(--mythic) 45%,transparent)}
+.rt.r-common{color:var(--muted)} .rt.r-uncommon{color:var(--uncommon)} .rt.r-rare{color:var(--rare)} .rt.r-epic{color:var(--epic)} .rt.r-mythic{color:var(--mythic)}
+.side{display:flex;gap:8px;margin:10px 0 0;flex-wrap:wrap}
 .rt{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:900}
-.rt.r-common{color:var(--common)} .rt.r-rare{color:var(--rare)} .rt.r-legend{color:var(--legend)}
+.rt.r-legend{color:var(--legend)}
 .roomview{border-radius:16px;overflow:hidden;border:2px solid var(--line);background:var(--paper)}
 .roomview svg{display:block;width:100%;height:auto}
 .chests{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:8px}
@@ -287,260 +291,279 @@ let toastTimer;function toast(msg){const t=$('#toast');t.innerHTML=`<div class="
 const star5=(cx,cy,r,fill,stroke='none')=>{let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;p+=(i?'L':'M')+(cx+rr*Math.cos(a)).toFixed(1)+' '+(cy+rr*Math.sin(a)).toFixed(1)}
   return `<path d="${p}Z" fill="${fill}" stroke="${stroke}" stroke-width="2"/>`};
 const heart=(cx,cy,s,fill)=>`<path d="M${cx} ${cy+s*.9} C${cx-s*1.6} ${cy-s*.1} ${cx-s*.8} ${cy-s*1.2} ${cx} ${cy-s*.4} C${cx+s*.8} ${cy-s*1.2} ${cx+s*1.6} ${cy-s*.1} ${cx} ${cy+s*.9}Z" fill="${fill}" opacity=".92"/>`;
-const RARITY={common:{name:Lx("Обычная","Common"),dup:2},rare:{name:Lx("Редкая","Rare"),dup:5},legend:{name:Lx("Легендарная","Legendary"),dup:12}};
+const RARITY={common:{name:Lx("Обычная","Common"),dup:2},uncommon:{name:Lx("Необычная","Uncommon"),dup:3},rare:{name:Lx("Редкая","Rare"),dup:5},
+  epic:{name:Lx("Эпическая","Epic"),dup:8},legend:{name:Lx("Легендарная","Legendary"),dup:12},mythic:{name:Lx("Мифическая","Mythic"),dup:20}};
+const RAR_ORDER=Object.keys(RARITY);
 
-/* ===== Котята: породы (скины) ===== */
-const P=(main,dark,belly,line,extra={})=>({main,dark,belly,line,...extra});
+/* ===== Модель котёнка: части тела, точки крепления, единый стиль ===== */
+const hex2=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mixC=(a,b,t)=>{const A=hex2(a),B=hex2(b);return '#'+A.map((v,i)=>Math.round(v*(1-t)+B[i]*t).toString(16).padStart(2,'0')).join('')};
+const isDark=c=>hex2(c).reduce((a,b)=>a+b,0)<240;
+
+/* Головы. Глаза у всех на линии y=96 (x=80 и x=120), поэтому любые очки подходят к любой голове.
+   top — макушка (к ней крепится шапка), earL/earR — основание уха и наклон */
+const HEADS={
+ round:{path:'M45 96 A55 46 0 1 0 155 96 A55 46 0 1 0 45 96 Z',top:50,earL:[66,60,-22],earR:[134,60,22],cheek:64},
+ square:{path:'M47 72 Q47 52 67 52 L133 52 Q153 52 153 72 L153 122 Q153 142 133 142 L67 142 Q47 142 47 122 Z',top:52,earL:[66,56,-8],earR:[134,56,8],cheek:64},
+ wide:{path:'M38 100 A62 42 0 1 0 162 100 A62 42 0 1 0 38 100 Z',top:58,earL:[62,64,-30],earR:[138,64,30],cheek:58},
+ heart:{path:'M100 144 Q56 134 46 100 Q40 62 72 54 Q90 50 100 60 Q110 50 128 54 Q160 62 154 100 Q144 134 100 144 Z',top:54,earL:[66,60,-18],earR:[134,60,18],cheek:64}};
+const EARS={
+ pointed:{o:'M-18 6 L0 -36 L18 6 Z',i:'M-10 2 L0 -24 L10 2 Z'},
+ round:{o:'M-18 6 A18 18 0 1 1 18 6 Z',i:'M-10 4 A10 10 0 1 1 10 4 Z'},
+ long:{o:'M-16 6 L-2 -54 L16 6 Z',i:'M-8 2 L-2 -40 L8 2 Z',tuft:true},
+ fold:{o:'M-20 6 Q-18 -22 14 -14 Q2 -6 -4 10 Z',i:'M-12 2 Q-10 -12 4 -10 Q-2 -4 -6 4 Z'},
+ bat:{o:'M-22 8 L-20 -40 L-6 -24 L4 -44 L22 8 Z',i:'M-12 2 L-12 -26 L-2 -14 L4 -30 L12 2 Z'}};
+/* Тела: где передние лапки, задние лапки, грудь (украшения и спина) и хвост */
+const BODIES={
+ round:{path:'M56 172 A44 40 0 1 0 144 172 A44 40 0 1 0 56 172 Z',pawL:[80,184],pawR:[120,184],feet:[[78,210],[122,210]],chest:[100,148],tail:[136,194]},
+ slim:{path:'M66 172 A34 42 0 1 0 134 172 A34 42 0 1 0 66 172 Z',pawL:[84,184],pawR:[116,184],feet:[[82,212],[118,212]],chest:[100,146],tail:[128,198]},
+ chubby:{path:'M48 176 A52 38 0 1 0 152 176 A52 38 0 1 0 48 176 Z',pawL:[78,186],pawR:[122,186],feet:[[74,211],[126,211]],chest:[100,152],tail:[144,196]},
+ square:{path:'M60 152 Q60 136 76 136 L124 136 Q140 136 140 152 L140 194 Q140 210 124 210 L76 210 Q60 210 60 194 Z',pawL:[80,184],pawR:[120,184],feet:[[78,212],[122,212]],chest:[100,150],tail:[136,196]}};
+const TAILS={
+ thin:{d:['M0 0 C40 2 50 -36 32 -68'],w:[15,9]},
+ fluffy:{d:['M0 0 C40 2 50 -36 32 -68'],w:[30,23]},
+ short:{d:['M0 0 C14 2 22 -6 22 -18'],w:[22,16]},
+ curly:{d:['M0 0 C34 4 46 -24 30 -40 C18 -52 4 -38 16 -30'],w:[15,9]},
+ double:{d:['M0 0 C40 2 50 -36 32 -68','M-4 4 C46 18 62 -14 56 -40'],w:[15,9]},
+ zigzag:{d:['M0 0 L22 -10 L12 -26 L34 -38 L22 -56 L42 -66'],w:[14,8]}};
+const EYE_SHAPES=['round','almond','big','sleepy','slit','star'];
+
+/* ===== Породы (выпадают из сундуков с котятами) ===== */
+const g=(head,body,ears,eyes,eyeColor,tail,main,belly,line,more={})=>({head,body,ears,eyes,eyeColor,tail,main,belly,line,glow:false,tailColor:null,pat:'none',neon:null,extras:[],hetero:null,...more});
 const SKINS=[
- {id:'sk_orange',name:Lx("Рыжик","Ginger"),r:'common',c:P('#f4a259','#d9803a','#fde3c4','#6b3d1f'),start:true},
- {id:'sk_grey',name:Lx("Серый","Grey"),r:'common',c:P('#a7adb8','#7d8492','#e6e8ec','#3d424d')},
- {id:'sk_greywhite',name:Lx("Серо-белый","Grey and white"),r:'common',c:P('#959cab','#6f7684','#ffffff','#3d424d',{paw:'#ffffff'}),pat:'bicolor'},
- {id:'sk_white',name:Lx("Белоснежка","Snowy"),r:'common',c:P('#f7f5f0','#d9d4ca','#ffffff','#6b6458')},
- {id:'sk_cream',name:Lx("Кремовый","Cream"),r:'common',c:P('#f3d9b1','#dcb98a','#fff3e0','#6b5134')},
- {id:'sk_choco',name:Lx("Шоколадный","Chocolate"),r:'common',c:P('#7b4a2e','#5a321c','#a9714c','#2e1a0e',{light:true})},
- {id:'sk_tabby',name:Lx("Рыжий полосатик","Ginger tabby"),r:'common',c:P('#f4a259','#c46a28','#fde3c4','#6b3d1f'),pat:'tabby'},
- {id:'sk_greytabby',name:Lx("Серый полосатик","Grey tabby"),r:'common',c:P('#a7adb8','#5f6674','#e6e8ec','#3d424d'),pat:'tabby'},
- {id:'sk_blue',name:Lx("Голубой","Blue"),r:'common',c:P('#8a9bb5','#6a7b95','#c9d3e3','#2f3a4d')},
- {id:'sk_black',name:Lx("Чёрный","Black"),r:'rare',c:P('#3a3a44','#24242c','#5b5b68','#111116',{light:true})},
- {id:'sk_siamese',name:Lx("Сиамский","Siamese"),r:'rare',c:P('#efe2cc','#6b4a35','#fff7ea','#4a3122'),pat:'points',glow:null},
- {id:'sk_tuxedo',name:Lx("Кот в смокинге","Tuxedo cat"),r:'rare',c:P('#2e2e36','#1c1c22','#ffffff','#0e0e12',{light:true,paw:'#ffffff'}),pat:'bicolor'},
- {id:'sk_calico',name:Lx("Трёхцветная","Calico"),r:'rare',c:P('#fbf7f0','#d9d0c2','#ffffff','#5b4a3a'),pat:'calico'},
- {id:'sk_bengal',name:Lx("Бенгальский","Bengal"),r:'rare',c:P('#e8b45c','#7a4a1d','#f8e2b8','#5a3612'),pat:'spots'},
- {id:'sk_night',name:Lx("Ночной охотник","Night hunter"),r:'rare',c:P('#26262e','#15151a','#3a3a46','#0a0a0e',{light:true}),glow:'#7cff4f'},
- {id:'sk_mint',name:Lx("Мятный","Mint"),r:'rare',c:P('#9fe3c9','#6cc4a4','#e3fbf1','#2c6b55')},
- {id:'sk_pink',name:Lx("Розовый","Pink"),r:'rare',c:P('#f6a6c8','#e07aa8','#ffe1ee','#7a2e50')},
- {id:'sk_lilac',name:Lx("Лавандовый","Lavender"),r:'rare',c:P('#c3b1e1','#9f88c9','#efe8fa','#4d3a73')},
- {id:'sk_space',name:Lx("Космический","Cosmic"),r:'legend',c:P('#2b2f6b','#1a1d4a','#454aa0','#0d0f2b',{light:true}),pat:'stars',glow:'#ffd166'},
- {id:'sk_rainbow',name:Lx("Радужный","Rainbow"),r:'legend',c:P('#ffffff','#e6e6ef','#ffffff','#5a4a7a'),pat:'rainbow'},
- {id:'sk_gold',name:Lx("Золотой","Golden"),r:'legend',c:P('#f4c542','#c99700','#ffe9a3','#7a5a00'),pat:'shine'},
- {id:'sk_ghost',name:Lx("Призрак","Ghost"),r:'legend',c:P('#eef4ff','#c9d6f0','#ffffff','#7a8bb5'),pat:'ghost',glow:'#7fd8ff'},
- {id:'sk_fire',name:Lx("Огненный","Fiery"),r:'legend',c:P('#ff6b35','#d1401a','#ffb38a','#6b1a05'),pat:'flame',glow:'#ffe066'},
- {id:'sk_cyber',name:Lx("Киберкот Неон","Cyber Cat Neon"),r:'rare',c:P('#2a2f45','#1a1e2e','#3c4363','#0b0d16',{light:true,neon:'#00e5ff'}),pat:'circuit',glow:'#00e5ff'},
- {id:'sk_cyberpink',name:Lx("Киберкошка Пинк","Cyber Cat Pink"),r:'rare',c:P('#3b2340','#25142a','#563360','#12070f',{light:true,neon:'#ff2bd6'}),pat:'circuit',glow:'#ff2bd6'},
- {id:'sk_chrome',name:Lx("Киберкот Хром","Cyber Cat Chrome"),r:'legend',c:P('#c9d1dc','#8d97a6','#eef2f7','#3d4654',{neon:'#ff3355'}),pat:'circuit',glow:'#ff3355'},
- {id:'sk_toxic',name:Lx("Киберкот Токсик","Cyber Cat Toxic"),r:'legend',c:P('#1f2a1f','#121a12','#2f3f2f','#060a06',{light:true,neon:'#39ff14'}),pat:'circuit',glow:'#39ff14'},
- {id:'px_orange',name:Lx("Пиксельный рыжик","Pixel ginger"),r:'common',st:'pixel',c:P('#f4a259','#c46a28','#fde3c4','#3a2010')},
- {id:'px_grey',name:Lx("Пиксельный серый","Pixel grey"),r:'common',st:'pixel',c:P('#a7adb8','#6d7482','#e6e8ec','#22262e')},
- {id:'px_snow',name:Lx("Пиксельный снежок","Pixel snowball"),r:'rare',st:'pixel',c:P('#f4f6fb','#c5cde0','#ffffff','#4a5270')},
- {id:'px_ninja',name:Lx("Пиксельный ниндзя","Pixel ninja"),r:'rare',st:'pixel',c:P('#2e2e38','#1c1c24','#45454f','#0a0a0e',{light:true}),glow:'#ff3355'},
- {id:'px_emerald',name:Lx("Пиксельный изумруд","Pixel emerald"),r:'legend',st:'pixel',c:P('#3ccf8e','#1f8f5c','#a8f0cf','#0d3d26'),glow:'#eaffb0'},
- {id:'br_red',name:Lx("Кот-кирпичик красный","Red brick cat"),r:'common',st:'brick',c:P('#d63b3b','#a32626','#f3a0a0','#5a1010')},
- {id:'br_yellow',name:Lx("Кот-кирпичик жёлтый","Yellow brick cat"),r:'common',st:'brick',c:P('#f5c518','#c99a00','#fff0a8','#5a4500')},
- {id:'br_blue',name:Lx("Кот-кирпичик синий","Blue brick cat"),r:'rare',st:'brick',c:P('#2f6fdc','#1f4f99','#a9c6f5','#0d2550')},
- {id:'br_green',name:Lx("Кот-кирпичик зелёный","Green brick cat"),r:'rare',st:'brick',c:P('#2e9e5b','#1d6b3c','#a6e3bf','#0c3a1e')},
- {id:'br_rainbow',name:Lx("Радужный конструктор","Rainbow bricks"),r:'legend',st:'brick',c:P('#d63b3b','#a32626','#fff0a8','#3a1a10'),pat:'multi'}];
+ {id:'sk_orange',name:Lx('Рыжик','Ginger'),r:'common',start:true,g:g('round','round','pointed','round','#5aa05a','thin','#f4a259','#fde3c4','#6b3d1f')},
+ {id:'sk_grey',name:Lx('Серый','Grey'),r:'common',g:g('round','round','pointed','almond','#e0a200','thin','#a7adb8','#e6e8ec','#3d424d')},
+ {id:'sk_white',name:Lx('Белоснежка','Snowy'),r:'common',g:g('heart','slim','pointed','big','#3a86ff','thin','#f7f5f0','#ffffff','#6b6458')},
+ {id:'sk_cream',name:Lx('Кремовый','Cream'),r:'common',g:g('round','round','fold','big','#8b5a2b','fluffy','#f3d9b1','#fff3e0','#6b5134')},
+ {id:'sk_tabby',name:Lx('Рыжий полосатик','Ginger tabby'),r:'common',g:g('round','round','pointed','round','#5aa05a','thin','#f4a259','#fde3c4','#6b3d1f',{pat:'tabby'})},
+ {id:'sk_greytabby',name:Lx('Серый полосатик','Grey tabby'),r:'common',g:g('wide','chubby','pointed','sleepy','#57c785','thin','#a7adb8','#e6e8ec','#3d424d',{pat:'tabby'})},
+ {id:'px_orange',name:Lx('Рысёнок','Lynx kitten'),r:'common',g:g('round','round','long','almond','#e0a200','short','#d9a066','#f6e3c6','#5c3a17',{pat:'spots'})},
+ {id:'px_grey',name:Lx('Серый рысёнок','Grey lynx'),r:'common',g:g('round','slim','long','almond','#57c785','short','#9aa0ab','#e6e8ec','#30343d',{pat:'spots'})},
+ {id:'br_red',name:Lx('Кубик красный','Red cubie'),r:'common',g:g('square','square','round','round','#1d3557','thin','#e35d5b','#ffd3d0','#5a1010')},
+ {id:'br_yellow',name:Lx('Кубик жёлтый','Yellow cubie'),r:'common',g:g('square','square','round','round','#2e9e5b','thin','#f5c518','#fff0a8','#5a4500')},
+ {id:'sk_greywhite',name:Lx('Серо-белый','Grey and white'),r:'uncommon',g:g('wide','chubby','round','round','#3a86ff','thin','#959cab','#ffffff','#3d424d',{pat:'bicolor'})},
+ {id:'sk_choco',name:Lx('Шоколадный','Chocolate'),r:'uncommon',g:g('square','round','round','almond','#ffd166','thin','#7b4a2e','#a9714c','#2e1a0e')},
+ {id:'sk_blue',name:Lx('Голубой','Blue'),r:'uncommon',g:g('round','slim','pointed','almond','#57c785','thin','#8a9bb5','#c9d3e3','#2f3a4d')},
+ {id:'sk_mint',name:Lx('Мятный','Mint'),r:'uncommon',g:g('round','round','round','big','#2f6fdc','curly','#9fe3c9','#e3fbf1','#2c6b55')},
+ {id:'sk_pink',name:Lx('Розовый','Pink'),r:'uncommon',g:g('heart','round','round','big','#7a4fd6','curly','#f6a6c8','#ffe1ee','#7a2e50')},
+ {id:'br_blue',name:Lx('Кубик синий','Blue cubie'),r:'uncommon',g:g('square','square','pointed','round','#ffd166','thin','#4b84e0','#cfe0fa','#0d2550')},
+ {id:'br_green',name:Lx('Кубик зелёный','Green cubie'),r:'uncommon',g:g('square','square','pointed','almond','#ffd166','short','#3fb071','#c8f0d8','#0c3a1e')},
+ {id:'sk_black',name:Lx('Чёрный','Black'),r:'rare',g:g('heart','slim','pointed','slit','#ffd166','thin','#3a3a44','#55555f','#111116')},
+ {id:'sk_siamese',name:Lx('Сиамский','Siamese'),r:'rare',g:g('heart','slim','pointed','almond','#3a86ff','thin','#efe2cc','#fff7ea','#4a3122',{pat:'points'})},
+ {id:'sk_tuxedo',name:Lx('Кот в смокинге','Tuxedo cat'),r:'rare',g:g('round','chubby','pointed','big','#57c785','thin','#2e2e36','#ffffff','#0e0e12',{pat:'bicolor'})},
+ {id:'sk_calico',name:Lx('Трёхцветная','Calico'),r:'rare',g:g('wide','round','fold','round','#e0a200','thin','#fbf7f0','#ffffff','#5b4a3a',{pat:'calico'})},
+ {id:'sk_bengal',name:Lx('Бенгальский','Bengal'),r:'rare',g:g('heart','slim','pointed','slit','#57c785','thin','#e8b45c','#f8e2b8','#5a3612',{pat:'spots'})},
+ {id:'sk_lilac',name:Lx('Лавандовый','Lavender'),r:'rare',g:g('wide','chubby','fold','sleepy','#7a4fd6','fluffy','#c3b1e1','#efe8fa','#4d3a73')},
+ {id:'px_snow',name:Lx('Снежный барс','Snow leopard'),r:'rare',g:g('wide','chubby','round','almond','#9fd8ff','fluffy','#e9edf3','#ffffff','#4a5270',{pat:'spots'})},
+ {id:'sk_night',name:Lx('Ночной охотник','Night hunter'),r:'epic',g:g('round','slim','bat','slit','#7cff4f','thin','#26262e','#3a3a46','#0a0a0e',{glow:true})},
+ {id:'sk_cyber',name:Lx('Киберкот Неон','Cyber Cat Neon'),r:'epic',g:g('square','square','pointed','slit','#00e5ff','thin','#2a2f45','#3c4363','#0b0d16',{glow:true,pat:'circuit',neon:'#00e5ff'})},
+ {id:'sk_cyberpink',name:Lx('Киберкошка Пинк','Cyber Cat Pink'),r:'epic',g:g('square','slim','bat','big','#ff2bd6','thin','#3b2340','#563360','#12070f',{glow:true,pat:'circuit',neon:'#ff2bd6'})},
+ {id:'px_ninja',name:Lx('Ниндзя','Ninja'),r:'epic',g:g('square','slim','pointed','slit','#ff3355','zigzag','#2e2e38','#45454f','#0a0a0e',{glow:true})},
+ {id:'sk_space',name:Lx('Космический','Cosmic'),r:'legend',g:g('round','round','pointed','star','#ffd166','fluffy','#2b2f6b','#454aa0','#0d0f2b',{glow:true,pat:'stars'})},
+ {id:'sk_rainbow',name:Lx('Радужный','Rainbow'),r:'legend',g:g('heart','round','long','big','#7a4fd6','fluffy','#ffffff','#ffffff','#5a4a7a',{pat:'rainbow',tailColor:'#c77dff'})},
+ {id:'sk_gold',name:Lx('Золотой','Golden'),r:'legend',g:g('round','chubby','pointed','star','#c99700','fluffy','#f4c542','#ffe9a3','#7a5a00',{pat:'shine'})},
+ {id:'sk_ghost',name:Lx('Призрак','Ghost'),r:'legend',g:g('heart','slim','long','sleepy','#7fd8ff','thin','#eef4ff','#ffffff','#7a8bb5',{glow:true,pat:'ghost'})},
+ {id:'sk_fire',name:Lx('Огненный','Fiery'),r:'legend',g:g('round','slim','bat','slit','#ffe066','zigzag','#ff6b35','#ffb38a','#6b1a05',{glow:true,pat:'flame',tailColor:'#ffd166'})},
+ {id:'sk_chrome',name:Lx('Киберкот Хром','Cyber Cat Chrome'),r:'legend',g:g('square','square','pointed','almond','#ff3355','thin','#c9d1dc','#eef2f7','#3d4654',{glow:true,pat:'circuit',neon:'#ff3355'})},
+ {id:'sk_toxic',name:Lx('Киберкот Токсик','Cyber Cat Toxic'),r:'legend',g:g('square','chubby','bat','slit','#39ff14','zigzag','#1f2a1f','#2f3f2f','#060a06',{glow:true,pat:'circuit',neon:'#39ff14',tailColor:'#39ff14'})},
+ {id:'px_emerald',name:Lx('Изумрудный дракончик','Emerald dragonling'),r:'legend',g:g('heart','round','bat','star','#eaffb0','zigzag','#3ccf8e','#a8f0cf','#0d3d26',{glow:true,extras:['horns']})},
+ {id:'br_rainbow',name:Lx('Радужный кубик','Rainbow cubie'),r:'legend',g:g('square','square','round','big','#2f6fdc','curly','#ffffff','#ffffff','#3a1a10',{pat:'rainbow',tailColor:'#ff924c'})},
+ {id:'sk_phoenix',name:Lx('Фениксик','Little phoenix'),r:'mythic',g:g('heart','slim','long','star','#fff3a0','double','#ff4d2e','#ffc46b','#5a0c00',{glow:true,pat:'flame',tailColor:'#ffd166',extras:['star']})},
+ {id:'sk_galaxy',name:Lx('Хранитель галактики','Galaxy keeper'),r:'mythic',g:g('round','chubby','bat','big','#ff7ae6','curly','#1b1f4d','#3a3f8f','#05061a',{glow:true,pat:'stars',neon:'#c77dff',tailColor:'#c77dff',extras:['horns','glowspots'],hetero:'#7ff2ff'})}];
 const SKIN_BY_ID=Object.fromEntries(SKINS.map(s=>[s.id,s]));
-const STYLE_NAME={pixel:Lx("Пиксельный","Pixel"),brick:Lx("Кирпичики","Bricks")};
 
-/* ===== Одежда ===== */
+/* ===== Вещи. Шапки и очки нарисованы для круглой головы и сдвигаются под любую форму;
+   вещи в лапки, на запястья, грудь и спину рисуются вокруг своей точки (0,0) ===== */
+const HAND=(id,name,r,svg,extra={})=>({id,slot:'hand',name,r,svg,...extra});
 const WEAR=[
- // голова
- {id:'hat_bow',slot:'hat',name:Lx("Бантик","Bow"),r:'common',svg:`<path d="M138 50 L118 38 L121 64 Z M138 50 L158 38 L155 64 Z" fill="#ff5d8f" stroke="#c2185b" stroke-width="2"/><circle cx="138" cy="51" r="6" fill="#ff8fab" stroke="#c2185b" stroke-width="2"/>`},
- {id:'hat_flower',slot:'hat',name:Lx("Цветочек","Flower"),r:'common',svg:[0,1,2,3,4].map(i=>{const a=i*1.2566;return `<circle cx="${(64+9*Math.cos(a)).toFixed(1)}" cy="${(52+9*Math.sin(a)).toFixed(1)}" r="7" fill="#ff8fab"/>`}).join('')+`<circle cx="64" cy="52" r="6" fill="#ffd166"/>`},
- {id:'hat_cap',slot:'hat',name:Lx("Кепка","Cap"),r:'common',svg:`<path d="M58 66 Q100 14 142 66 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="3"/><ellipse cx="148" cy="66" rx="28" ry="7" fill="#2a5fb0" stroke="#1f4f99" stroke-width="2"/><circle cx="100" cy="30" r="4" fill="#1f4f99"/>`},
- {id:'hat_party',slot:'hat',name:Lx("Колпак","Party hat"),r:'common',svg:`<path d="M100 2 L74 60 L126 60 Z" fill="#ffb703" stroke="#c77d00" stroke-width="3"/><path d="M88 31 L112 31 M82 46 L118 46" stroke="#e63946" stroke-width="5"/><circle cx="100" cy="2" r="7" fill="#e63946"/>`},
- {id:'hat_beanie',slot:'hat',name:Lx("Шапка с помпоном","Bobble hat"),r:'common',svg:`<path d="M56 68 Q58 18 100 18 Q142 18 144 68 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3"/><rect x="52" y="58" width="96" height="14" rx="7" fill="#e9f5f3" stroke="#1d6b62" stroke-width="2"/><circle cx="100" cy="14" r="11" fill="#e9f5f3" stroke="#1d6b62" stroke-width="2"/>`},
- {id:'hat_horns',slot:'hat',name:Lx("Рожки","Horns"),r:'common',svg:`<path d="M70 58 Q58 34 72 22 Q74 40 84 52 Z M130 58 Q142 34 128 22 Q126 40 116 52 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/>`},
- {id:'hat_cowboy',slot:'hat',name:Lx("Ковбойская шляпа","Cowboy hat"),r:'rare',svg:`<path d="M70 56 Q70 18 100 22 Q130 18 130 56 Z" fill="#a0692f" stroke="#5c3a17" stroke-width="3"/><rect x="70" y="44" width="60" height="7" fill="#5c3a17"/><ellipse cx="100" cy="58" rx="64" ry="10" fill="#8b5a2b" stroke="#5c3a17" stroke-width="3"/>`},
- {id:'hat_phones',slot:'hat',name:Lx("Наушники","Headphones"),r:'rare',svg:`<path d="M50 92 Q48 28 100 28 Q152 28 150 92" fill="none" stroke="#333" stroke-width="7"/><rect x="38" y="78" width="20" height="32" rx="8" fill="#e63946" stroke="#333" stroke-width="3"/><rect x="142" y="78" width="20" height="32" rx="8" fill="#e63946" stroke="#333" stroke-width="3"/>`},
- {id:'hat_wizard',slot:'hat',name:Lx("Шляпа волшебника","Wizard hat"),r:'rare',svg:`<path d="M100 -14 L68 58 L132 58 Z" fill="#5a3fc0" stroke="#33227a" stroke-width="3"/><ellipse cx="100" cy="58" rx="46" ry="9" fill="#4a32a8" stroke="#33227a" stroke-width="3"/>${star5(96,18,7,'#ffd166')}${star5(108,40,5,'#ffd166')}`},
- {id:'hat_crown',slot:'hat',name:Lx("Корона","Crown"),r:'legend',svg:`<path d="M66 60 L66 24 L83 42 L100 14 L117 42 L134 24 L134 60 Z" fill="#ffd166" stroke="#c99700" stroke-width="3"/><circle cx="100" cy="48" r="6" fill="#e63946"/><circle cx="80" cy="52" r="4" fill="#3a7bd5"/><circle cx="120" cy="52" r="4" fill="#2a9d8f"/>`},
- {id:'hat_halo',slot:'hat',name:Lx("Нимб","Halo"),r:'legend',glowy:true,svg:`<ellipse cx="100" cy="22" rx="34" ry="9" fill="none" stroke="#ffd166" stroke-width="7" filter="url(#FID)"/><ellipse cx="100" cy="22" rx="34" ry="9" fill="none" stroke="#fff3c4" stroke-width="3"/>`},
- {id:'hat_mohawk',slot:'hat',name:Lx("Неоновый ирокез","Neon mohawk"),r:'legend',glowy:true,svg:`<path d="M78 58 L80 30 L88 44 L92 14 L100 38 L106 8 L112 38 L118 18 L122 44 L128 28 L124 58 Z" fill="#ff2bd6" filter="url(#FID)" opacity=".8"/><path d="M78 58 L80 30 L88 44 L92 14 L100 38 L106 8 L112 38 L118 18 L122 44 L128 28 L124 58 Z" fill="#ff7ae6" stroke="#b0009a" stroke-width="2"/>`},
- // очки
- {id:'gl_round',slot:'glasses',name:Lx("Круглые очки","Round glasses"),r:'common',svg:`<circle cx="80" cy="96" r="15" fill="rgba(255,255,255,.18)" stroke="#333" stroke-width="3"/><circle cx="120" cy="96" r="15" fill="rgba(255,255,255,.18)" stroke="#333" stroke-width="3"/><path d="M95 95 L105 95" stroke="#333" stroke-width="3"/>`},
- {id:'gl_3d',slot:'glasses',name:Lx("3D-очки","3D glasses"),r:'common',svg:`<rect x="60" y="85" width="80" height="24" rx="5" fill="#fff" stroke="#333" stroke-width="3"/><rect x="65" y="89" width="30" height="16" rx="3" fill="rgba(230,57,70,.75)"/><rect x="105" y="89" width="30" height="16" rx="3" fill="rgba(58,123,213,.75)"/>`},
- {id:'gl_swim',slot:'glasses',name:Lx("Очки для плавания","Swim goggles"),r:'common',svg:`<path d="M44 96 L156 96" stroke="#2a9d8f" stroke-width="5"/><ellipse cx="80" cy="96" rx="15" ry="12" fill="rgba(110,205,255,.55)" stroke="#1d6b62" stroke-width="3"/><ellipse cx="120" cy="96" rx="15" ry="12" fill="rgba(110,205,255,.55)" stroke="#1d6b62" stroke-width="3"/>`},
- {id:'gl_sun',slot:'glasses',name:Lx("Тёмные очки","Sunglasses"),r:'rare',svg:`<rect x="62" y="86" width="34" height="20" rx="8" fill="#1d1d28" stroke="#000" stroke-width="2"/><rect x="104" y="86" width="34" height="20" rx="8" fill="#1d1d28" stroke="#000" stroke-width="2"/><path d="M96 92 L104 92" stroke="#000" stroke-width="3"/><path d="M68 90 L76 90" stroke="#fff" stroke-width="2" opacity=".6"/>`},
- {id:'gl_mono',slot:'glasses',name:Lx("Монокль","Monocle"),r:'rare',svg:`<circle cx="120" cy="96" r="15" fill="rgba(255,255,255,.2)" stroke="#c99700" stroke-width="3"/><path d="M134 102 Q144 128 132 150" fill="none" stroke="#c99700" stroke-width="2"/>`},
- {id:'gl_aviator',slot:'glasses',name:Lx("Авиаторы","Aviators"),r:'rare',svg:`<path d="M63 88 Q80 84 96 88 Q97 108 80 109 Q63 107 63 88 Z M104 88 Q120 84 137 88 Q137 107 120 109 Q103 108 104 88 Z" fill="rgba(150,95,30,.6)" stroke="#c99700" stroke-width="2.5"/><path d="M96 90 Q100 86 104 90" fill="none" stroke="#c99700" stroke-width="2.5"/>`},
- {id:'gl_pixel',slot:'glasses',name:Lx("Пиксельные очки","Pixel shades"),r:'rare',svg:`<rect x="58" y="86" width="84" height="7" fill="#111"/><rect x="62" y="93" width="30" height="14" fill="#111"/><rect x="108" y="93" width="30" height="14" fill="#111"/><rect x="66" y="95" width="6" height="5" fill="#fff"/><rect x="112" y="95" width="6" height="5" fill="#fff"/>`},
- {id:'gl_cateye',slot:'glasses',name:Lx("Очки «кошачий глаз»","Cat-eye glasses"),r:'rare',svg:`<path d="M62 90 Q78 84 95 92 Q93 106 79 106 Q65 104 62 90 L56 82 Z M138 90 Q122 84 105 92 Q107 106 121 106 Q135 104 138 90 L144 82 Z" fill="rgba(255,143,171,.35)" stroke="#e0457b" stroke-width="3" stroke-linejoin="round"/>`},
- {id:'gl_star',slot:'glasses',name:Lx("Очки-звёздочки","Star glasses"),r:'legend',svg:star5(80,96,17,'rgba(255,209,102,.85)','#d99a00')+star5(120,96,17,'rgba(255,209,102,.85)','#d99a00')},
- {id:'gl_heart',slot:'glasses',name:Lx("Очки-сердечки","Heart glasses"),r:'legend',svg:heart(80,98,13,'#ff4d6d')+heart(120,98,13,'#ff4d6d')+`<path d="M94 94 L106 94" stroke="#c9184a" stroke-width="3"/>`},
- {id:'gl_cyber',slot:'glasses',name:Lx("Кибервизор","Cyber visor"),r:'legend',glowy:true,svg:`<rect x="56" y="85" width="88" height="22" rx="11" fill="rgba(0,229,255,.35)" stroke="#00e5ff" stroke-width="3" filter="url(#FID)"/><rect x="56" y="85" width="88" height="22" rx="11" fill="rgba(0,229,255,.3)" stroke="#00e5ff" stroke-width="2.5"/><path d="M64 96 L136 96" stroke="#e0ffff" stroke-width="2"/><circle cx="56" cy="96" r="5" fill="#333"/><circle cx="144" cy="96" r="5" fill="#333"/>`},
- // глаза
- {id:'ey_neon',slot:'eyes',name:Lx("Неоновые глаза","Neon eyes"),r:'rare',eye:{kind:'glow',color:'#00e5ff'}},
- {id:'ey_fire',slot:'eyes',name:Lx("Огненные глаза","Fire eyes"),r:'rare',eye:{kind:'glow',color:'#ff8c1a'}},
- {id:'ey_toxic',slot:'eyes',name:Lx("Ядовито-зелёные глаза","Toxic green eyes"),r:'rare',eye:{kind:'glow',color:'#39ff14'}},
- {id:'ey_heart',slot:'eyes',name:Lx("Влюблённые глаза","Lovestruck eyes"),r:'rare',eye:{kind:'heart'}},
- {id:'ey_laser',slot:'eyes',name:Lx("Лазерные глаза","Laser eyes"),r:'legend',eye:{kind:'glow',color:'#ff1f3d'}},
- {id:'ey_star',slot:'eyes',name:Lx("Звёздные глаза","Starry eyes"),r:'legend',eye:{kind:'star'}},
- {id:'ey_violet',slot:'eyes',name:Lx("Фиолетовое сияние","Violet glow"),r:'legend',eye:{kind:'glow',color:'#c77dff'}},
- // шея
- {id:'nk_bell',slot:'neck',name:Lx("Колокольчик","Bell"),r:'common',svg:`<path d="M64 132 Q100 150 136 132" fill="none" stroke="#e63946" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="148" r="9" fill="#ffd166" stroke="#c99700" stroke-width="2"/><path d="M96 151 L104 151" stroke="#8a6500" stroke-width="2"/>`},
- {id:'nk_bowtie',slot:'neck',name:Lx("Бабочка","Bow tie"),r:'common',svg:`<path d="M100 140 L78 128 L78 152 Z M100 140 L122 128 L122 152 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><circle cx="100" cy="140" r="5" fill="#9d1b28"/>`},
- {id:'nk_scarf',slot:'neck',name:Lx("Шарф","Scarf"),r:'common',svg:`<path d="M60 128 Q100 148 140 128 L140 142 Q100 160 60 142 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="2"/><rect x="112" y="140" width="15" height="34" rx="4" fill="#2a9d8f" stroke="#1d6b62" stroke-width="2" transform="rotate(-10 120 150)"/><path d="M66 134 L66 144 M80 138 L80 148 M94 140 L94 151" stroke="#e9f5f3" stroke-width="3"/>`},
- {id:'nk_tie',slot:'neck',name:Lx("Галстук","Tie"),r:'rare',svg:`<path d="M93 134 L107 134 L105 143 L95 143 Z" fill="#1f4f99"/><path d="M95 143 L105 143 L112 182 L100 194 L88 182 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/><path d="M92 160 L108 152 M90 176 L110 166" stroke="#ffd166" stroke-width="3"/>`},
- {id:'nk_cyber',slot:'neck',name:Lx("Неоновый ошейник","Neon collar"),r:'rare',glowy:true,svg:`<path d="M64 134 Q100 150 136 134" fill="none" stroke="#00e5ff" stroke-width="7" stroke-linecap="round" filter="url(#FID)"/><path d="M64 134 Q100 150 136 134" fill="none" stroke="#bff8ff" stroke-width="4" stroke-linecap="round"/><rect x="92" y="138" width="16" height="12" rx="3" fill="#222" stroke="#00e5ff" stroke-width="2"/>`},
- {id:'nk_medal',slot:'neck',name:Lx("Медаль отличника","Top student medal"),r:'legend',svg:`<path d="M84 130 L100 160 L116 130" fill="none" stroke="#3a7bd5" stroke-width="7"/><circle cx="100" cy="164" r="13" fill="#ffd166" stroke="#c99700" stroke-width="3"/>${star5(100,164,8,'#c99700')}`},
- // одежда
- {id:'bd_tshirt',slot:'body',name:Lx("Футболка","T-shirt"),r:'common',clip:`<rect x="40" y="128" width="120" height="62" fill="#ffb703"/><circle cx="100" cy="160" r="9" fill="#fff" opacity=".8"/>`},
- {id:'bd_vest',slot:'body',name:Lx("Жилетка","Vest"),r:'common',clip:`<rect x="40" y="128" width="46" height="90" fill="#6d4c41"/><rect x="114" y="128" width="46" height="90" fill="#6d4c41"/><circle cx="84" cy="162" r="3" fill="#ffd166"/><circle cx="84" cy="180" r="3" fill="#ffd166"/>`},
- {id:'bd_sweater',slot:'body',name:Lx("Свитер в полоску","Striped sweater"),r:'rare',clip:`<rect x="40" y="128" width="120" height="90" fill="#e63946"/><rect x="40" y="146" width="120" height="8" fill="#fff"/><rect x="40" y="166" width="120" height="8" fill="#fff"/><rect x="40" y="186" width="120" height="8" fill="#fff"/>`},
- {id:'bd_dress',slot:'body',name:Lx("Платье","Dress"),r:'rare',svg:`<path d="M68 140 Q100 152 132 140 L152 206 Q100 218 48 206 Z" fill="#c77dff" stroke="#7b2cbf" stroke-width="3"/><circle cx="80" cy="190" r="4" fill="#fff"/><circle cx="104" cy="172" r="4" fill="#fff"/><circle cx="124" cy="196" r="4" fill="#fff"/><circle cx="96" cy="200" r="4" fill="#fff"/>`},
- {id:'bd_jacket',slot:'body',name:Lx("Киберкуртка","Cyber jacket"),r:'rare',clip:`<rect x="40" y="128" width="120" height="90" fill="#1d2235"/><path d="M100 140 L100 214" stroke="#00e5ff" stroke-width="3"/><path d="M60 150 L80 150 L86 160 M140 176 L120 176 L114 168" fill="none" stroke="#ff2bd6" stroke-width="3"/>`},
- {id:'bd_hero',slot:'body',name:Lx("Костюм героя","Hero suit"),r:'legend',clip:`<rect x="40" y="128" width="120" height="90" fill="#3a7bd5"/><path d="M104 146 L88 172 L100 172 L94 196 L114 164 L102 164 L110 146 Z" fill="#ffd166" stroke="#c99700" stroke-width="2"/><rect x="40" y="192" width="120" height="8" fill="#e63946"/>`},
- {id:'bd_astro',slot:'body',name:Lx("Скафандр","Space suit"),r:'legend',clip:`<rect x="40" y="128" width="120" height="90" fill="#eef1f6"/><rect x="82" y="152" width="36" height="26" rx="5" fill="#9aa6bd"/><circle cx="91" cy="160" r="3" fill="#e63946"/><circle cx="100" cy="160" r="3" fill="#2e9e5b"/><circle cx="109" cy="160" r="3" fill="#3a7bd5"/><rect x="40" y="196" width="120" height="6" fill="#f77f00"/>`},
- // спина
- {id:'bk_pack',slot:'back',name:Lx("Рюкзак","Backpack"),r:'common',svg:`<rect x="126" y="138" width="34" height="50" rx="10" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3"/><rect x="134" y="160" width="20" height="16" rx="4" fill="#38b2a2" stroke="#1d6b62" stroke-width="2"/>`},
- {id:'bk_cape',slot:'back',name:Lx("Плащ","Cape"),r:'rare',svg:`<path d="M66 132 Q24 196 44 224 L156 224 Q176 196 134 132 Z" fill="#e63946" stroke="#9d1b28" stroke-width="3"/>`},
- {id:'bk_jet',slot:'back',name:Lx("Реактивный ранец","Jetpack"),r:'rare',svg:`<rect x="34" y="140" width="22" height="50" rx="8" fill="#9aa6bd" stroke="#3d4654" stroke-width="3"/><rect x="144" y="140" width="22" height="50" rx="8" fill="#9aa6bd" stroke="#3d4654" stroke-width="3"/><path d="M38 190 L45 214 L52 190 Z M148 190 L155 214 L162 190 Z" fill="#ff8c1a"/>`},
- {id:'bk_fairy',slot:'back',name:Lx("Крылья феи","Fairy wings"),r:'legend',svg:`<ellipse cx="50" cy="146" rx="24" ry="40" fill="rgba(160,231,255,.7)" stroke="#6cc8f0" stroke-width="3" transform="rotate(-25 50 146)"/><ellipse cx="150" cy="146" rx="24" ry="40" fill="rgba(160,231,255,.7)" stroke="#6cc8f0" stroke-width="3" transform="rotate(25 150 146)"/><ellipse cx="58" cy="192" rx="14" ry="22" fill="rgba(255,182,230,.7)" stroke="#f08cc8" stroke-width="3" transform="rotate(20 58 192)"/><ellipse cx="142" cy="192" rx="14" ry="22" fill="rgba(255,182,230,.7)" stroke="#f08cc8" stroke-width="3" transform="rotate(-20 142 192)"/>`},
- {id:'bk_dragon',slot:'back',name:Lx("Крылья дракона","Dragon wings"),r:'legend',svg:`<path d="M72 150 L16 104 L28 138 L8 148 L34 160 L22 184 L70 172 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3" stroke-linejoin="round"/><path d="M128 150 L184 104 L172 138 L192 148 L166 160 L178 184 L130 172 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3" stroke-linejoin="round"/>`},
- {id:'bk_neon',slot:'back',name:Lx("Неоновые крылья","Neon wings"),r:'legend',glowy:true,svg:`<g filter="url(#FID)"><path d="M70 150 Q24 100 14 130 Q30 160 70 172 M130 150 Q176 100 186 130 Q170 160 130 172" fill="none" stroke="#ff2bd6" stroke-width="6"/></g><path d="M70 150 Q24 100 14 130 Q30 160 70 172 Z M130 150 Q176 100 186 130 Q170 160 130 172 Z" fill="rgba(255,43,214,.25)" stroke="#ffb0f2" stroke-width="3"/>`},
- // в лапках
- {id:'ty_yarn',slot:'toy',name:Lx("Клубок","Yarn ball"),r:'common',svg:`<circle cx="152" cy="198" r="15" fill="#ff5d8f" stroke="#c2185b" stroke-width="2"/><path d="M140 190 Q152 200 162 188 M139 202 Q152 210 165 198 M146 212 Q130 222 118 214" fill="none" stroke="#c2185b" stroke-width="2"/>`},
- {id:'ty_fish',slot:'toy',name:Lx("Рыбка","Fish"),r:'common',svg:`<ellipse cx="150" cy="200" rx="17" ry="9" fill="#5fa8d3" stroke="#2c6e95" stroke-width="2"/><path d="M166 200 L178 191 L178 209 Z" fill="#5fa8d3" stroke="#2c6e95" stroke-width="2"/><circle cx="141" cy="198" r="2" fill="#1d3557"/>`},
- {id:'ty_book',slot:'toy',name:Lx("Книжка","Book"),r:'common',svg:`<rect x="132" y="184" width="36" height="26" rx="3" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/><path d="M150 184 L150 210" stroke="#fff" stroke-width="2"/><path d="M137 192 L146 192 M137 198 L146 198" stroke="#fff" stroke-width="2"/>`},
- {id:'ty_balloon',slot:'toy',name:Lx("Шарик","Balloon"),r:'rare',svg:`<path d="M126 204 Q150 170 160 124" fill="none" stroke="#666" stroke-width="2"/><ellipse cx="162" cy="102" rx="17" ry="21" fill="#ff4d6d" stroke="#c9184a" stroke-width="2"/><ellipse cx="156" cy="94" rx="4" ry="7" fill="#fff" opacity=".5"/>`},
- {id:'ty_wand',slot:'toy',name:Lx("Волшебная палочка","Magic wand"),r:'rare',svg:`<path d="M128 206 L164 164" stroke="#6d4c41" stroke-width="5" stroke-linecap="round"/>${star5(166,160,13,'#ffd166','#c99700')}`},
- {id:'ty_sword',slot:'toy',name:Lx("Световой меч","Light sword"),r:'legend',glowy:true,svg:`<path d="M134 206 L176 120" stroke="#39ff14" stroke-width="9" stroke-linecap="round" filter="url(#FID)"/><path d="M134 206 L176 120" stroke="#eaffd9" stroke-width="4" stroke-linecap="round"/><rect x="124" y="198" width="16" height="22" rx="3" fill="#555" transform="rotate(26 132 209)"/>`},
- {id:'ty_trophy',slot:'toy',name:Lx("Кубок","Trophy"),r:'legend',svg:`<path d="M138 172 L166 172 L164 192 Q152 202 140 192 Z" fill="#ffd166" stroke="#c99700" stroke-width="2"/><rect x="148" y="198" width="8" height="8" fill="#c99700"/><rect x="140" y="206" width="24" height="6" rx="2" fill="#c99700"/>`}];
+ {id:'hat_bow',slot:'hat',name:Lx('Бантик','Bow'),r:'common',svg:`<path d="M138 50 L118 38 L121 64 Z M138 50 L158 38 L155 64 Z" fill="#ff5d8f" stroke="#c2185b" stroke-width="2"/><circle cx="138" cy="51" r="6" fill="#ff8fab" stroke="#c2185b" stroke-width="2"/>`},
+ {id:'hat_flower',slot:'hat',name:Lx('Цветочек','Flower'),r:'common',svg:[0,1,2,3,4].map(i=>{const a=i*1.2566;return `<circle cx="${(64+9*Math.cos(a)).toFixed(1)}" cy="${(52+9*Math.sin(a)).toFixed(1)}" r="7" fill="#ff8fab"/>`}).join('')+`<circle cx="64" cy="52" r="6" fill="#ffd166"/>`},
+ {id:'hat_cap',slot:'hat',name:Lx('Кепка','Cap'),r:'common',svg:`<path d="M58 66 Q100 14 142 66 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="3"/><ellipse cx="148" cy="66" rx="28" ry="7" fill="#2a5fb0" stroke="#1f4f99" stroke-width="2"/><circle cx="100" cy="30" r="4" fill="#1f4f99"/>`},
+ {id:'hat_beanie',slot:'hat',name:Lx('Шапка с помпоном','Bobble hat'),r:'common',svg:`<path d="M56 68 Q58 18 100 18 Q142 18 144 68 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3"/><rect x="52" y="58" width="96" height="14" rx="7" fill="#e9f5f3" stroke="#1d6b62" stroke-width="2"/><circle cx="100" cy="14" r="11" fill="#e9f5f3" stroke="#1d6b62" stroke-width="2"/>`},
+ {id:'hat_party',slot:'hat',name:Lx('Колпак','Party hat'),r:'uncommon',svg:`<path d="M100 2 L74 60 L126 60 Z" fill="#ffb703" stroke="#c77d00" stroke-width="3"/><path d="M88 31 L112 31 M82 46 L118 46" stroke="#e63946" stroke-width="5"/><circle cx="100" cy="2" r="7" fill="#e63946"/>`},
+ {id:'hat_horns',slot:'hat',name:Lx('Рожки','Horns'),r:'uncommon',svg:`<path d="M70 58 Q58 34 72 22 Q74 40 84 52 Z M130 58 Q142 34 128 22 Q126 40 116 52 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/>`},
+ {id:'hat_cowboy',slot:'hat',name:Lx('Ковбойская шляпа','Cowboy hat'),r:'rare',svg:`<path d="M70 56 Q70 18 100 22 Q130 18 130 56 Z" fill="#a0692f" stroke="#5c3a17" stroke-width="3"/><rect x="70" y="44" width="60" height="7" fill="#5c3a17"/><ellipse cx="100" cy="58" rx="64" ry="10" fill="#8b5a2b" stroke="#5c3a17" stroke-width="3"/>`},
+ {id:'hat_phones',slot:'hat',name:Lx('Наушники','Headphones'),r:'rare',svg:`<path d="M50 92 Q48 28 100 28 Q152 28 150 92" fill="none" stroke="#333" stroke-width="7"/><rect x="38" y="78" width="20" height="32" rx="8" fill="#e63946" stroke="#333" stroke-width="3"/><rect x="142" y="78" width="20" height="32" rx="8" fill="#e63946" stroke="#333" stroke-width="3"/>`},
+ {id:'hat_wizard',slot:'hat',name:Lx('Шляпа волшебника','Wizard hat'),r:'epic',svg:`<path d="M100 -14 L68 58 L132 58 Z" fill="#5a3fc0" stroke="#33227a" stroke-width="3"/><ellipse cx="100" cy="58" rx="46" ry="9" fill="#4a32a8" stroke="#33227a" stroke-width="3"/>${star5(96,18,7,'#ffd166')}${star5(108,40,5,'#ffd166')}`},
+ {id:'hat_mohawk',slot:'hat',name:Lx('Неоновый ирокез','Neon mohawk'),r:'epic',glowy:true,svg:`<path d="M78 58 L80 30 L88 44 L92 14 L100 38 L106 8 L112 38 L118 18 L122 44 L128 28 L124 58 Z" fill="#ff2bd6" filter="url(#FID)" opacity=".8"/><path d="M78 58 L80 30 L88 44 L92 14 L100 38 L106 8 L112 38 L118 18 L122 44 L128 28 L124 58 Z" fill="#ff7ae6" stroke="#b0009a" stroke-width="2"/>`},
+ {id:'hat_crown',slot:'hat',name:Lx('Корона','Crown'),r:'legend',svg:`<path d="M66 60 L66 24 L83 42 L100 14 L117 42 L134 24 L134 60 Z" fill="#ffd166" stroke="#c99700" stroke-width="3"/><circle cx="100" cy="48" r="6" fill="#e63946"/><circle cx="80" cy="52" r="4" fill="#3a7bd5"/><circle cx="120" cy="52" r="4" fill="#2a9d8f"/>`},
+ {id:'hat_halo',slot:'hat',name:Lx('Нимб','Halo'),r:'legend',glowy:true,svg:`<ellipse cx="100" cy="22" rx="34" ry="9" fill="none" stroke="#ffd166" stroke-width="7" filter="url(#FID)"/><ellipse cx="100" cy="22" rx="34" ry="9" fill="none" stroke="#fff3c4" stroke-width="3"/>`},
+ {id:'hat_fire',slot:'hat',name:Lx('Огненная корона','Fire crown'),r:'mythic',glowy:true,svg:`<path d="M64 60 L66 26 L80 44 L88 10 L100 36 L112 10 L120 44 L134 26 L136 60 Z" fill="#ff6b35" filter="url(#FID)" opacity=".9"/><path d="M64 60 L66 26 L80 44 L88 10 L100 36 L112 10 L120 44 L134 26 L136 60 Z" fill="#ffb347" stroke="#c2410c" stroke-width="2.5"/><path d="M72 58 L76 40 L86 52 L100 30 L114 52 L124 40 L128 58 Z" fill="#fff3a0"/><circle cx="100" cy="50" r="5" fill="#e5243b"/>`},
+ {id:'gl_round',slot:'glasses',name:Lx('Круглые очки','Round glasses'),r:'common',svg:`<circle cx="80" cy="96" r="15" fill="rgba(255,255,255,.18)" stroke="#333" stroke-width="3"/><circle cx="120" cy="96" r="15" fill="rgba(255,255,255,.18)" stroke="#333" stroke-width="3"/><path d="M95 95 L105 95" stroke="#333" stroke-width="3"/>`},
+ {id:'gl_swim',slot:'glasses',name:Lx('Очки для плавания','Swim goggles'),r:'common',svg:`<path d="M44 96 L156 96" stroke="#2a9d8f" stroke-width="5"/><ellipse cx="80" cy="96" rx="15" ry="12" fill="rgba(110,205,255,.55)" stroke="#1d6b62" stroke-width="3"/><ellipse cx="120" cy="96" rx="15" ry="12" fill="rgba(110,205,255,.55)" stroke="#1d6b62" stroke-width="3"/>`},
+ {id:'gl_3d',slot:'glasses',name:Lx('3D-очки','3D glasses'),r:'uncommon',svg:`<rect x="60" y="85" width="80" height="24" rx="5" fill="#fff" stroke="#333" stroke-width="3"/><rect x="65" y="89" width="30" height="16" rx="3" fill="rgba(230,57,70,.75)"/><rect x="105" y="89" width="30" height="16" rx="3" fill="rgba(58,123,213,.75)"/>`},
+ {id:'gl_sun',slot:'glasses',name:Lx('Тёмные очки','Sunglasses'),r:'uncommon',svg:`<rect x="62" y="86" width="34" height="20" rx="8" fill="#1d1d28" stroke="#000" stroke-width="2"/><rect x="104" y="86" width="34" height="20" rx="8" fill="#1d1d28" stroke="#000" stroke-width="2"/><path d="M96 92 L104 92" stroke="#000" stroke-width="3"/><path d="M68 90 L76 90" stroke="#fff" stroke-width="2" opacity=".6"/>`},
+ {id:'gl_cateye',slot:'glasses',name:Lx('Очки «кошачий глаз»','Cat-eye glasses'),r:'uncommon',svg:`<path d="M62 90 Q78 84 95 92 Q93 106 79 106 Q65 104 62 90 L56 82 Z M138 90 Q122 84 105 92 Q107 106 121 106 Q135 104 138 90 L144 82 Z" fill="rgba(255,143,171,.35)" stroke="#e0457b" stroke-width="3" stroke-linejoin="round"/>`},
+ {id:'gl_mono',slot:'glasses',name:Lx('Монокль','Monocle'),r:'rare',svg:`<circle cx="120" cy="96" r="15" fill="rgba(255,255,255,.2)" stroke="#c99700" stroke-width="3"/><path d="M134 102 Q144 128 132 150" fill="none" stroke="#c99700" stroke-width="2"/>`},
+ {id:'gl_aviator',slot:'glasses',name:Lx('Авиаторы','Aviators'),r:'rare',svg:`<path d="M63 88 Q80 84 96 88 Q97 108 80 109 Q63 107 63 88 Z M104 88 Q120 84 137 88 Q137 107 120 109 Q103 108 104 88 Z" fill="rgba(150,95,30,.6)" stroke="#c99700" stroke-width="2.5"/><path d="M96 90 Q100 86 104 90" fill="none" stroke="#c99700" stroke-width="2.5"/>`},
+ {id:'gl_pixel',slot:'glasses',name:Lx('Пиксельные очки','Pixel shades'),r:'rare',svg:`<rect x="58" y="86" width="84" height="7" fill="#111"/><rect x="62" y="93" width="30" height="14" fill="#111"/><rect x="108" y="93" width="30" height="14" fill="#111"/><rect x="66" y="95" width="6" height="5" fill="#fff"/><rect x="112" y="95" width="6" height="5" fill="#fff"/>`},
+ {id:'gl_star',slot:'glasses',name:Lx('Очки-звёздочки','Star glasses'),r:'epic',svg:star5(80,96,17,'rgba(255,209,102,.85)','#d99a00')+star5(120,96,17,'rgba(255,209,102,.85)','#d99a00')},
+ {id:'gl_heart',slot:'glasses',name:Lx('Очки-сердечки','Heart glasses'),r:'epic',svg:heart(80,98,13,'#ff4d6d')+heart(120,98,13,'#ff4d6d')+`<path d="M94 94 L106 94" stroke="#c9184a" stroke-width="3"/>`},
+ {id:'gl_cyber',slot:'glasses',name:Lx('Кибервизор','Cyber visor'),r:'legend',glowy:true,svg:`<rect x="56" y="85" width="88" height="22" rx="11" fill="rgba(0,229,255,.35)" stroke="#00e5ff" stroke-width="3" filter="url(#FID)"/><rect x="56" y="85" width="88" height="22" rx="11" fill="rgba(0,229,255,.3)" stroke="#00e5ff" stroke-width="2.5"/><path d="M64 96 L136 96" stroke="#e0ffff" stroke-width="2"/><circle cx="56" cy="96" r="5" fill="#333"/><circle cx="144" cy="96" r="5" fill="#333"/>`},
+ {id:'ey_neon',slot:'eyes',name:Lx('Неоновые глаза','Neon eyes'),r:'rare',eye:{glow:true,color:'#00e5ff'}},
+ {id:'ey_fire',slot:'eyes',name:Lx('Огненные глаза','Fire eyes'),r:'rare',eye:{glow:true,color:'#ff8c1a'}},
+ {id:'ey_toxic',slot:'eyes',name:Lx('Ядовито-зелёные глаза','Toxic green eyes'),r:'rare',eye:{glow:true,color:'#39ff14'}},
+ {id:'ey_heart',slot:'eyes',name:Lx('Влюблённые глаза','Lovestruck eyes'),r:'epic',eye:{shape:'heart',color:'#ff4d6d'}},
+ {id:'ey_violet',slot:'eyes',name:Lx('Фиолетовое сияние','Violet glow'),r:'epic',eye:{glow:true,color:'#c77dff'}},
+ {id:'ey_laser',slot:'eyes',name:Lx('Лазерные глаза','Laser eyes'),r:'legend',eye:{glow:true,color:'#ff1f3d',shape:'slit'}},
+ {id:'ey_star',slot:'eyes',name:Lx('Звёздные глаза','Starry eyes'),r:'legend',eye:{glow:true,color:'#ffd166',shape:'star'}},
+ {id:'ey_galaxy',slot:'eyes',name:Lx('Галактические глаза','Galaxy eyes'),r:'mythic',eye:{glow:true,color:'#ff7ae6',shape:'star'}},
+ HAND('ty_fish',Lx('Рыбка','Fish'),'common',`<ellipse cx="6" cy="-14" rx="8" ry="15" fill="#5fa8d3" stroke="#2c6e95" stroke-width="2"/><path d="M6 -28 L-2 -38 L14 -38 Z" fill="#5fa8d3" stroke="#2c6e95" stroke-width="2"/><circle cx="8" cy="-6" r="1.8" fill="#1d3557"/>`),
+ HAND('ty_yarn',Lx('Клубок','Yarn ball'),'common',`<circle cx="4" cy="-16" r="13" fill="#ff5d8f" stroke="#c2185b" stroke-width="2"/><path d="M-6 -22 Q4 -14 14 -24 M-8 -12 Q4 -4 16 -14" fill="none" stroke="#c2185b" stroke-width="2"/>`),
+ HAND('ty_book',Lx('Книжка','Book'),'common',`<rect x="-12" y="-30" width="28" height="22" rx="3" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/><path d="M2 -30 L2 -8" stroke="#fff" stroke-width="2"/>`),
+ HAND('ty_icecream',Lx('Мороженое','Ice cream'),'uncommon',`<path d="M-6 -4 L6 -4 L0 14 Z" fill="#e9c46a" stroke="#b8860b" stroke-width="1.5"/><circle cx="0" cy="-10" r="9" fill="#ff8fab"/><circle cx="0" cy="-20" r="7" fill="#fff3c4"/>`),
+ HAND('ty_flag',Lx('Флажок','Flag'),'uncommon',`<path d="M0 6 L0 -48" stroke="#6d4c41" stroke-width="3"/><path d="M0 -48 L26 -40 L0 -30 Z" fill="#e63946"/>`),
+ HAND('ty_balloon',Lx('Шарик','Balloon'),'rare',`<path d="M0 0 Q8 -30 4 -56" fill="none" stroke="#666" stroke-width="2"/><ellipse cx="4" cy="-74" rx="15" ry="19" fill="#ff4d6d" stroke="#c9184a" stroke-width="2"/><ellipse cx="-1" cy="-80" rx="4" ry="6" fill="#fff" opacity=".5"/>`),
+ HAND('ty_shield',Lx('Щит','Shield'),'rare',`<path d="M-14 -20 L14 -20 L14 -2 Q14 12 0 18 Q-14 12 -14 -2 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/>${star5(0,-4,7,'#ffd166')}`),
+ HAND('ty_wand',Lx('Волшебная палочка','Magic wand'),'epic',`<path d="M0 0 L22 -36" stroke="#6d4c41" stroke-width="4" stroke-linecap="round"/>${star5(24,-40,10,'#ffd166','#c99700')}`),
+ HAND('ty_sword',Lx('Световой меч','Light sword'),'legend',`<path d="M0 -4 L0 -58" stroke="#39ff14" stroke-width="9" stroke-linecap="round" filter="url(#FID)"/><path d="M0 -4 L0 -58" stroke="#eaffd9" stroke-width="4" stroke-linecap="round"/><rect x="-4" y="-6" width="8" height="16" rx="2" fill="#555"/>`,{glowy:true}),
+ HAND('ty_trophy',Lx('Кубок','Trophy'),'legend',`<path d="M-12 -30 L12 -30 L10 -12 Q0 -4 -10 -12 Z" fill="#ffd166" stroke="#c99700" stroke-width="2"/><rect x="-3" y="-8" width="6" height="7" fill="#c99700"/><rect x="-9" y="-2" width="18" height="5" rx="2" fill="#c99700"/>`),
+ HAND('ty_staff',Lx('Звёздный посох','Star staff'),'mythic',`<path d="M0 14 L0 -60" stroke="#6b3d1f" stroke-width="5" stroke-linecap="round"/><circle cx="0" cy="-68" r="13" fill="#c77dff" filter="url(#FID)"/><circle cx="0" cy="-68" r="9" fill="#f0d9ff" stroke="#7b2cbf" stroke-width="2"/>${star5(0,-68,6,'#ffd166')}<path d="M-12 -54 Q0 -48 12 -54" fill="none" stroke="#ffd166" stroke-width="3"/>`,{glowy:true}),
+ {id:'wr_bands',slot:'wrist',name:Lx('Напульсники','Sweatbands'),r:'common',svg:`<rect x="-12" y="-3" width="24" height="7" rx="3" fill="#e63946"/><path d="M-12 0 L12 0" stroke="#fff" stroke-width="1.5"/>`},
+ {id:'wr_watch',slot:'wrist',name:Lx('Часики','Watch'),r:'uncommon',svg:`<rect x="-12" y="-3" width="24" height="6" rx="3" fill="#333"/><circle cx="0" cy="0" r="5.5" fill="#fff" stroke="#333" stroke-width="2"/>`},
+ {id:'wr_beads',slot:'wrist',name:Lx('Браслет из бусин','Bead bracelet'),r:'rare',svg:[-9,-3,3,9].map((x,i)=>`<circle cx="${x}" cy="0" r="3.4" fill="${['#ff8fab','#7fc8f8','#ffd166','#8ac926'][i]}"/>`).join('')},
+ {id:'wr_neon',slot:'wrist',name:Lx('Неоновые браслеты','Neon bands'),r:'epic',glowy:true,svg:`<rect x="-12" y="-3" width="24" height="6" rx="3" fill="#ff2bd6" filter="url(#FID)"/><rect x="-12" y="-2" width="24" height="4" rx="2" fill="#ffb0f2"/>`},
+ {id:'wr_gold',slot:'wrist',name:Lx('Золотые браслеты','Gold bracelets'),r:'legend',svg:`<rect x="-12" y="-3" width="24" height="7" rx="3" fill="#ffd166" stroke="#c99700" stroke-width="1.5"/><circle cx="0" cy="0" r="3" fill="#2f6fdc"/>`},
+ {id:'nk_bell',slot:'chest',name:Lx('Колокольчик','Bell'),r:'common',svg:`<path d="M-36 -16 Q0 2 36 -16" fill="none" stroke="#e63946" stroke-width="7" stroke-linecap="round"/><circle cx="0" cy="0" r="9" fill="#ffd166" stroke="#c99700" stroke-width="2"/><path d="M-4 3 L4 3" stroke="#8a6500" stroke-width="2"/>`},
+ {id:'nk_bowtie',slot:'chest',name:Lx('Бабочка','Bow tie'),r:'common',svg:`<path d="M0 -8 L-22 -20 L-22 4 Z M0 -8 L22 -20 L22 4 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><circle cx="0" cy="-8" r="5" fill="#9d1b28"/>`},
+ {id:'nk_scarf',slot:'chest',name:Lx('Шарф','Scarf'),r:'uncommon',svg:`<path d="M-40 -20 Q0 0 40 -20 L40 -6 Q0 12 -40 -6 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="2"/><rect x="12" y="-8" width="15" height="34" rx="4" fill="#2a9d8f" stroke="#1d6b62" stroke-width="2" transform="rotate(-10 20 2)"/><path d="M-34 -14 L-34 -4 M-20 -10 L-20 0 M-6 -8 L-6 3" stroke="#e9f5f3" stroke-width="3"/>`},
+ {id:'nk_tie',slot:'chest',name:Lx('Галстук','Tie'),r:'uncommon',svg:`<path d="M-7 -14 L7 -14 L5 -5 L-5 -5 Z" fill="#1f4f99"/><path d="M-5 -5 L5 -5 L12 34 L0 46 L-12 34 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/><path d="M-8 12 L8 4 M-10 28 L10 18" stroke="#ffd166" stroke-width="3"/>`},
+ {id:'nk_heart',slot:'chest',name:Lx('Кулон-сердце','Heart pendant'),r:'rare',svg:`<path d="M-30 -18 Q0 -2 30 -18" fill="none" stroke="#c0c6d0" stroke-width="2"/><path d="M0 10 C-14 0 -8 -12 0 -4 C8 -12 14 0 0 10 Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="1.5"/>`},
+ {id:'nk_cyber',slot:'chest',name:Lx('Неоновый ошейник','Neon collar'),r:'epic',glowy:true,svg:`<path d="M-36 -14 Q0 2 36 -14" fill="none" stroke="#00e5ff" stroke-width="7" stroke-linecap="round" filter="url(#FID)"/><path d="M-36 -14 Q0 2 36 -14" fill="none" stroke="#bff8ff" stroke-width="4" stroke-linecap="round"/><rect x="-8" y="-10" width="16" height="12" rx="3" fill="#222" stroke="#00e5ff" stroke-width="2"/>`},
+ {id:'nk_medal',slot:'chest',name:Lx('Медаль отличника','Top student medal'),r:'legend',svg:`<path d="M-14 -18 L0 10 L14 -18" fill="none" stroke="#3a7bd5" stroke-width="7"/><circle cx="0" cy="14" r="12" fill="#ffd166" stroke="#c99700" stroke-width="3"/>${star5(0,14,7,'#c99700')}`},
+ {id:'nk_dragon',slot:'chest',name:Lx('Сердце дракона','Dragon heart'),r:'mythic',glowy:true,svg:`<path d="M-30 -18 Q0 -2 30 -18" fill="none" stroke="#c99700" stroke-width="3"/><path d="M0 -8 L12 6 L0 22 L-12 6 Z" fill="#e5243b" filter="url(#FID)"/><path d="M0 -8 L12 6 L0 22 L-12 6 Z" fill="#ff4d6d" stroke="#ffd166" stroke-width="2.5"/><path d="M-4 2 L0 -2 L4 2" stroke="#fff" stroke-width="1.5" fill="none"/>`},
+ {id:'bd_tshirt',slot:'body',name:Lx('Футболка','T-shirt'),r:'common',clip:`<rect x="30" y="120" width="140" height="70" fill="#ffb703"/><circle cx="100" cy="160" r="9" fill="#fff" opacity=".8"/>`},
+ {id:'bd_vest',slot:'body',name:Lx('Жилетка','Vest'),r:'uncommon',clip:`<rect x="30" y="120" width="56" height="100" fill="#6d4c41"/><rect x="114" y="120" width="56" height="100" fill="#6d4c41"/><circle cx="84" cy="164" r="3" fill="#ffd166"/>`},
+ {id:'bd_sweater',slot:'body',name:Lx('Свитер в полоску','Striped sweater'),r:'rare',clip:`<rect x="30" y="120" width="140" height="100" fill="#e63946"/><rect x="30" y="146" width="140" height="8" fill="#fff"/><rect x="30" y="166" width="140" height="8" fill="#fff"/><rect x="30" y="186" width="140" height="8" fill="#fff"/>`},
+ {id:'bd_dress',slot:'body',name:Lx('Платье','Dress'),r:'rare',clip:`<rect x="30" y="150" width="140" height="70" fill="#c77dff"/><circle cx="80" cy="190" r="4" fill="#fff"/><circle cx="104" cy="172" r="4" fill="#fff"/><circle cx="124" cy="196" r="4" fill="#fff"/><path d="M30 150 Q100 162 170 150" fill="none" stroke="#7b2cbf" stroke-width="4"/>`},
+ {id:'bd_jacket',slot:'body',name:Lx('Киберкуртка','Cyber jacket'),r:'epic',clip:`<rect x="30" y="120" width="140" height="100" fill="#1d2235"/><path d="M100 140 L100 214" stroke="#00e5ff" stroke-width="3"/><path d="M62 154 L80 154 L86 164 M138 176 L120 176 L114 168" fill="none" stroke="#ff2bd6" stroke-width="3"/>`},
+ {id:'bd_hero',slot:'body',name:Lx('Костюм героя','Hero suit'),r:'legend',clip:`<rect x="30" y="120" width="140" height="100" fill="#3a7bd5"/><path d="M104 146 L88 172 L100 172 L94 196 L114 164 L102 164 L110 146 Z" fill="#ffd166" stroke="#c99700" stroke-width="2"/>`},
+ {id:'bd_astro',slot:'body',name:Lx('Скафандр','Space suit'),r:'legend',clip:`<rect x="30" y="120" width="140" height="100" fill="#eef1f6"/><rect x="82" y="152" width="36" height="22" rx="5" fill="#9aa6bd"/><circle cx="91" cy="160" r="3" fill="#e63946"/><circle cx="100" cy="160" r="3" fill="#2e9e5b"/><circle cx="109" cy="160" r="3" fill="#3a7bd5"/>`},
+ {id:'bk_pack',slot:'back',name:Lx('Рюкзак','Backpack'),r:'common',svg:`<rect x="26" y="-10" width="34" height="48" rx="10" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3"/><rect x="34" y="10" width="20" height="16" rx="4" fill="#38b2a2" stroke="#1d6b62" stroke-width="2"/>`},
+ {id:'bk_cape',slot:'back',name:Lx('Плащ','Cape'),r:'rare',svg:`<path d="M-34 -14 Q-74 48 -56 76 L56 76 Q74 48 34 -14 Z" fill="#e63946" stroke="#9d1b28" stroke-width="3"/>`},
+ {id:'bk_jet',slot:'back',name:Lx('Реактивный ранец','Jetpack'),r:'epic',svg:`<rect x="-66" y="-8" width="22" height="50" rx="8" fill="#9aa6bd" stroke="#3d4654" stroke-width="3"/><rect x="44" y="-8" width="22" height="50" rx="8" fill="#9aa6bd" stroke="#3d4654" stroke-width="3"/><path d="M-62 42 L-55 66 L-48 42 Z M48 42 L55 66 L62 42 Z" fill="#ff8c1a"/>`},
+ {id:'bk_fairy',slot:'back',name:Lx('Крылья феи','Fairy wings'),r:'epic',svg:`<ellipse cx="-50" cy="-2" rx="24" ry="40" fill="rgba(160,231,255,.7)" stroke="#6cc8f0" stroke-width="3" transform="rotate(-25 -50 -2)"/><ellipse cx="50" cy="-2" rx="24" ry="40" fill="rgba(160,231,255,.7)" stroke="#6cc8f0" stroke-width="3" transform="rotate(25 50 -2)"/><ellipse cx="-42" cy="44" rx="14" ry="22" fill="rgba(255,182,230,.7)" stroke="#f08cc8" stroke-width="3" transform="rotate(20 -42 44)"/><ellipse cx="42" cy="44" rx="14" ry="22" fill="rgba(255,182,230,.7)" stroke="#f08cc8" stroke-width="3" transform="rotate(-20 42 44)"/>`},
+ {id:'bk_dragon',slot:'back',name:Lx('Крылья дракона','Dragon wings'),r:'legend',svg:`<path d="M-28 2 L-84 -44 L-72 -10 L-92 0 L-66 12 L-78 36 L-30 24 Z M28 2 L84 -44 L72 -10 L92 0 L66 12 L78 36 L30 24 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3" stroke-linejoin="round"/>`},
+ {id:'bk_neon',slot:'back',name:Lx('Неоновые крылья','Neon wings'),r:'legend',glowy:true,svg:`<g filter="url(#FID)"><path d="M-30 2 Q-76 -48 -86 -18 Q-70 12 -30 24 M30 2 Q76 -48 86 -18 Q70 12 30 24" fill="none" stroke="#ff2bd6" stroke-width="6"/></g><path d="M-30 2 Q-76 -48 -86 -18 Q-70 12 -30 24 Z M30 2 Q76 -48 86 -18 Q70 12 30 24 Z" fill="rgba(255,43,214,.25)" stroke="#ffb0f2" stroke-width="3"/>`},
+ {id:'bk_phoenix',slot:'back',name:Lx('Крылья феникса','Phoenix wings'),r:'mythic',glowy:true,svg:`<g filter="url(#FID)"><path d="M-28 4 Q-70 -60 -96 -30 Q-80 -20 -88 -4 Q-70 0 -76 18 Q-50 14 -30 26 Z M28 4 Q70 -60 96 -30 Q80 -20 88 -4 Q70 0 76 18 Q50 14 30 26 Z" fill="#ff6b35" opacity=".8"/></g><path d="M-28 4 Q-70 -60 -96 -30 Q-80 -20 -88 -4 Q-70 0 -76 18 Q-50 14 -30 26 Z M28 4 Q70 -60 96 -30 Q80 -20 88 -4 Q70 0 76 18 Q50 14 30 26 Z" fill="#ffb347" stroke="#c2410c" stroke-width="2.5" stroke-linejoin="round"/><path d="M-34 8 Q-60 -30 -80 -22 M-36 16 Q-60 4 -74 6 M34 8 Q60 -30 80 -22 M36 16 Q60 4 74 6" fill="none" stroke="#fff3a0" stroke-width="3" stroke-linecap="round"/>`}];
 const WEAR_BY_ID=Object.fromEntries(WEAR.map(w=>[w.id,w]));
-const SLOTS=[['hat',Lx("Голова","Head")],['glasses',Lx("Очки","Glasses")],['eyes',Lx("Глаза","Eyes")],['neck',Lx("Шея","Neck")],['body',Lx("Одежда","Clothes")],['back',Lx("Спина","Back")],['toy',Lx("В лапках","In paws")]];
+const SLOTS=[['hat',Lx('Голова','Head')],['glasses',Lx('Очки','Glasses')],['eyes',Lx('Глаза','Eyes')],['hand',Lx('В лапки','In paws')],['wrist',Lx('На лапки','Paw jewelry')],
+  ['chest',Lx('На грудь','Chest')],['body',Lx('Одежда','Clothes')],['back',Lx('Спина','Back')]];
+const OLD_SLOT={neck:'chest',toy:'handR'};
 
 /* ===== Рисуем котёнка ===== */
-function eyesSVG(mood,eye,F,fid){const L=F.light?'#f2f2ff':'#2b2230';
-  if(mood==='sleep')return `<path d="M70 96 Q80 104 90 96 M110 96 Q120 104 130 96" fill="none" stroke="${L}" stroke-width="4" stroke-linecap="round"/>`;
-  if(eye.kind==='star'){const s=star5(80,96,11,'#ffd166','#c99700')+star5(120,96,11,'#ffd166','#c99700');return `<g filter="url(#${fid})" opacity=".8">${s}</g>${s}`}
-  if(eye.kind==='heart')return heart(80,99,9,'#ff4d6d')+heart(120,99,9,'#ff4d6d');
-  if(eye.kind==='glow'){const c=eye.color;
-    if(mood==='happy'){const p=`<path d="M70 98 Q80 86 90 98 M110 98 Q120 86 130 98" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/>`;return `<g filter="url(#${fid})">${p}</g>${p}`}
-    const ry=mood==='sad'?7:10;const brow=mood==='sad'?`<path d="M68 84 L90 90 M132 84 L110 90" stroke="${L}" stroke-width="3.5" stroke-linecap="round"/>`:'';
-    return `<ellipse cx="80" cy="97" rx="10" ry="${ry+2}" fill="#0b0b12"/><ellipse cx="120" cy="97" rx="10" ry="${ry+2}" fill="#0b0b12"/>
-    <g filter="url(#${fid})"><ellipse cx="80" cy="97" rx="8" ry="${ry}" fill="${c}"/><ellipse cx="120" cy="97" rx="8" ry="${ry}" fill="${c}"/></g>
-    <ellipse cx="80" cy="97" rx="6" ry="${ry-2}" fill="${c}"/><ellipse cx="120" cy="97" rx="6" ry="${ry-2}" fill="${c}"/>
-    <ellipse cx="80" cy="97" rx="1.8" ry="${ry-3}" fill="#0b0b12" opacity=".7"/><ellipse cx="120" cy="97" rx="1.8" ry="${ry-3}" fill="#0b0b12" opacity=".7"/>${brow}`}
-  if(mood==='happy')return `<path d="M70 98 Q80 86 90 98 M110 98 Q120 86 130 98" fill="none" stroke="${L}" stroke-width="4.5" stroke-linecap="round"/>`;
-  if(mood==='sad')return `<ellipse cx="80" cy="98" rx="7" ry="8" fill="#fff" stroke="${F.line}" stroke-width="2"/><ellipse cx="120" cy="98" rx="7" ry="8" fill="#fff" stroke="${F.line}" stroke-width="2"/><circle cx="80" cy="100" r="4.5" fill="#2b2230"/><circle cx="120" cy="100" r="4.5" fill="#2b2230"/><path d="M68 84 L90 90 M132 84 L110 90" stroke="${L}" stroke-width="3.5" stroke-linecap="round"/>`;
-  return `<ellipse cx="80" cy="96" rx="9" ry="11" fill="#fff" stroke="${F.line}" stroke-width="2"/><ellipse cx="120" cy="96" rx="9" ry="11" fill="#fff" stroke="${F.line}" stroke-width="2"/><ellipse cx="81" cy="98" rx="5.5" ry="7.5" fill="#2b2230"/><ellipse cx="121" cy="98" rx="5.5" ry="7.5" fill="#2b2230"/><circle cx="83" cy="94" r="2.4" fill="#fff"/><circle cx="123" cy="94" r="2.4" fill="#fff"/>`}
-const mouthSVG=(mood,line)=>mood==='sad'?`<path d="M90 125 Q100 117 110 125" fill="none" stroke="${line}" stroke-width="3" stroke-linecap="round"/>`
-  :`<path d="M100 116 Q94 ${mood==='happy'?125:123} 88 119 M100 116 Q106 ${mood==='happy'?125:123} 112 119" fill="none" stroke="${line}" stroke-width="3" stroke-linecap="round"/>`;
-const noseSVG=line=>`<path d="M94 109 L106 109 L100 116 Z" fill="#f48fb1" stroke="${line}" stroke-width="1.5" stroke-linejoin="round"/>`;
+function catGenes(cat){if(cat&&cat.dna&&typeof cleanDna==='function'){const d=cleanDna(cat.dna);if(d)return d}return (SKIN_BY_ID[cat&&cat.skin]||SKINS[0]).g}
+function eyesSVG(G,mood,fid){const line=G.line,lid=isDark(G.main)?'#f2f2ff':line;
+  const one=(x,col)=>{const glow=G.glow;const blur=s=>glow?`<g filter="url(#${fid})">${s}</g>${s}`:s;
+    if(mood==='sleep')return `<path d="M${x-10} 96 Q${x} 103 ${x+10} 96" fill="none" stroke="${lid}" stroke-width="4" stroke-linecap="round"/>`;
+    if(mood==='happy')return blur(`<path d="M${x-10} 99 Q${x} 87 ${x+10} 99" fill="none" stroke="${glow?col:lid}" stroke-width="4.5" stroke-linecap="round"/>`);
+    const k=mood==='sad'?.8:1,S=G.eyes,bg=glow?'#0b0b12':'#fff';
+    if(S==='heart')return heart(x,98,10*k,col);
+    if(S==='star')return `<circle cx="${x}" cy="96" r="${11*k}" fill="${bg}" stroke="${line}" stroke-width="2"/>`+blur(star5(x,96,9*k,col))+`<circle cx="${x+3}" cy="92" r="1.8" fill="#fff"/>`;
+    if(S==='sleepy')return `<path d="M${x-11} 96 A11 11 0 0 0 ${x+11} 96 Z" fill="${bg}" stroke="${line}" stroke-width="2"/>`+blur(`<path d="M${x-8} 97 A8 7 0 0 0 ${x+8} 97 Z" fill="${col}"/>`)+`<path d="M${x-12} 96 L${x+12} 96" stroke="${line}" stroke-width="3.5" stroke-linecap="round"/>`;
+    const sh={round:[11,11,7,7],almond:[13,8,6,7],big:[13,15,9,11],slit:[11,12,9,10]}[S]||[11,11,7,7];
+    const white=S==='almond'?`<path d="M${x-13*k} 96 Q${x} ${96-14*k} ${x+13*k} 96 Q${x} ${96+12*k} ${x-13*k} 96 Z" fill="${bg}" stroke="${line}" stroke-width="2"/>`
+      :`<ellipse cx="${x}" cy="96" rx="${sh[0]*k}" ry="${sh[1]*k}" fill="${bg}" stroke="${line}" stroke-width="2"/>`;
+    const iris=blur(`<ellipse cx="${x}" cy="97" rx="${sh[2]*k}" ry="${sh[3]*k}" fill="${col}"/>`);
+    const pupil=S==='slit'?`<ellipse cx="${x}" cy="97" rx="1.8" ry="${8*k}" fill="#111"/>`:glow?'':`<ellipse cx="${x}" cy="98" rx="${sh[2]*.5*k}" ry="${sh[3]*.6*k}" fill="#1b1b22"/>`;
+    const shine=`<circle cx="${x+3}" cy="92" r="${S==='big'?3.4:2.2}" fill="#fff"/>${S==='big'?`<circle cx="${x-4}" cy="102" r="1.7" fill="#fff"/>`:''}`;
+    return white+iris+pupil+shine};
+  let s=one(80,G.hetero||G.eyeColor)+one(120,G.eyeColor);
+  if(mood==='sad')s+=`<path d="M66 80 L90 86 M134 80 L110 86" stroke="${lid}" stroke-width="3.5" stroke-linecap="round"/>`;
+  return s}
+function patternSVG(G,part,dark){const p=G.pat,n=G.neon||'#00e5ff';
+  if(part==='head'){
+    if(p==='tabby')return `<path d="M88 56 L90 72 M100 52 L100 70 M112 56 L110 72 M42 92 L60 96 M42 104 L60 104 M158 92 L140 96 M158 104 L140 104" stroke="${dark}" stroke-width="5" stroke-linecap="round"/>`;
+    if(p==='bicolor')return `<path d="M100 76 Q80 96 68 126 Q100 152 132 126 Q120 96 100 76 Z" fill="#ffffff"/>`;
+    if(p==='points')return `<ellipse cx="100" cy="114" rx="26" ry="20" fill="${dark}" opacity=".55"/>`;
+    if(p==='calico')return `<ellipse cx="66" cy="70" rx="28" ry="22" fill="#f4a259"/><ellipse cx="136" cy="80" rx="22" ry="20" fill="#3a3a44"/>`;
+    if(p==='spots')return [[64,76],[134,74],[58,112],[142,112],[100,62]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="6" ry="5" fill="none" stroke="${dark}" stroke-width="3"/>`).join('');
+    if(p==='stars')return [[68,78],[126,68],[142,112],[58,118]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#fff" opacity=".85"/>`).join('');
+    if(p==='rainbow')return ['#ff924c','#ffca3a','#8ac926','#1982c4'].map((c,i)=>`<path d="M40 ${70+i*9} Q100 ${40+i*9} 160 ${70+i*9}" fill="none" stroke="${c}" stroke-width="7" opacity=".75"/>`).join('');
+    if(p==='flame')return `<path d="M100 54 Q86 70 96 84 Q98 72 104 70 Q114 82 106 92 Q122 80 112 62 Q108 72 104 66 Z" fill="#ffd166"/>`;
+    if(p==='circuit')return `<path d="M50 84 L66 84 L72 76 M150 116 L132 116 L126 124 M88 58 L88 70 L100 70" fill="none" stroke="${n}" stroke-width="2.5"/><circle cx="72" cy="76" r="3" fill="${n}"/><circle cx="126" cy="124" r="3" fill="${n}"/>`;
+    return ''}
+  if(p==='tabby')return `<path d="M50 152 Q64 148 72 162 M48 178 Q64 172 72 186 M150 152 Q136 148 128 162 M152 178 Q136 172 128 186" fill="none" stroke="${dark}" stroke-width="5" stroke-linecap="round"/>`;
+  if(p==='calico')return `<ellipse cx="74" cy="160" rx="24" ry="18" fill="#3a3a44"/><ellipse cx="130" cy="186" rx="22" ry="16" fill="#f4a259"/>`;
+  if(p==='spots')return [[66,162],[134,160],[72,190],[128,192],[100,150]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="5" fill="none" stroke="${dark}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="2" fill="${dark}"/>`).join('');
+  if(p==='stars')return [[78,160],[118,188],[132,160],[104,200],[66,186]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#fff" opacity=".85"/>`).join('');
+  if(p==='rainbow')return ['#ff595e','#ff924c','#ffca3a','#8ac926','#1982c4','#6a4c93'].map((c,i)=>`<rect x="30" y="${130+i*14}" width="140" height="14" fill="${c}" opacity=".8"/>`).join('');
+  if(p==='flame')return `<path d="M64 214 Q60 186 76 172 Q76 192 88 196 Q90 176 100 162 Q110 178 112 196 Q122 186 124 172 Q140 186 136 214 Z" fill="#ffd166" opacity=".9"/>`;
+  if(p==='circuit')return `<path d="M58 160 L78 160 L84 170 L100 170 M142 186 L122 186 L116 196" fill="none" stroke="${n}" stroke-width="2.5"/>`;
+  if(p==='shine')return `<ellipse cx="72" cy="158" rx="9" ry="16" fill="#fff" opacity=".35"/>`;
+  return ''}
 
-function softCat(S,F,mood,eye,ids){const pat=S.pat;const pt=pat==='points'?F.dark:F.main;const paw=F.paw||pt;
-  const tailCol=pat==='flame'?'#ffd166':pat==='rainbow'?'#c77dff':pt;
-  let headPat='',bodyPat='';
-  if(pat==='tabby'){headPat=`<path d="M88 58 L90 72 M100 54 L100 70 M112 58 L110 72 M46 92 L62 96 M46 104 L62 104 M154 92 L138 96 M154 104 L138 104" stroke="${F.dark}" stroke-width="5" stroke-linecap="round"/>`;
-    bodyPat=`<path d="M56 152 Q66 150 72 162 M54 176 Q66 172 72 184 M146 152 Q134 150 128 162 M146 176 Q134 172 128 184" fill="none" stroke="${F.dark}" stroke-width="5" stroke-linecap="round"/>`}
-  else if(pat==='bicolor'){headPat=`<path d="M100 76 Q80 96 70 124 Q100 146 130 124 Q120 96 100 76 Z" fill="#ffffff"/>`}
-  else if(pat==='calico'){headPat=`<ellipse cx="68" cy="72" rx="26" ry="20" fill="#f4a259"/><ellipse cx="134" cy="80" rx="20" ry="18" fill="#3a3a44"/>`;
-    bodyPat=`<ellipse cx="76" cy="160" rx="22" ry="16" fill="#3a3a44"/><ellipse cx="128" cy="184" rx="20" ry="14" fill="#f4a259"/>`}
-  else if(pat==='spots'){const sp=[[66,78],[132,76],[60,112],[140,112],[100,64]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="6" ry="5" fill="none" stroke="${F.dark}" stroke-width="3"/>`).join('');
-    headPat=sp;bodyPat=[[66,162],[134,160],[72,188],[128,190],[100,150]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="5" fill="none" stroke="${F.dark}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="2" fill="${F.dark}"/>`).join('')}
-  else if(pat==='stars'){headPat=[[70,80],[124,70],[140,110],[60,118]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#fff" opacity=".85"/>`).join('');bodyPat=[[78,160],[118,186],[132,160],[104,198],[66,186]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#fff" opacity=".85"/>`).join('')}
-  else if(pat==='rainbow'){const cols=['#ff595e','#ff924c','#ffca3a','#8ac926','#1982c4','#6a4c93'];bodyPat=cols.map((c,i)=>`<rect x="40" y="${132+i*14}" width="120" height="14" fill="${c}" opacity=".8"/>`).join('');
-    headPat=`<path d="M48 70 Q100 40 152 70" fill="none" stroke="#ff924c" stroke-width="6" opacity=".7"/><path d="M48 80 Q100 50 152 80" fill="none" stroke="#8ac926" stroke-width="6" opacity=".7"/><path d="M48 90 Q100 60 152 90" fill="none" stroke="#1982c4" stroke-width="6" opacity=".7"/>`}
-  else if(pat==='shine'){headPat=`<ellipse cx="74" cy="70" rx="16" ry="9" fill="#fff" opacity=".45" transform="rotate(-25 74 70)"/>`;bodyPat=`<ellipse cx="72" cy="158" rx="10" ry="16" fill="#fff" opacity=".35"/>`}
-  else if(pat==='flame'){headPat=`<path d="M100 54 Q88 70 96 82 Q98 72 104 70 Q112 82 106 90 Q120 80 112 64 Q108 72 104 66 Z" fill="#ffd166"/>`;bodyPat=`<path d="M70 210 Q66 184 80 172 Q80 190 90 194 Q92 176 100 164 Q108 180 112 194 Q120 186 122 172 Q136 186 130 210 Z" fill="#ffd166" opacity=".9"/>`}
-  else if(pat==='circuit'){const n=F.neon;const g=`filter="url(#${ids.f})"`;
-    headPat=`<g ${g}><path d="M52 84 L66 84 L72 76 M148 114 L132 114 L126 122 M88 60 L88 70 L100 70" fill="none" stroke="${n}" stroke-width="3"/></g><path d="M52 84 L66 84 L72 76 M148 114 L132 114 L126 122 M88 60 L88 70 L100 70" fill="none" stroke="${n}" stroke-width="2"/><circle cx="72" cy="76" r="3" fill="${n}"/><circle cx="126" cy="122" r="3" fill="${n}"/>`;
-    bodyPat=`<path d="M60 160 L78 160 L84 170 L100 170 M140 184 L122 184 L116 194" fill="none" stroke="${n}" stroke-width="2.5"/><circle cx="100" cy="170" r="3" fill="${n}"/><circle cx="116" cy="194" r="3" fill="${n}"/>`}
-  const cyberPlate=pat==='circuit'?`<rect x="104" y="80" width="32" height="32" rx="7" fill="#2a2f3a" stroke="${F.neon}" stroke-width="2"/>`:'';
-  const antenna=pat==='circuit'?`<path d="M150 30 L158 6" stroke="#888" stroke-width="3"/><circle cx="158" cy="6" r="5" fill="${F.neon}" filter="url(#${ids.f})"/><circle cx="158" cy="6" r="3" fill="#fff"/>`:'';
-  const ghost=pat==='ghost'?' opacity=".78"':'';
-  const TP={normal:['M134 196 C178 198 186 160 168 128'],fluffy:['M134 196 C178 198 186 160 168 128'],short:['M134 198 C152 200 160 190 160 176'],double:['M134 196 C178 198 186 160 168 128','M130 200 C186 214 196 176 188 150']}[S.tail||'normal']||['M134 196 C178 198 186 160 168 128'];
-  const tw=S.tail==='fluffy'?[28,21]:[17,11];
-  const under=`<g${ghost}>${TP.map(d=>`<path d="${d}" fill="none" stroke="${F.line}" stroke-width="${tw[0]}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${tailCol}" stroke-width="${tw[1]}" stroke-linecap="round"/>`).join('')}
-  <ellipse cx="100" cy="172" rx="44" ry="40" fill="${F.main}" stroke="${F.line}" stroke-width="3"/>
-  <g clip-path="url(#${ids.b})">${bodyPat}<ellipse cx="100" cy="184" rx="${pat==='bicolor'?30:26}" ry="${pat==='bicolor'?28:24}" fill="${F.belly}"/></g></g>`;
-  const shape=`<ellipse cx="100" cy="172" rx="44" ry="40"/>`;
-  const over=`<g${ghost}><ellipse cx="100" cy="172" rx="44" ry="40" fill="none" stroke="${F.line}" stroke-width="3"/>
-  <ellipse cx="78" cy="208" rx="16" ry="10" fill="${paw}" stroke="${F.line}" stroke-width="3"/><ellipse cx="122" cy="208" rx="16" ry="10" fill="${paw}" stroke="${F.line}" stroke-width="3"/></g>`;
-  const EARS={normal:['M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z','M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z'],
-    tufts:['M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z','M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z'],
-    long:['M56 80 L42 2 L90 56 Z M144 80 L158 2 L110 56 Z','M62 68 L50 22 L80 58 Z M138 68 L150 22 L120 58 Z'],
-    round:['M48 74 A22 22 0 1 1 88 54 Z M152 74 A22 22 0 1 0 112 54 Z','M56 66 A13 13 0 1 1 80 56 Z M144 66 A13 13 0 1 0 120 56 Z'],
-    fold:['M52 82 Q50 50 88 56 Q76 70 62 84 Z M148 82 Q150 50 112 56 Q124 70 138 84 Z','M60 74 Q60 60 80 60 Q72 68 64 76 Z M140 74 Q140 60 120 60 Q128 68 136 76 Z']}[S.ears||'normal']||null;
-  const E2=EARS||['M54 80 L50 28 L90 56 Z M146 80 L150 28 L110 56 Z','M60 68 L58 42 L80 58 Z M140 68 L142 42 L120 58 Z'];
-  const head=`<g${ghost}>${antenna}<path d="${E2[0]}" fill="${pt}" stroke="${F.line}" stroke-width="3" stroke-linejoin="round"/>
-  <path d="${E2[1]}" fill="#ffb3c7"/>${S.ears==='tufts'?`<path d="M50 30 L44 8 M50 30 L54 10 M150 30 L156 8 M150 30 L146 10" stroke="${F.line}" stroke-width="3.5" stroke-linecap="round"/>`:''}
-  <ellipse cx="100" cy="98" rx="55" ry="46" fill="${F.main}"/>
-  <g clip-path="url(#${ids.h})">${headPat}${pat==='points'?`<ellipse cx="100" cy="112" rx="24" ry="18" fill="${F.dark}" opacity=".55"/>`:''}</g>
-  <ellipse cx="100" cy="98" rx="55" ry="46" fill="none" stroke="${F.line}" stroke-width="3"/>
-  ${mood==='happy'?`<circle cx="66" cy="114" r="8" fill="#ff8fab" opacity=".5"/><circle cx="134" cy="114" r="8" fill="#ff8fab" opacity=".5"/>`:''}
-  ${cyberPlate}${eyesSVG(mood,eye,F,ids.f)}${noseSVG(F.line)}${mouthSVG(mood,F.line)}
-  <path d="M66 110 L34 104 M66 116 L34 120 M134 110 L166 104 M134 116 L166 120" stroke="${F.light?'#d8d8f0':F.line}" stroke-width="2" opacity=".6" stroke-linecap="round"/></g>`;
-  return {under,shape,over,head}}
+function catSVG(cat,mood){const G=catGenes(cat);const wear=(cat&&cat.wear)||{};
+  const it=s=>{const w=WEAR_BY_ID[wear[s]];return w&&(w.slot===s||(w.slot==='hand'&&(s==='handL'||s==='handR')))?w:null};
+  const eyeIt=it('eyes');const E=eyeIt?{...G,glow:eyeIt.eye.glow??G.glow,eyeColor:eyeIt.eye.color||G.eyeColor,eyes:eyeIt.eye.shape||G.eyes,hetero:null}:G;
+  const H=HEADS[G.head]||HEADS.round,B=BODIES[G.body]||BODIES.round,EA=EARS[G.ears]||EARS.pointed,T=TAILS[G.tail]||TAILS.thin;
+  const id=uid('c'),hid=uid('h'),fid=uid('f'),gb=uid('g');const L=G.line,dark=mixC(G.main,L,.45),light=mixC(G.main,'#ffffff',.35),edge=mixC(G.main,L,.18);
+  const pt=G.pat==='points'?dark:G.main,tailC=G.tailColor||pt;const fx=w=>w?(w.glowy?w.svg.replace(/FID/g,fid):w.svg):'';
+  const at=([x,y],svg,flip)=>`<g transform="translate(${x} ${y})${flip?' scale(-1,1)':''}">${svg}</g>`;
+  const ear=([x,y,a],side)=>`<g transform="translate(${x} ${y}) rotate(${a}) scale(${side},1)"><path d="${EA.o}" fill="${pt}" stroke="${L}" stroke-width="3" stroke-linejoin="round"/><path d="${EA.i}" fill="#ffb3c7"/>${EA.tuft?`<path d="M-2 -54 L-6 -66 M-2 -54 L2 -66" stroke="${L}" stroke-width="3" stroke-linecap="round"/>`:''}</g>`;
+  const ghost=G.pat==='ghost'?' opacity=".8"':'';const dy=H.top-50,cy=B.chest[1]-148;
+  const back=it('back'),body=it('body'),chest=it('chest'),hR=it('handR'),hL=it('handL'),wr=it('wrist'),gl=it('glasses'),hat=it('hat');
+  const paw=([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="13" ry="11" fill="${pt}" stroke="${L}" stroke-width="3"/><path d="M${x-5} ${y-7} L${x-5} ${y-3} M${x} ${y-8} L${x} ${y-4} M${x+5} ${y-7} L${x+5} ${y-3}" stroke="${L}" stroke-width="1.5" opacity=".45"/>`;
+  const foot=([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="15" ry="9" fill="${pt}" stroke="${L}" stroke-width="3"/><circle cx="${x-5}" cy="${y+1}" r="2" fill="#ffb3c7"/><circle cx="${x}" cy="${y+2}" r="2" fill="#ffb3c7"/><circle cx="${x+5}" cy="${y+1}" r="2" fill="#ffb3c7"/>`;
+  const PL=hL?[B.pawL[0]-30,B.pawL[1]-14]:B.pawL,PR=hR?[B.pawR[0]+30,B.pawR[1]-14]:B.pawR;
+  const hold=(w,P,flip)=>w?`${at([P[0],P[1]-6],fx(w),flip)}<g${ghost}><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${L}" stroke-width="15" stroke-linecap="round"/><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${pt}" stroke-width="10" stroke-linecap="round"/>${paw(P)}</g>${wr?at([P[0]+(flip?6:-6),P[1]+9],fx(wr)):''}`:'';
+  const extras=G.extras||[];const blush=mood==='happy'||mood==='sleep';
+  return `<svg viewBox="0 -20 200 248" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${Lx('Котёнок','Kitten')}">
+  <defs><clipPath id="${id}"><path d="${B.path}"/></clipPath><clipPath id="${hid}"><path d="${H.path}"/></clipPath>
+  <radialGradient id="${gb}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${light}"/><stop offset=".55" stop-color="${G.main}"/><stop offset="1" stop-color="${edge}"/></radialGradient>
+  <filter id="${fid}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
+  <ellipse cx="100" cy="221" rx="56" ry="7" fill="#000" opacity=".12"/>
+  ${back?at([100,148+cy],fx(back)):''}
+  <g${ghost}>${T.d.map(d=>`<g transform="translate(${B.tail[0]} ${B.tail[1]})"><path d="${d}" fill="none" stroke="${L}" stroke-width="${T.w[0]}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${tailC}" stroke-width="${T.w[1]}" stroke-linecap="round" stroke-linejoin="round"/></g>`).join('')}
+  <path d="${B.path}" fill="url(#${gb})"/>
+  <g clip-path="url(#${id})">${patternSVG(G,'body',dark)}<ellipse cx="100" cy="190" rx="${G.pat==='bicolor'?32:26}" ry="${G.pat==='bicolor'?30:26}" fill="${G.belly}"/>${body&&body.clip?body.clip:''}</g>
+  <path d="${B.path}" fill="none" stroke="${L}" stroke-width="3"/>
+  ${extras.includes('glowspots')?`<g filter="url(#${fid})">${[[76,166],[124,182],[106,158]].map(([x,y])=>`<circle cx="${x}" cy="${y+cy}" r="6" fill="${G.eyeColor}"/>`).join('')}</g>`:''}
+  ${B.feet.map(foot).join('')}</g>
+  ${chest?at([100,148+cy],fx(chest)):''}
+  <g${ghost}>${hL?'':paw(PL)}${hR?'':paw(PR)}</g>
+  ${wr&&!hL?at([PL[0],PL[1]+8],fx(wr)):''}${wr&&!hR?at([PR[0],PR[1]+8],fx(wr)):''}
+  <g${ghost}>${ear(H.earL,1)}${ear(H.earR,-1)}
+  <path d="${H.path}" fill="url(#${gb})"/><g clip-path="url(#${hid})">${patternSVG(G,'head',dark)}<ellipse cx="74" cy="${70+dy}" rx="18" ry="9" fill="#fff" opacity=".22" transform="rotate(-20 74 ${70+dy})"/></g>
+  <path d="${H.path}" fill="none" stroke="${L}" stroke-width="3"/></g>
+  ${extras.includes('horns')?`<path d="M78 ${62+dy} Q72 ${40+dy} 84 ${34+dy} Q84 ${48+dy} 92 ${58+dy} Z M122 ${62+dy} Q128 ${40+dy} 116 ${34+dy} Q116 ${48+dy} 108 ${58+dy} Z" fill="#f4e3c1" stroke="#8a6a3a" stroke-width="2.5"/>`:''}
+  ${extras.includes('star')?star5(100,70+dy*.5,8,'#ffd166','#c99700'):''}
+  <circle cx="${H.cheek}" cy="114" r="${blush?8:6}" fill="#ff8fab" opacity="${blush?.5:.3}"/><circle cx="${200-H.cheek}" cy="114" r="${blush?8:6}" fill="#ff8fab" opacity="${blush?.5:.3}"/>
+  ${extras.includes('freckles')?[[62,112],[70,118],[56,120],[138,112],[130,118],[144,120]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2" fill="${dark}" opacity=".6"/>`).join(''):''}
+  ${eyesSVG(E,mood,fid)}
+  <path d="M94 109 L106 109 L100 116 Z" fill="#f48fb1" stroke="${L}" stroke-width="1.5" stroke-linejoin="round"/>
+  ${mood==='sad'?`<path d="M90 125 Q100 117 110 125" fill="none" stroke="${L}" stroke-width="3" stroke-linecap="round"/>`:`<path d="M100 116 Q94 ${mood==='happy'?126:123} 88 119 M100 116 Q106 ${mood==='happy'?126:123} 112 119" fill="none" stroke="${L}" stroke-width="3" stroke-linecap="round"/>`}
+  <path d="M64 110 L32 104 M64 116 L32 120 M136 110 L168 104 M136 116 L168 120" stroke="${isDark(G.main)?'#d8d8f0':L}" stroke-width="2" opacity=".55" stroke-linecap="round"/>
+  ${hold(hL,PL,true)}${hold(hR,PR,false)}
+  ${mood==='sleep'?'':fx(gl)}${hat?`<g transform="translate(0 ${dy})">${fx(hat)}</g>`:''}
+  ${mood==='sleep'?'<text x="146" y="30" font-family="Nunito,sans-serif" font-size="22" font-weight="900" fill="#7a8bb5">z</text><text x="164" y="12" font-family="Nunito,sans-serif" font-size="30" font-weight="900" fill="#7a8bb5">Z</text>':''}</svg>`}
 
-const PIX=["","","","","...oo..........oo...","...opo........opo...","...oppooooooooppo...","..ommmmmmmmmmmmmmo..","..ommmmmmmmmmmmmmo..",
-"..ommmmeemmeemmmmo..","..ommmmeemmeemmmmo..","..ommmmmmnnmmmmmmo..","..ommmmmommommmmmo..","..ommmmmmoommmmmmo..","...ommmmmmmmmmmmo...",
-"....oooooooooooo....","....ommmmmmmmmmo....","...ommmbbbbbbmmmo...","...ommmbbbbbbmmmo...","...ommmbbbbbbmmmo...","...ommmmmmmmmmmmo...","...ommmo....ommmo...","...ooooo....ooooo..."];
-const PIX_TAIL=[[13,18],[14,18],[15,18],[16,18],[17,18],[18,17],[19,17]];
-function pixelCat(S,F,mood,eye,ids){
-  const glowCol=mood==='sleep'?null:eye.kind==='glow'?eye.color:eye.kind==='star'?'#ffd166':eye.kind==='heart'?'#ff4d6d':null;
-  const col={o:F.line,m:F.main,d:F.dark,b:F.belly,n:'#f48fb1',p:'#ffb3c7',e:glowCol||'#2b2230'};
-  const cell=(r,c,fill)=>`<rect x="${c*10}" y="${r*10-10}" width="10.4" height="10.4" fill="${fill}"/>`;
-  let body='',head='',eyes='';
-  PIX.forEach((row,r)=>{for(let c=0;c<row.length;c++){const ch=row[c];if(ch==='.')continue;
-    let k=ch;if(k==='e'){if(mood==='happy'&&r===9)k='m';else if(mood!=='normal'&&r===9)k='m';else{eyes+=cell(r,c,col.e);continue}}
-    const s=cell(r,c,col[k]);if(r>=16)body+=s;else head+=s}});
-  if(mood==='happy'){head+=cell(11,4,'#ff8fab')+cell(11,15,'#ff8fab')}
-  if(mood==='sad'){head+=cell(8,7,F.light?'#f2f2ff':F.line)+cell(8,12,F.light?'#f2f2ff':F.line)}
-  if(!glowCol&&mood==='normal')eyes+=`<rect x="72" y="82" width="4" height="4" fill="#fff"/><rect x="112" y="82" width="4" height="4" fill="#fff"/>`;
-  if(glowCol)eyes=`<g filter="url(#${ids.f})">${eyes}</g>`+eyes;
-  const tail=PIX_TAIL.map(([r,c])=>cell(r,c,F.dark)).join('');
-  return {under:tail+body,shape:`<rect x="40" y="150" width="120" height="50"/>`,over:'',head:head+eyes}}
-
-function brickCat(S,F,mood,eye,ids){const multi=S.pat==='multi';
-  const C=multi?{tail:'#f77f00',body:'#2f6fdc',legs:'#2e9e5b',ears:'#f5c518',head:'#d63b3b'}:{tail:F.main,body:F.main,legs:F.main,ears:F.main,head:F.main};
-  const L=F.line;const stud=(x,y,c)=>`<rect x="${x}" y="${y}" width="16" height="9" rx="3" fill="${c}" stroke="${L}" stroke-width="2"/><rect x="${x+3}" y="${y+2}" width="4" height="4" rx="1" fill="#fff" opacity=".35"/>`;
-  const under=`<rect x="136" y="126" width="18" height="62" rx="4" fill="${C.tail}" stroke="${L}" stroke-width="3" transform="rotate(25 145 157)"/>
-  <rect x="58" y="140" width="84" height="64" rx="6" fill="${C.body}" stroke="${L}" stroke-width="3"/>
-  <rect x="78" y="156" width="44" height="36" rx="6" fill="${F.belly}" opacity=".9"/><rect x="64" y="146" width="7" height="50" rx="3" fill="#fff" opacity=".25"/>`;
-  const over=`<rect x="60" y="196" width="36" height="20" rx="4" fill="${C.legs}" stroke="${L}" stroke-width="3"/><rect x="104" y="196" width="36" height="20" rx="4" fill="${C.legs}" stroke="${L}" stroke-width="3"/>`;
-  const head=`${stud(57,22,C.ears)}${stud(127,22,C.ears)}
-  <rect x="50" y="30" width="30" height="30" rx="4" fill="${C.ears}" stroke="${L}" stroke-width="3"/><rect x="120" y="30" width="30" height="30" rx="4" fill="${C.ears}" stroke="${L}" stroke-width="3"/>
-  <rect x="58" y="40" width="14" height="14" rx="2" fill="#ffb3c7"/><rect x="128" y="40" width="14" height="14" rx="2" fill="#ffb3c7"/>
-  ${stud(62,45,C.head)}${stud(92,45,C.head)}${stud(122,45,C.head)}
-  <rect x="44" y="52" width="112" height="92" rx="10" fill="${C.head}" stroke="${L}" stroke-width="3"/>
-  <rect x="52" y="60" width="9" height="60" rx="4" fill="#fff" opacity=".25"/><rect x="80" y="104" width="40" height="24" rx="8" fill="${F.belly}" opacity=".9"/>
-  ${mood==='happy'?`<rect x="56" y="108" width="14" height="10" rx="5" fill="#ff8fab" opacity=".6"/><rect x="130" y="108" width="14" height="10" rx="5" fill="#ff8fab" opacity=".6"/>`:''}
-  ${eyesSVG(mood,eye,{...F,line:'#1a1a1a',light:false},ids.f)}${noseSVG('#1a1a1a')}${mouthSVG(mood,'#1a1a1a')}`;
-  return {under,shape:`<rect x="58" y="140" width="84" height="64" rx="6"/>`,over,head}}
-
-function catSVG(cat,mood){const S=cat&&cat.dna?dnaToSkin(cat.dna):SKIN_BY_ID[cat&&cat.skin]||SKINS[0];const F=S.c;
-  const wear=(cat&&cat.wear)||{};const it=s=>{const w=WEAR_BY_ID[wear[s]];return w&&w.slot===s?w:null};
-  const ids={b:uid('b'),h:uid('h'),f:uid('f')};
-  const ei=it('eyes');const eye=ei?ei.eye:S.glow?{kind:'glow',color:S.glow}:{kind:'normal'};
-  const parts=(S.st==='pixel'?pixelCat:S.st==='brick'?brickCat:softCat)(S,F,mood,eye,ids);
-  const body=it('body'),fx=w=>w?(w.glowy?w.svg.replace(/FID/g,ids.f):w.svg):'';
-  return `<svg viewBox="0 -20 200 248" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${Lx("Котёнок","Kitten")}">
-  <defs><clipPath id="${ids.b}">${parts.shape}</clipPath><clipPath id="${ids.h}"><ellipse cx="100" cy="98" rx="55" ry="46"/></clipPath>
-  <filter id="${ids.f}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
-  ${fx(it('back'))}${extrasSVG(S,'back',ids,mood)}${parts.under}
-  ${body&&body.clip?`<g clip-path="url(#${ids.b})">${body.clip}</g>`:''}${body&&body.svg?body.svg:''}
-  ${parts.over}${parts.head}${extrasSVG(S,'front',ids,mood)}${fx(it('neck'))}${mood==='sleep'?'':fx(it('glasses'))}${fx(it('hat'))}${fx(it('toy'))}${mood==='sleep'?'<text x="146" y="30" font-family="Nunito,sans-serif" font-size="22" font-weight="900" fill="#7a8bb5">z</text><text x="164" y="12" font-family="Nunito,sans-serif" font-size="30" font-weight="900" fill="#7a8bb5">Z</text>':''}</svg>`}
-
-function wearPreview(w){return catSVG({skin:'sk_orange',wear:{[w.slot]:w.id}},'normal')}
+function wearPreview(w){const wear=w.slot==='hand'?{handR:w.id}:{[w.slot]:w.id};return catSVG({skin:'sk_orange',wear},'normal')}
 function skinPreview(s,mood='normal'){return catSVG({skin:s.id,wear:{}},mood)}
 
 /* ===== Генетика котят: гены внешности, свойства, характеристики, скрещивание ===== */
 const HEX=/^#[0-9a-f]{6}$/i;
-const PATS=['none','tabby','bicolor','points','calico','spots','stars','rainbow','shine','flame','circuit','ghost','multi'];
-const STYLES=['soft','pixel','brick'],EAR_T=['normal','tufts','long','round','fold'],TAIL_T=['normal','fluffy','short','double'],EXTRAS=['horns','wings','star','freckles','glowspots'];
-const RU={pat:{none:Lx("Однотонный","Solid"),tabby:Lx("Полоски","Stripes"),bicolor:Lx("Белая грудка","White chest"),points:Lx("Тёмные ушки и лапки","Dark ears and paws"),calico:Lx("Трёхцветный","Calico"),spots:Lx("Пятнышки","Spots"),stars:Lx("Звёздочки","Little stars"),rainbow:Lx("Радуга","Rainbow"),shine:Lx("Блеск","Shine"),flame:Lx("Пламя","Flame"),circuit:Lx("Киберсхемы","Cyber circuits"),ghost:Lx("Призрачный","Ghostly"),multi:Lx("Разноцветные кирпичики","Colorful bricks")},
-  style:{soft:Lx("Пушистый","Fluffy"),pixel:Lx("Пиксельный","Pixel"),brick:Lx("Кирпичики","Bricks")},ears:{normal:Lx("Обычные","Normal"),tufts:Lx("С кисточками","Tufted"),long:Lx("Длинные","Long"),round:Lx("Круглые","Round"),fold:Lx("Вислоухие","Folded")},
-  tail:{normal:Lx("Обычный","Normal"),fluffy:Lx("Пушистый","Fluffy"),short:Lx("Короткий","Short"),double:Lx("Два хвоста","Two tails")},extra:{horns:Lx("Рожки","Horns"),wings:Lx("Крылышки","Little wings"),star:Lx("Звезда на лбу","Star on the forehead"),freckles:Lx("Веснушки","Freckles"),glowspots:Lx("Светящиеся пятна","Glowing spots")}};
+const PATS=['none','tabby','bicolor','points','calico','spots','stars','rainbow','shine','flame','circuit','ghost'];
+const HEAD_T=Object.keys(HEADS),BODY_T=Object.keys(BODIES),EAR_T=Object.keys(EARS),TAIL_T=Object.keys(TAILS),EYE_T=EYE_SHAPES,EXTRAS=['horns','star','freckles','glowspots'];
+const RU={pat:{none:Lx("Однотонный","Solid"),tabby:Lx("Полоски","Stripes"),bicolor:Lx("Белая грудка","White chest"),points:Lx("Тёмные ушки и лапки","Dark ears and paws"),calico:Lx("Трёхцветный","Calico"),spots:Lx("Пятнышки","Spots"),stars:Lx("Звёздочки","Little stars"),rainbow:Lx("Радуга","Rainbow"),shine:Lx("Блеск","Shine"),flame:Lx("Пламя","Flame"),circuit:Lx("Киберсхемы","Cyber circuits"),ghost:Lx("Призрачный","Ghostly")},
+  head:{round:Lx("Круглая","Round"),square:Lx("Квадратная","Square"),wide:Lx("Широкая","Wide"),heart:Lx("Сердечком","Heart-shaped")},
+  body:{round:Lx("Круглое","Round"),slim:Lx("Стройное","Slim"),chubby:Lx("Пухлое","Chubby"),square:Lx("Квадратное","Square")},
+  ears:{pointed:Lx("Острые","Pointed"),round:Lx("Круглые","Round"),long:Lx("С кисточками","Tufted"),fold:Lx("Вислоухие","Folded"),bat:Lx("Как у летучей мыши","Bat ears")},
+  eyes:{round:Lx("Круглые","Round"),almond:Lx("Миндальные","Almond"),big:Lx("Большие","Big"),sleepy:Lx("Сонные","Sleepy"),slit:Lx("Хищные","Hunter"),star:Lx("Звёздные","Starry")},
+  tail:{thin:Lx("Тонкий","Thin"),fluffy:Lx("Пушистый","Fluffy"),short:Lx("Короткий","Short"),curly:Lx("Колечком","Curly"),double:Lx("Два хвоста","Two tails"),zigzag:Lx("Молния","Zigzag")},
+  extra:{horns:Lx("Рожки","Horns"),star:Lx("Звезда на лбу","Star on the forehead"),freckles:Lx("Веснушки","Freckles"),glowspots:Lx("Светящиеся пятна","Glowing spots")}};
 const NEONS=['#00e5ff','#ff2bd6','#39ff14','#ff3355','#ffd166','#c77dff'];
-
-function cleanDna(d){if(!d||typeof d!=='object')return null;const h=(v,f)=>HEX.test(v)?v:f;
-  return {style:STYLES.includes(d.style)?d.style:'soft',pat:PATS.includes(d.pat)?d.pat:'none',main:h(d.main,'#f4a259'),dark:h(d.dark,'#d9803a'),belly:h(d.belly,'#fde3c4'),line:h(d.line,'#6b3d1f'),
-    light:!!d.light,neon:HEX.test(d.neon)?d.neon:null,glow:HEX.test(d.glow)?d.glow:null,ears:EAR_T.includes(d.ears)?d.ears:'normal',tail:TAIL_T.includes(d.tail)?d.tail:'normal',
-    extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
-function skinToDna(s){return cleanDna({style:s.st||'soft',pat:s.pat||'none',...s.c,neon:s.c.neon||null,glow:s.glow||null})}
-function dnaToSkin(d){d=cleanDna(d)||skinToDna(SKINS[0]);
-  return {id:'dna',name:'',r:'rare',st:d.style,pat:d.pat==='none'?undefined:d.pat,glow:d.glow,ears:d.ears,tail:d.tail,extras:d.extras,hetero:d.hetero,
-    c:{main:d.main,dark:d.dark,belly:d.belly,line:d.line,light:d.light,paw:d.pat==='bicolor'?'#ffffff':undefined,neon:d.neon||(d.pat==='circuit'?'#00e5ff':undefined)}}}
-function extrasSVG(S,layer,ids,mood){const ex=S.extras||[];let o='';
-  if(layer==='back'){if(ex.includes('wings'))o+=`<ellipse cx="50" cy="150" rx="18" ry="32" fill="#ffffff" stroke="#c9d6f0" stroke-width="3" transform="rotate(-30 50 150)"/><ellipse cx="150" cy="150" rx="18" ry="32" fill="#ffffff" stroke="#c9d6f0" stroke-width="3" transform="rotate(30 150 150)"/>`;return o}
-  if(ex.includes('horns'))o+=`<path d="M78 60 Q72 38 84 32 Q84 46 92 56 Z M122 60 Q128 38 116 32 Q116 46 108 56 Z" fill="#f4e3c1" stroke="#8a6a3a" stroke-width="2.5"/>`;
-  if(ex.includes('star'))o+=star5(100,70,8,'#ffd166','#c99700');
-  if(ex.includes('freckles'))o+=[[62,112],[70,118],[56,120],[138,112],[130,118],[144,120]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2" fill="#6b3d1f" opacity=".55"/>`).join('');
-  if(ex.includes('glowspots')){const c=S.glow||'#7ff2ff';o+=`<g filter="url(#${ids.f})">${[[76,166],[124,184],[106,158]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="${c}"/>`).join('')}</g>${[[76,166],[124,184],[106,158]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.5" fill="#fff"/>`).join('')}`}
-  if(S.hetero&&S.st!=='pixel'&&(mood==='normal'||mood==='sad'))o+=S.glow?`<ellipse cx="80" cy="97" rx="6" ry="${mood==='sad'?5:8}" fill="${S.hetero}"/>`:`<ellipse cx="81" cy="${mood==='sad'?100:98}" rx="${mood==='sad'?4.5:5.5}" ry="${mood==='sad'?4.5:7.5}" fill="${S.hetero}"/><circle cx="83" cy="${mood==='sad'?98:94}" r="2" fill="#fff"/>`;
-  return o}
+const EYE_COLORS=['#5aa05a','#e0a200','#3a86ff','#8b5a2b','#57c785','#7a4fd6','#2f6fdc','#ffd166'];
+/* Старые гены (до новой модели) переводятся в новые */
+const OLD_EARS={normal:'pointed',tufts:'long',long:'long',round:'round',fold:'fold'},OLD_TAIL={normal:'thin',fluffy:'fluffy',short:'short',double:'double'};
+function cleanDna(d){if(!d||typeof d!=='object')return null;const h=(v,f)=>HEX.test(v)?v:f;const one=(v,list,f)=>list.includes(v)?v:f;
+  if(!d.head&&(d.style||d.ears in OLD_EARS)){const brick=d.style==='brick';
+    d={...d,head:brick?'square':'round',body:brick?'square':'round',ears:OLD_EARS[d.ears]||'pointed',tail:OLD_TAIL[d.tail]||'thin',eyes:d.glow?'slit':'round',
+      eyeColor:HEX.test(d.glow)?d.glow:'#5aa05a',glow:HEX.test(d.glow),pat:d.pat==='multi'?'rainbow':d.pat}}
+  return {head:one(d.head,HEAD_T,'round'),body:one(d.body,BODY_T,'round'),ears:one(d.ears,EAR_T,'pointed'),eyes:one(d.eyes,EYE_T,'round'),eyeColor:h(d.eyeColor,'#5aa05a'),glow:d.glow===true,
+    tail:one(d.tail,TAIL_T,'thin'),tailColor:HEX.test(d.tailColor)?d.tailColor:null,main:h(d.main,'#f4a259'),belly:h(d.belly,'#fde3c4'),line:h(d.line,'#6b3d1f'),
+    pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
+function skinToDna(s){return cleanDna(s.g)}
 
 const CAT_TRAITS=[
  {id:'smart',name:Lx("Умник","Smarty"),icon:'🧠',desc:Lx("+20% опыта за задания","+20% XP for tasks")},
@@ -563,7 +586,7 @@ const KIT_NAMES=[Lx("Пушок","Fluffy"),Lx("Снежок","Snowball"),Lx("У�
 const seeded=str=>{let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
   return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return (h>>>0)/4294967296}};
 function indFromSkin(s){const r=seeded(s.id);const t=[];while(t.length<2){const x=CAT_TRAITS[Math.floor(r()*CAT_TRAITS.length)].id;if(!t.includes(x))t.push(x)}
-  const bonus=s.r==='legend'?2:s.r==='rare'?1:0;const stats={};CSTATS.forEach(([k])=>stats[k]=clamp(3+Math.floor(r()*4)+(r()<.5?bonus:0),1,10));
+  const bonus=({common:0,uncommon:0,rare:1,epic:1,legend:2,mythic:3})[s.r]||0;const stats={};CSTATS.forEach(([k])=>stats[k]=clamp(3+Math.floor(r()*4)+(r()<.5?bonus:0),1,10));
   return {id:'s_'+s.id,skin:s.id,name:s.name,dna:skinToDna(s),traits:t,stats,gen:0,parents:null}}
 function cleanKitten(k){if(!k||typeof k!=='object'||!/^k[a-z0-9]{4,12}$/.test(k.id))return null;const dna=cleanDna(k.dna);if(!dna)return null;
   const stats={};CSTATS.forEach(([s])=>stats[s]=clamp(Math.round(+(k.stats&&k.stats[s])||5),1,10));
@@ -586,13 +609,14 @@ function hueShift(hex,deg){let [r,g,b]=[0,2,4].map(i=>parseInt(hex.slice(1+i,3+i
 /* Скрещивание: каждый ген берётся от одного из родителей, иногда смешивается или мутирует */
 function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()<.5?['A',a]:['B',b];
   let r=Math.random(),src;
-  if(r<.06){src=from();const sh=rnd(40,300);['main','dark','belly'].forEach(k=>d[k]=hueShift(src[1][k],sh));d.line=src[1].line;d.light=src[1].light;O.coat='mut'}
-  else if(r<.28){['main','dark','belly','line'].forEach(k=>d[k]=mixHex(a[k],b[k]));d.light=a.light&&b.light;O.coat='mix'}
-  else{src=from();['main','dark','belly','line','light'].forEach(k=>d[k]=src[1][k]);O.coat=src[0]}
+  if(r<.06){src=from();const sh=rnd(40,300);['main','belly'].forEach(k=>d[k]=hueShift(src[1][k],sh));d.line=src[1].line;O.coat='mut'}
+  else if(r<.28){['main','belly','line'].forEach(k=>d[k]=mixHex(a[k],b[k]));O.coat='mix'}
+  else{src=from();['main','belly','line'].forEach(k=>d[k]=src[1][k]);O.coat=src[0]}
   const gene=(k,list,p)=>{if(Math.random()<p){d[k]=pick(list);O[k]='mut'}else{const s=from();d[k]=s[1][k];O[k]=s[0]}};
-  gene('pat',PATS.filter(x=>x!=='multi'),.07);gene('style',STYLES,.03);gene('ears',EAR_T,.08);gene('tail',TAIL_T,.08);
-  if(d.style!=='brick'&&d.pat==='multi')d.pat='rainbow';
-  if(Math.random()<.06){d.glow=pick(NEONS);O.eyes='mut'}else{const s=from();d.glow=s[1].glow;O.eyes=s[0]}
+  gene('pat',PATS,.07);gene('head',HEAD_T,.06);gene('body',BODY_T,.06);gene('ears',EAR_T,.07);gene('tail',TAIL_T,.07);gene('eyes',EYE_T,.06);
+  if(Math.random()<.06){d.glow=true;d.eyeColor=pick(NEONS);O.eyeColor='mut'}
+  else{const s=from();d.glow=s[1].glow;d.eyeColor=Math.random()<.2?mixHex(a.eyeColor,b.eyeColor):s[1].eyeColor;O.eyeColor=s[0]}
+  if(Math.random()<.05){d.tailColor=pick([...NEONS,'#ffffff','#3a3a44']);O.tail='mut'}else d.tailColor=from()[1].tailColor;
   d.neon=a.neon||b.neon||(d.pat==='circuit'?pick(NEONS):null);
   d.extras=[...new Set([...a.extras,...b.extras])].filter(()=>Math.random()<.5);if(Math.random()<.08){const n=pick(EXTRAS.filter(x=>!d.extras.includes(x)));if(n){d.extras.push(n);O.extras='mut'}}
   if(Math.random()<.05){d.hetero=pick(['#3a86ff','#2e9e5b','#ffd166','#c77dff','#e63946']);O.hetero='mut'}else d.hetero=(a.hetero||b.hetero)&&Math.random()<.4?(a.hetero||b.hetero):null;
@@ -600,7 +624,9 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   let traits=[...new Set(tr.filter(Boolean))];while(traits.length<2){const x=pick(CAT_TRAITS).id;if(!traits.includes(x))traits.push(x)}if(tMut)O.traits='mut';
   const stats={};CSTATS.forEach(([k])=>{let v=(Math.random()<.5?A:B).stats[k]+rnd(-1,1);if(Math.random()<.04){v+=2;O['s_'+k]='mut'}stats[k]=clamp(v,1,10)});
   return cleanKitten({id:'k'+Date.now().toString(36)+rnd(10,99),name:pick(KIT_NAMES),dna:d,traits,stats,gen:Math.max(A.gen,B.gen)+1,parents:[A.name,B.name],born:Date.now(),origin:O})}
-const kitRarity=k=>{const d=k.dna;const s=d.extras.length+(d.glow?1:0)+(d.hetero?1:0)+(['rainbow','flame','circuit','ghost','stars','shine'].includes(d.pat)?1:0)+(d.ears!=='normal'?.5:0)+(d.tail!=='normal'?.5:0);return s>=3?'legend':s>=1.5?'rare':'common'};
+const kitRarity=k=>{const d=k.dna;const s=d.extras.length+(d.glow?1:0)+(d.hetero?1:0)+(d.tailColor?.5:0)+(['rainbow','flame','circuit','ghost','stars','shine'].includes(d.pat)?1:0)
+  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0);
+  return s>=6?'mythic':s>=4.5?'legend':s>=3?'epic':s>=1.5?'rare':s>=.5?'uncommon':'common'};
 const BREED_COST=10,BREED_TIME=20*60e3,KENNEL_MAX=24;
 
 /* ===== Комната котёнка: сцена 400×280, стена до y=190, дальше пол ===== */
@@ -626,38 +652,38 @@ const RSLOTS=[['bed',Lx("Лежанка","Bed")],['tower',Lx("Когтеточк
 const FURN=[
  {id:'bed_box',slot:'bed',name:Lx("Коробка","Box"),r:'common',box:[50,200,100,70],svg:`<rect x="60" y="222" width="80" height="40" fill="#c89566" stroke="#8a5f3a" stroke-width="3"/><path d="M60 222 L48 208 L100 208 L100 222 M140 222 L152 208 L100 208" fill="#d9a777" stroke="#8a5f3a" stroke-width="3"/><path d="M80 238 H120" stroke="#8a5f3a" stroke-width="2"/>`},
  {id:'bed_basket',slot:'bed',name:Lx("Корзинка","Basket"),r:'common',box:[50,214,100,54],svg:`<ellipse cx="100" cy="250" rx="46" ry="16" fill="#b5835a" stroke="#7a5233" stroke-width="3"/><ellipse cx="100" cy="242" rx="38" ry="10" fill="#ff8fab"/><path d="M62 252 Q100 266 138 252 M66 258 Q100 270 134 258" stroke="#7a5233" stroke-width="2" fill="none"/>`},
- {id:'bed_pillow',slot:'bed',name:Lx("Подушка","Cushion"),r:'common',box:[50,226,100,44],svg:`<rect x="56" y="234" width="88" height="28" rx="14" fill="#7fc8f8" stroke="#3a7bd5" stroke-width="3"/><path d="M70 248 H130" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/>`},
+ {id:'bed_pillow',slot:'bed',name:Lx("Подушка","Cushion"),r:'uncommon',box:[50,226,100,44],svg:`<rect x="56" y="234" width="88" height="28" rx="14" fill="#7fc8f8" stroke="#3a7bd5" stroke-width="3"/><path d="M70 248 H130" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/>`},
  {id:'bed_sofa',slot:'bed',name:Lx("Диванчик","Little sofa"),r:'rare',box:[48,200,104,70],svg:`<rect x="56" y="208" width="88" height="32" rx="12" fill="#3a7bd5" stroke="#1f4f99" stroke-width="3"/><rect x="52" y="232" width="96" height="26" rx="10" fill="#2f6fdc" stroke="#1f4f99" stroke-width="3"/><rect x="60" y="258" width="8" height="8" fill="#5c3a17"/><rect x="132" y="258" width="8" height="8" fill="#5c3a17"/><rect x="70" y="236" width="60" height="10" rx="5" fill="#7aa7f0"/>`},
- {id:'bed_castle',slot:'bed',name:Lx("Домик-замок","Castle house"),r:'legend',box:[48,160,104,110],svg:`<path d="M58 196 V184 H68 V192 H78 V184 H88 V192 H112 V184 H122 V192 H132 V184 H142 V196 Z" fill="#b39ddb" stroke="#5e35b1" stroke-width="3"/><rect x="58" y="196" width="84" height="66" fill="#c3b1e1" stroke="#5e35b1" stroke-width="3"/><path d="M86 262 V236 Q100 220 114 236 V262 Z" fill="#4a3a73"/><path d="M100 184 V164 L116 170 L100 176" fill="#e63946" stroke="#5e35b1" stroke-width="2"/>`},
+ {id:'bed_castle',slot:'bed',name:Lx("Домик-замок","Castle house"),r:'epic',box:[48,160,104,110],svg:`<path d="M58 196 V184 H68 V192 H78 V184 H88 V192 H112 V184 H122 V192 H132 V184 H142 V196 Z" fill="#b39ddb" stroke="#5e35b1" stroke-width="3"/><rect x="58" y="196" width="84" height="66" fill="#c3b1e1" stroke="#5e35b1" stroke-width="3"/><path d="M86 262 V236 Q100 220 114 236 V262 Z" fill="#4a3a73"/><path d="M100 184 V164 L116 170 L100 176" fill="#e63946" stroke="#5e35b1" stroke-width="2"/>`},
  {id:'bed_capsule',slot:'bed',name:Lx("Капсула сна","Sleep pod"),r:'legend',glowy:true,box:[46,196,108,74],svg:`<path d="M54 262 Q54 206 100 206 Q146 206 146 262 Z" fill="#1d2235" stroke="#00e5ff" stroke-width="4" filter="url(#FID)"/><path d="M54 262 Q54 206 100 206 Q146 206 146 262 Z" fill="#1d2235" stroke="#00e5ff" stroke-width="3"/><path d="M70 262 Q70 224 100 224 Q130 224 130 262" fill="rgba(0,229,255,.18)"/><rect x="50" y="260" width="100" height="8" rx="4" fill="#ff2bd6"/>`},
  {id:'tw_post',slot:'tower',name:Lx("Когтеточка","Scratching post"),r:'common',box:[300,150,80,120],svg:`<rect x="330" y="172" width="18" height="88" fill="#d9b98a" stroke="#8a6a3a" stroke-width="3"/><path d="M330 182 H348 M330 194 H348 M330 206 H348 M330 218 H348 M330 230 H348 M330 242 H348" stroke="#8a6a3a" stroke-width="2"/><rect x="312" y="256" width="54" height="10" rx="3" fill="#a0692f"/><ellipse cx="339" cy="170" rx="28" ry="7" fill="#e63946" stroke="#9d1b28" stroke-width="2"/>`},
  {id:'tw_tree',slot:'tower',name:Lx("Кошачье дерево","Cat tree"),r:'rare',box:[296,76,100,194],svg:`<rect x="320" y="120" width="14" height="140" fill="#d9b98a" stroke="#8a6a3a" stroke-width="3"/><rect x="356" y="170" width="14" height="90" fill="#d9b98a" stroke="#8a6a3a" stroke-width="3"/><rect x="302" y="256" width="88" height="10" rx="3" fill="#a0692f"/><rect x="340" y="162" width="46" height="10" rx="4" fill="#2a9d8f"/><rect x="302" y="86" width="50" height="36" rx="6" fill="#2a9d8f" stroke="#1d6b62" stroke-width="3"/><circle cx="327" cy="106" r="10" fill="#1d6b62"/>`},
- {id:'tw_rocket',slot:'tower',name:Lx("Ракета","Rocket"),r:'legend',box:[296,70,100,200],svg:`<path d="M346 78 Q376 120 372 214 L320 214 Q316 120 346 78 Z" fill="#eef1f6" stroke="#3d4654" stroke-width="3"/><circle cx="346" cy="140" r="14" fill="#7fc8f8" stroke="#3d4654" stroke-width="3"/><path d="M320 190 L302 230 L322 222 Z M372 190 L390 230 L370 222 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><path d="M326 214 L336 252 L346 228 L356 252 L366 214 Z" fill="#ff8c1a"/><path d="M336 214 L346 242 L356 214 Z" fill="#ffd166"/>`},
+ {id:'tw_rocket',slot:'tower',name:Lx("Ракета","Rocket"),r:'mythic',box:[296,70,100,200],svg:`<path d="M346 78 Q376 120 372 214 L320 214 Q316 120 346 78 Z" fill="#eef1f6" stroke="#3d4654" stroke-width="3"/><circle cx="346" cy="140" r="14" fill="#7fc8f8" stroke="#3d4654" stroke-width="3"/><path d="M320 190 L302 230 L322 222 Z M372 190 L390 230 L370 222 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><path d="M326 214 L336 252 L346 228 L356 252 L366 214 Z" fill="#ff8c1a"/><path d="M336 214 L346 242 L356 214 Z" fill="#ffd166"/>`},
  {id:'tw_neon',slot:'tower',name:Lx("Неоновая башня","Neon tower"),r:'legend',glowy:true,box:[300,80,90,190],svg:`<g filter="url(#FID)"><rect x="316" y="92" width="58" height="40" rx="6" fill="none" stroke="#ff2bd6" stroke-width="4"/><rect x="324" y="150" width="42" height="40" rx="6" fill="none" stroke="#00e5ff" stroke-width="4"/></g><rect x="338" y="132" width="14" height="128" fill="#1d2235"/><rect x="316" y="92" width="58" height="40" rx="6" fill="#1d2235" stroke="#ff7ae6" stroke-width="3"/><rect x="324" y="150" width="42" height="40" rx="6" fill="#1d2235" stroke="#7ff2ff" stroke-width="3"/><rect x="308" y="256" width="74" height="10" rx="3" fill="#ff2bd6"/>`},
  {id:'rug_round',slot:'rug',name:Lx("Круглый коврик","Round rug"),r:'common',box:[120,228,160,46],svg:`<ellipse cx="200" cy="252" rx="74" ry="18" fill="#e9c46a" stroke="#c99700" stroke-width="3"/><ellipse cx="200" cy="252" rx="54" ry="12" fill="none" stroke="#f4a261" stroke-width="4"/>`},
- {id:'rug_paw',slot:'rug',name:Lx("Коврик-лапка","Paw rug"),r:'common',box:[120,222,160,52],svg:`<ellipse cx="200" cy="256" rx="44" ry="14" fill="#ff8fab"/><ellipse cx="148" cy="240" rx="14" ry="7" fill="#ff8fab"/><ellipse cx="180" cy="232" rx="14" ry="7" fill="#ff8fab"/><ellipse cx="220" cy="232" rx="14" ry="7" fill="#ff8fab"/><ellipse cx="252" cy="240" rx="14" ry="7" fill="#ff8fab"/>`},
+ {id:'rug_paw',slot:'rug',name:Lx("Коврик-лапка","Paw rug"),r:'uncommon',box:[120,222,160,52],svg:`<ellipse cx="200" cy="256" rx="44" ry="14" fill="#ff8fab"/><ellipse cx="148" cy="240" rx="14" ry="7" fill="#ff8fab"/><ellipse cx="180" cy="232" rx="14" ry="7" fill="#ff8fab"/><ellipse cx="220" cy="232" rx="14" ry="7" fill="#ff8fab"/><ellipse cx="252" cy="240" rx="14" ry="7" fill="#ff8fab"/>`},
  {id:'rug_fish',slot:'rug',name:Lx("Коврик-рыбка","Fish rug"),r:'rare',box:[110,228,180,46],svg:`<ellipse cx="192" cy="252" rx="66" ry="17" fill="#5fa8d3" stroke="#2c6e95" stroke-width="3"/><path d="M256 252 L284 236 L284 268 Z" fill="#5fa8d3" stroke="#2c6e95" stroke-width="3"/><circle cx="148" cy="248" r="4" fill="#1d3557"/>`},
- {id:'rug_rainbow',slot:'rug',name:Lx("Радужный коврик","Rainbow rug"),r:'legend',box:[110,226,180,48],svg:['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93'].map((c,i)=>`<ellipse cx="200" cy="252" rx="${80-i*14}" ry="${20-i*3.5}" fill="${c}"/>`).join('')},
+ {id:'rug_rainbow',slot:'rug',name:Lx("Радужный коврик","Rainbow rug"),r:'epic',box:[110,226,180,48],svg:['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93'].map((c,i)=>`<ellipse cx="200" cy="252" rx="${80-i*14}" ry="${20-i*3.5}" fill="${c}"/>`).join('')},
  {id:'lamp_floor',slot:'lamp',name:Lx("Торшер","Floor lamp"),r:'common',box:[0,96,64,174],svg:`<ellipse cx="30" cy="150" rx="40" ry="50" fill="#fff3c4" opacity=".35"/><path d="M14 102 L46 102 L54 128 L6 128 Z" fill="#ffd166" stroke="#c99700" stroke-width="3"/><path d="M30 128 V258" stroke="#555" stroke-width="4"/><ellipse cx="30" cy="260" rx="16" ry="5" fill="#555"/>`},
  {id:'lamp_lava',slot:'lamp',name:Lx("Лава-лампа","Lava lamp"),r:'rare',box:[0,196,60,74],svg:`<path d="M22 206 L38 206 L46 252 L14 252 Z" fill="#7a4fd6" opacity=".85" stroke="#3b2a6b" stroke-width="3"/><circle cx="28" cy="222" r="5" fill="#ff8c1a"/><circle cx="34" cy="238" r="7" fill="#ff8c1a"/><rect x="12" y="252" width="36" height="12" rx="3" fill="#3b2a6b"/><rect x="20" y="198" width="20" height="8" rx="3" fill="#3b2a6b"/>`},
- {id:'lamp_moon',slot:'lamp',name:Lx("Лампа-луна","Moon lamp"),r:'legend',glowy:true,box:[0,100,70,90],svg:`<circle cx="34" cy="140" r="26" fill="#fff3c4" filter="url(#FID)"/><circle cx="34" cy="140" r="22" fill="#fff8de" stroke="#e0c56a" stroke-width="2"/><circle cx="26" cy="132" r="4" fill="#efdca0"/><circle cx="42" cy="148" r="6" fill="#efdca0"/><path d="M34 118 V104" stroke="#888" stroke-width="2"/>`},
+ {id:'lamp_moon',slot:'lamp',name:Lx("Лампа-луна","Moon lamp"),r:'epic',glowy:true,box:[0,100,70,90],svg:`<circle cx="34" cy="140" r="26" fill="#fff3c4" filter="url(#FID)"/><circle cx="34" cy="140" r="22" fill="#fff8de" stroke="#e0c56a" stroke-width="2"/><circle cx="26" cy="132" r="4" fill="#efdca0"/><circle cx="42" cy="148" r="6" fill="#efdca0"/><path d="M34 118 V104" stroke="#888" stroke-width="2"/>`},
  {id:'lamp_neon',slot:'lamp',name:Lx("Вывеска «МЯУ»","“MEOW” sign"),r:'legend',glowy:true,box:[0,110,130,60],svg:`<text x="16" y="152" font-family="Nunito,sans-serif" font-weight="900" font-size="34" fill="#ff2bd6" filter="url(#FID)">${Lx("МЯУ","MEOW")}</text><text x="16" y="152" font-family="Nunito,sans-serif" font-weight="900" font-size="34" fill="#ffd6f6">${Lx("МЯУ","MEOW")}</text>`},
  {id:'pl_cactus',slot:'plant',name:Lx("Кактус","Cactus"),r:'common',box:[248,180,50,90],svg:`<path d="M258 238 L286 238 L282 264 L262 264 Z" fill="#c8664a"/><rect x="264" y="196" width="16" height="44" rx="8" fill="#2e9e5b"/><path d="M264 216 Q254 216 254 204" stroke="#2e9e5b" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="272" cy="194" r="4" fill="#ff8fab"/>`},
  {id:'pl_ficus',slot:'plant',name:Lx("Фикус","Ficus"),r:'common',box:[244,170,60,100],svg:`<path d="M258 236 L286 236 L282 264 L262 264 Z" fill="#3a7bd5"/><path d="M272 236 V196" stroke="#5c3a17" stroke-width="3"/>${[[262,206,-30],[282,200,30],[266,186,-20],[280,180,20],[272,172,0]].map(([x,y,a])=>`<ellipse cx="${x}" cy="${y}" rx="8" ry="14" fill="#3bb273" transform="rotate(${a} ${x} ${y})"/>`).join('')}`},
- {id:'pl_catgrass',slot:'plant',name:Lx("Кошачья травка","Cat grass"),r:'common',box:[248,200,50,70],svg:`<rect x="256" y="240" width="32" height="24" rx="4" fill="#e9c46a"/><path d="M260 240 L258 212 M266 240 L268 206 M272 240 L272 210 M278 240 L282 208 M284 240 L288 214" stroke="#7cc35e" stroke-width="3" stroke-linecap="round"/>`},
+ {id:'pl_catgrass',slot:'plant',name:Lx("Кошачья травка","Cat grass"),r:'uncommon',box:[248,200,50,70],svg:`<rect x="256" y="240" width="32" height="24" rx="4" fill="#e9c46a"/><path d="M260 240 L258 212 M266 240 L268 206 M272 240 L272 210 M278 240 L282 208 M284 240 L288 214" stroke="#7cc35e" stroke-width="3" stroke-linecap="round"/>`},
  {id:'pl_sunflower',slot:'plant',name:Lx("Подсолнух","Sunflower"),r:'rare',box:[244,150,60,120],svg:`<path d="M260 240 L284 240 L280 264 L264 264 Z" fill="#a0692f"/><path d="M272 240 V180" stroke="#2e9e5b" stroke-width="4"/><ellipse cx="282" cy="214" rx="10" ry="5" fill="#2e9e5b"/>${Array.from({length:10},(_,i)=>{const a=i*Math.PI/5;return `<ellipse cx="${(272+12*Math.cos(a)).toFixed(1)}" cy="${(172+12*Math.sin(a)).toFixed(1)}" rx="7" ry="4" fill="#ffca3a" transform="rotate(${i*36} ${(272+12*Math.cos(a)).toFixed(1)} ${(172+12*Math.sin(a)).toFixed(1)})"/>`}).join('')}<circle cx="272" cy="172" r="9" fill="#6b3d1f"/>`},
- {id:'pl_bonsai',slot:'plant',name:Lx("Цветущая сакура","Blooming sakura"),r:'legend',box:[236,160,74,110],svg:`<rect x="250" y="250" width="44" height="12" rx="3" fill="#3b2a6b"/><path d="M272 250 Q268 226 280 212 Q270 204 260 206" stroke="#5c3a17" stroke-width="6" fill="none" stroke-linecap="round"/>${[[258,196,16],[282,198,18],[270,182,16],[292,212,12]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#ffb3c7"/>`).join('')}${[[262,192],[284,196],[272,180],[290,210]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3" fill="#fff"/>`).join('')}`},
+ {id:'pl_bonsai',slot:'plant',name:Lx("Цветущая сакура","Blooming sakura"),r:'epic',box:[236,160,74,110],svg:`<rect x="250" y="250" width="44" height="12" rx="3" fill="#3b2a6b"/><path d="M272 250 Q268 226 280 212 Q270 204 260 206" stroke="#5c3a17" stroke-width="6" fill="none" stroke-linecap="round"/>${[[258,196,16],[282,198,18],[270,182,16],[292,212,12]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#ffb3c7"/>`).join('')}${[[262,192],[284,196],[272,180],[290,210]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3" fill="#fff"/>`).join('')}`},
  {id:'wa_shelf',slot:'wall',name:Lx("Полка с книгами","Bookshelf"),r:'common',box:[24,40,110,80],svg:`<rect x="28" y="100" width="100" height="8" fill="#8b5a2b"/>${[['#e63946',32,26],['#3a7bd5',46,32],['#ffca3a',60,22],['#2e9e5b',72,30],['#7a4fd6',88,28]].map(([c,x,h])=>`<rect x="${x}" y="${100-h}" width="12" height="${h}" fill="${c}" stroke="#333" stroke-width="1.5"/>`).join('')}<circle cx="114" cy="90" r="9" fill="#5fa8d3"/>`},
- {id:'wa_poster',slot:'wall',name:Lx("Постер «Рыбка»","“Fish” poster"),r:'common',box:[30,30,90,90],svg:`<rect x="40" y="36" width="64" height="78" fill="#fff" stroke="#333" stroke-width="3"/><rect x="46" y="42" width="52" height="66" fill="#bfe3ff"/><ellipse cx="70" cy="76" rx="16" ry="9" fill="#ff8c1a"/><path d="M84 76 L96 68 L96 84 Z" fill="#ff8c1a"/><circle cx="62" cy="74" r="2" fill="#333"/>`},
+ {id:'wa_poster',slot:'wall',name:Lx("Постер «Рыбка»","“Fish” poster"),r:'uncommon',box:[30,30,90,90],svg:`<rect x="40" y="36" width="64" height="78" fill="#fff" stroke="#333" stroke-width="3"/><rect x="46" y="42" width="52" height="66" fill="#bfe3ff"/><ellipse cx="70" cy="76" rx="16" ry="9" fill="#ff8c1a"/><path d="M84 76 L96 68 L96 84 Z" fill="#ff8c1a"/><circle cx="62" cy="74" r="2" fill="#333"/>`},
  {id:'wa_clock',slot:'wall',name:Lx("Часы-кот","Cat clock"),r:'rare',box:[30,30,90,90],svg:`<path d="M52 52 L50 32 L64 44 Z M98 52 L100 32 L86 44 Z" fill="#333"/><circle cx="75" cy="72" r="28" fill="#fff" stroke="#333" stroke-width="4"/><path d="M75 72 V54 M75 72 L88 78" stroke="#333" stroke-width="3" stroke-linecap="round"/><circle cx="75" cy="72" r="3" fill="#e63946"/><path d="M75 100 Q72 112 80 116" stroke="#333" stroke-width="3" fill="none"/>`},
- {id:'wa_garland',slot:'wall',name:Lx("Гирлянда","Fairy lights"),r:'rare',glowy:true,box:[0,0,400,70],svg:`<path d="M0 14 Q100 46 200 18 T400 16" fill="none" stroke="#2e2e2e" stroke-width="2"/>${[20,60,100,140,180,220,260,300,340,380].map((x,i)=>{const y=(14+Math.sin(x/64)*14+16).toFixed(0);const c=['#ff595e','#ffca3a','#8ac926','#1982c4','#ff2bd6'][i%5];return `<circle cx="${x}" cy="${y}" r="7" fill="${c}" filter="url(#FID)"/><circle cx="${x}" cy="${y}" r="4.5" fill="${c}"/>`}).join('')}`},
+ {id:'wa_garland',slot:'wall',name:Lx("Гирлянда","Fairy lights"),r:'epic',glowy:true,box:[0,0,400,70],svg:`<path d="M0 14 Q100 46 200 18 T400 16" fill="none" stroke="#2e2e2e" stroke-width="2"/>${[20,60,100,140,180,220,260,300,340,380].map((x,i)=>{const y=(14+Math.sin(x/64)*14+16).toFixed(0);const c=['#ff595e','#ffca3a','#8ac926','#1982c4','#ff2bd6'][i%5];return `<circle cx="${x}" cy="${y}" r="7" fill="${c}" filter="url(#FID)"/><circle cx="${x}" cy="${y}" r="4.5" fill="${c}"/>`}).join('')}`},
  {id:'wa_aquarium',slot:'wall',name:Lx("Аквариум","Aquarium"),r:'legend',box:[24,40,110,80],svg:`<rect x="28" y="104" width="100" height="8" fill="#8b5a2b"/><rect x="34" y="56" width="88" height="48" rx="4" fill="#7fc8f8" opacity=".85" stroke="#3a7bd5" stroke-width="3"/><path d="M40 104 Q46 90 44 80 M112 104 Q108 92 114 84" stroke="#2e9e5b" stroke-width="3" fill="none"/><ellipse cx="66" cy="78" rx="9" ry="5" fill="#ff8c1a"/><path d="M75 78 L82 73 L82 83 Z" fill="#ff8c1a"/><ellipse cx="96" cy="90" rx="7" ry="4" fill="#ffd166"/><circle cx="58" cy="66" r="2" fill="#fff"/><circle cx="62" cy="60" r="1.5" fill="#fff"/>`},
  {id:'wi_curtains',slot:'window',name:Lx("Шторы","Curtains"),r:'common',box:[136,20,128,110],svg:`<path d="M140 24 L176 24 Q166 70 176 122 L140 122 Z M260 24 L224 24 Q234 70 224 122 L260 122 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><rect x="136" y="20" width="128" height="6" rx="3" fill="#8b5a2b"/>`},
- {id:'wi_blinds',slot:'window',name:Lx("Жалюзи","Blinds"),r:'common',box:[136,20,128,110],svg:`${[34,44,54,64].map(y=>`<rect x="150" y="${y}" width="100" height="7" fill="#eef1f6" stroke="#9aa6bd" stroke-width="1"/>`).join('')}<rect x="146" y="26" width="108" height="8" fill="#9aa6bd"/>`},
+ {id:'wi_blinds',slot:'window',name:Lx("Жалюзи","Blinds"),r:'uncommon',box:[136,20,128,110],svg:`${[34,44,54,64].map(y=>`<rect x="150" y="${y}" width="100" height="7" fill="#eef1f6" stroke="#9aa6bd" stroke-width="1"/>`).join('')}<rect x="146" y="26" width="108" height="8" fill="#9aa6bd"/>`},
  {id:'wi_night',slot:'window',name:Lx("Ночное небо","Night sky"),r:'rare',view:true,box:[136,20,128,110],svg:`<rect x="150" y="30" width="100" height="90" fill="#1f2a5a"/><circle cx="222" cy="56" r="12" fill="#fff3c4"/><circle cx="228" cy="52" r="10" fill="#1f2a5a"/>${[[166,44],[182,70],[204,96],[236,90],[172,104],[244,40]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.8" fill="#fff"/>`).join('')}`},
- {id:'wi_space',slot:'window',name:Lx("Окно в космос","Window to space"),r:'legend',view:true,box:[136,20,128,110],svg:`<rect x="150" y="30" width="100" height="90" fill="#0b0b2a"/><circle cx="196" cy="78" r="18" fill="#c77dff"/><ellipse cx="196" cy="78" rx="30" ry="7" fill="none" stroke="#ffd166" stroke-width="3"/>${[[162,40],[240,44],[230,108],[168,104],[214,40]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.8" fill="#fff"/>`).join('')}<circle cx="238" cy="96" r="6" fill="#5fa8d3"/>`},
+ {id:'wi_space',slot:'window',name:Lx("Окно в космос","Window to space"),r:'mythic',view:true,box:[136,20,128,110],svg:`<rect x="150" y="30" width="100" height="90" fill="#0b0b2a"/><circle cx="196" cy="78" r="18" fill="#c77dff"/><ellipse cx="196" cy="78" rx="30" ry="7" fill="none" stroke="#ffd166" stroke-width="3"/>${[[162,40],[240,44],[230,108],[168,104],[214,40]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.8" fill="#fff"/>`).join('')}<circle cx="238" cy="96" r="6" fill="#5fa8d3"/>`},
  {id:'bw_bowl',slot:'bowl',name:Lx("Миска","Bowl"),r:'common',box:[130,248,44,26],svg:`<path d="M138 258 L166 258 L162 268 L142 268 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/>`},
- {id:'bw_fish',slot:'bowl',name:Lx("Миска с рыбкой","Bowl with fish"),r:'common',box:[130,240,50,34],svg:`<path d="M156 254 L170 244 L170 260 Z" fill="#5fa8d3"/><path d="M138 258 L166 258 L162 268 L142 268 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/>`},
+ {id:'bw_fish',slot:'bowl',name:Lx("Миска с рыбкой","Bowl with fish"),r:'uncommon',box:[130,240,50,34],svg:`<path d="M156 254 L170 244 L170 260 Z" fill="#5fa8d3"/><path d="M138 258 L166 258 L162 268 L142 268 Z" fill="#3a7bd5" stroke="#1f4f99" stroke-width="2"/>`},
  {id:'bw_fountain',slot:'bowl',name:Lx("Фонтанчик","Water fountain"),r:'rare',box:[126,226,54,48],svg:`<path d="M152 242 Q140 232 136 250 M152 242 Q164 232 168 250" stroke="#7fc8f8" stroke-width="3" fill="none"/><rect x="148" y="240" width="8" height="16" fill="#9aa6bd"/><path d="M134 256 L170 256 L166 268 L138 268 Z" fill="#eef1f6" stroke="#9aa6bd" stroke-width="2"/>`},
  {id:'bw_gold',slot:'bowl',name:Lx("Золотая миска","Golden bowl"),r:'legend',box:[128,240,50,34],svg:`<path d="M138 258 L166 258 L162 268 L142 268 Z" fill="#ffd166" stroke="#c99700" stroke-width="2"/>${star5(170,248,6,'#fff3c4','#ffd166')}`}];
 const FURN_BY_ID=Object.fromEntries(FURN.map(f=>[f.id,f]));
@@ -959,7 +985,8 @@ function normalize(p){if(!p)return p;
   c.skins=[...new Set([...(Array.isArray(c.skins)?c.skins:[]),...oldOwned.map(x=>OLD_FUR[x]).filter(Boolean),'sk_orange'])].filter(id=>SKIN_BY_ID[id]);
   c.skin=SKIN_BY_ID[c.skin]?c.skin:OLD_FUR[c.fur]||'sk_orange';if(!c.skins.includes(c.skin))c.skins.push(c.skin);delete c.fur;
   c.owned=[...new Set(oldOwned.filter(id=>WEAR_BY_ID[id]))];
-  const wear={};if(c.wear&&typeof c.wear==='object')for(const [s,id] of Object.entries(c.wear)){const w=WEAR_BY_ID[id];if(w&&w.slot===s&&c.owned.includes(id))wear[s]=id}c.wear=wear;
+  const wear={};if(c.wear&&typeof c.wear==='object')for(let [s,id] of Object.entries(c.wear)){s=OLD_SLOT[s]||s;const w=WEAR_BY_ID[id];
+    if(w&&c.owned.includes(id)&&(w.slot===s||(w.slot==='hand'&&(s==='handR'||s==='handL'))))wear[s]=id}c.wear=wear;
   const N=(v,d)=>v==null?d:clamp(+v||0,0,100);c.food=N(c.food,80);c.joy=N(c.joy,70);c.fun=N(c.fun,70);c.sport=N(c.sport,60);c.energy=N(c.energy,90);
   const now0=Date.now();c.t=+c.t||now0;c.sleepUntil=+c.sleepUntil||0;c.poops=clamp(Math.floor(+c.poops||0),0,5);c.bag=Math.max(0,Math.floor(+c.bag||0));
   c.poopNext=+c.poopNext||now0+rnd(8,15)*36e5;
@@ -980,10 +1007,10 @@ const FEEDER_MAX=4,FEEDER_EVERY=3*36e5,SLEEP_H=4;
 const FOODS=[
  {id:'fish',name:Lx("Рыбка","Fish"),icon:'🐟',grade:Lx("Обычная","Common"),r:'common',price:2,eff:{food:40,joy:5}},
  {id:'milk',name:Lx("Сливки","Cream"),icon:'🥛',grade:Lx("Обычная","Common"),r:'common',price:2,eff:{food:20,joy:15}},
- {id:'chicken',name:Lx("Курочка","Chicken"),icon:'🍗',grade:Lx("Хорошая","Good"),r:'rare',price:4,eff:{food:60,sport:10}},
- {id:'shrimp',name:Lx("Креветки","Shrimp"),icon:'🍤',grade:Lx("Хорошая","Good"),r:'rare',price:5,eff:{food:50,fun:15,joy:10}},
+ {id:'chicken',name:Lx("Курочка","Chicken"),icon:'🍗',grade:Lx("Хорошая","Good"),r:'uncommon',price:4,eff:{food:60,sport:10}},
+ {id:'shrimp',name:Lx("Креветки","Shrimp"),icon:'🍤',grade:Lx("Хорошая","Good"),r:'uncommon',price:5,eff:{food:50,fun:15,joy:10}},
  {id:'vitamin',name:Lx("Витаминки","Vitamins"),icon:'💊',grade:Lx("Отличная","Excellent"),r:'rare',price:6,eff:{food:10,energy:30,sport:15}},
- {id:'salmon',name:Lx("Лосось","Salmon"),icon:'🍣',grade:Lx("Отличная","Excellent"),r:'legend',price:8,eff:{food:80,joy:20,fun:10}},
+ {id:'salmon',name:Lx("Лосось","Salmon"),icon:'🍣',grade:Lx("Отличная","Excellent"),r:'epic',price:8,eff:{food:80,joy:20,fun:10}},
  {id:'feast',name:Lx("Королевский обед","Royal feast"),icon:'👑',grade:Lx("Королевская","Royal"),r:'legend',price:15,eff:{food:100,joy:30,fun:30,sport:20,energy:20},xp2:2}];
 const FOOD_BY_ID=Object.fromEntries(FOODS.map(f=>[f.id,f]));
 const STATS=[['food',Lx("Сытость","Fullness"),'var(--ok)'],['joy',Lx("Настроение","Mood"),'var(--star)'],['fun',Lx("Развлечение","Fun"),'#e76f51'],['sport',Lx("Спорт","Sport"),'#3a86ff'],['energy',Lx("Энергия","Energy"),'#9b5de5']];
@@ -1199,7 +1226,7 @@ function leaders(){screen='leaders';stopTimer();
   $('#back').onclick=player?menu:login}
 
 /* ===== Котёнок: уход, гардероб, котята, комната, сундуки ===== */
-let catTab='care',wearSlot='hat',roomSlot='wp',skinFilter='all';
+let catTab='care',wearSlot='hat',roomSlot='wp',skinFilter='all',handSide='handR';
 const lockedCard=(r,svg)=>`<button class="item r-${r} locked" aria-disabled="true">${svg}<span>???</span><span class="rt r-${r}">${RARITY[r].name}</span></button>`;
 function stageHTML(){const c=player.cat,sl=sleeping();
   return `<div class="stage"><div class="bigcat" id="bigcat" title="${Lx("Погладь котёнка","Pet the kitten")}">${catSVG(c,mood())}</div>
@@ -1233,10 +1260,12 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
     </div></div>`}
   else if(catTab==='wear'){const owned=new Set(c.owned);
     body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="${Lx("Вещи","Items")}">${SLOTS.map(([s,n])=>`<button data-s="${s}" aria-pressed="${s===wearSlot}">${n}</button>`).join('')}</div>
-    <div class="items">${WEAR.filter(x=>x.slot===wearSlot).map(x=>owned.has(x.id)?`<button class="item r-${x.r}${c.wear[x.slot]===x.id?' on':''}" data-w="${x.id}">${wearPreview(x)}<span>${esc(x.name)}</span><span class="rt r-${x.r}">${RARITY[x.r].name}</span></button>`:lockedCard(x.r,wearPreview(x))).join('')}</div>
+    ${wearSlot==='hand'?`<div class="side" role="group" aria-label="${Lx("Какая лапка","Which paw")}">${[['handL',Lx("🐾 Левая лапка","🐾 Left paw")],['handR',Lx("Правая лапка 🐾","Right paw 🐾")]].map(([k,n])=>`<button class="btn small ${handSide===k?'':'alt'}" data-hs="${k}" aria-pressed="${handSide===k}">${n}${c.wear[k]?' · '+esc(WEAR_BY_ID[c.wear[k]].name):''}</button>`).join('')}</div>`:''}
+    <div class="items">${WEAR.filter(x=>x.slot===wearSlot).map(x=>owned.has(x.id)?`<button class="item r-${x.r}${(x.slot==='hand'?c.wear[handSide]===x.id:c.wear[x.slot]===x.id)?' on':''}" data-w="${x.id}">${wearPreview(x)}<span>${esc(x.name)}</span><span class="rt r-${x.r}">${RARITY[x.r].name}</span></button>`:lockedCard(x.r,wearPreview(x))).join('')}</div>
     <p class="note">${Lx("Нажми на вещь, чтобы надеть или снять. Серые вещи ждут в сундуках с одеждой. Собрано","Tap an item to put it on or take it off. Grey items are waiting in clothes chests. Collected")} ${c.owned.length} ${Lx("из","of")} ${WEAR.length}.</p></div></div>`}
-  else if(catTab==='skins'){const owned=new Set(c.skins);const list=SKINS.filter(s=>skinFilter==='all'||(s.st||'soft')===skinFilter&&s.pat!=='circuit'||(skinFilter==='cyber'&&s.pat==='circuit')||(skinFilter==='glow'&&s.glow));
-    body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="${Lx("Котята","Kittens")}">${[['all',Lx("Все","All")],['soft',Lx("Пушистые","Fluffy")],['cyber',Lx("Кибер","Cyber")],['pixel',Lx("Пиксельные","Pixel")],['brick',Lx("Кирпичики","Bricks")],['glow',Lx("Светятся глаза","Glowing eyes")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${skinFilter===k}">${n}</button>`).join('')}</div>
+  else if(catTab==='skins'){const owned=new Set(c.skins);const SF={all:()=>true,round:s=>s.g.head!=='square',square:s=>s.g.head==='square',cyber:s=>s.g.pat==='circuit',glow:s=>s.g.glow,top:s=>['epic','legend','mythic'].includes(s.r)};
+    const list=SKINS.filter(SF[skinFilter]||SF.all);
+    body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="${Lx("Котята","Kittens")}">${[['all',Lx("Все","All")],['round',Lx("Круглоголовые","Round heads")],['square',Lx("Квадратные","Square heads")],['cyber',Lx("Кибер","Cyber")],['glow',Lx("Светятся глаза","Glowing eyes")],['top',Lx("Эпик и выше","Epic and up")]].map(([k,n])=>`<button data-f="${k}" aria-pressed="${skinFilter===k}">${n}</button>`).join('')}</div>
     <div class="items">${list.map(s=>owned.has(s.id)?`<button class="item r-${s.r}${c.skin===s.id&&!c.kid?' on':''}" data-k="${s.id}">${skinPreview(s)}<span>${esc(s.name)}</span><span class="rt r-${s.r}">${RARITY[s.r].name}</span></button>`:lockedCard(s.r,skinPreview(s))).join('')}</div>
     <p class="note">${Lx("Нажми на котёнка, чтобы играть им. Новые котята выпадают из сундуков с котятами. Собрано","Tap a kitten to play as it. New kittens come from kitten chests. Collected")} ${c.skins.length} ${Lx("из","of")} ${SKINS.length}.</p></div></div>`}
   else if(catTab==='kennel')body=kennelHTML();
@@ -1264,7 +1293,8 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
   app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{wearSlot=b.dataset.s;catScreen()});
   app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{skinFilter=b.dataset.f;catScreen()});
   app.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{roomSlot=b.dataset.r;catScreen()});
-  app.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const x=WEAR_BY_ID[b.dataset.w];c.wear={...c.wear,[x.slot]:c.wear[x.slot]===x.id?null:x.id};if(!c.wear[x.slot])delete c.wear[x.slot];
+  app.querySelectorAll('[data-hs]').forEach(b=>b.onclick=()=>{handSide=b.dataset.hs;catScreen()});
+  app.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const x=WEAR_BY_ID[b.dataset.w];const k=x.slot==='hand'?handSide:x.slot;c.wear={...c.wear,[k]:c.wear[k]===x.id?null:x.id};if(!c.wear[k])delete c.wear[k];
     c.joy=clamp(c.joy+2,0,100);tone(740,0,.12,'triangle');savePlayer();catScreen()});
   app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{setActive(indFromSkin(SKIN_BY_ID[b.dataset.k]));tone(740,0,.12,'triangle');savePlayer();catScreen()});
   app.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const f=FURN_BY_ID[b.dataset.p];if(R.place[f.slot]===f.id)delete R.place[f.slot];else R.place[f.slot]=f.id;tone(620,0,.1,'triangle');savePlayer();catScreen()});
@@ -1302,15 +1332,15 @@ async function catPhoto(){const m=$('#modal');m.innerHTML=evOverlay('<h3>'+Lx("�
 
 /* ===== Сундуки ===== */
 const CHEST_SETS={
-  clothes:{title:Lx("Сундуки с одеждой","Clothes chests"),note:Lx("Шапки, очки, светящиеся глаза, костюмы, крылья и игрушки","Hats, glasses, glowing eyes, costumes, wings and toys"),pool:WEAR,get:()=>player.cat.owned,add:id=>player.cat.owned=[...player.cat.owned,id],
-    preview:wearPreview,equip:it=>{player.cat.wear={...player.cat.wear,[it.slot]:it.id};wearSlot=it.slot;return 'wear'},gift:{common:60,rare:40,legend:0},
-    tiers:{small:{name:Lx("Деревянный сундук","Wooden chest"),cost:5,desc:Lx("Чаще всего обычные вещи","Mostly common items"),w:{common:80,rare:18,legend:2}},rare:{name:Lx("Волшебный сундук","Magic chest"),cost:15,desc:Lx("Много редких вещей","Lots of rare items"),w:{common:25,rare:65,legend:10}},royal:{name:Lx("Королевский сундук","Royal chest"),cost:40,desc:Lx("Шанс на легендарную вещь","Chance of a legendary item"),w:{common:0,rare:40,legend:60}}}},
-  cats:{title:Lx("Сундуки с котятами","Kitten chests"),note:Lx("Пушистые, кибер, пиксельные и котята-кирпичики, коты со светящимися глазами","Fluffy, cyber, pixel and brick kittens, cats with glowing eyes"),pool:SKINS,get:()=>player.cat.skins,add:id=>player.cat.skins=[...player.cat.skins,id],
-    preview:s=>skinPreview(s,'happy'),equip:it=>{setActive(indFromSkin(it));return 'skins'},gift:{common:70,rare:30,legend:0},
-    tiers:{small:{name:Lx("Коробка с котёнком","Kitten box"),cost:10,desc:Lx("Обычные породы","Common breeds"),w:{common:75,rare:22,legend:3}},rare:{name:Lx("Волшебная корзинка","Magic basket"),cost:25,desc:Lx("Редкие и кибер-котята","Rare and cyber kittens"),w:{common:20,rare:65,legend:15}},royal:{name:Lx("Королевская переноска","Royal carrier"),cost:60,desc:Lx("Шанс на легендарного кота","Chance of a legendary cat"),w:{common:0,rare:35,legend:65}}}},
+  clothes:{title:Lx("Сундуки с одеждой","Clothes chests"),note:Lx("Шапки, очки, глаза, вещи в лапки, браслеты, украшения на грудь, костюмы, крылья и плащи","Hats, glasses, eyes, things to hold, bracelets, chest jewelry, costumes, wings and capes"),pool:WEAR,get:()=>player.cat.owned,add:id=>player.cat.owned=[...player.cat.owned,id],
+    preview:wearPreview,equip:it=>{const k=it.slot==='hand'?handSide:it.slot;player.cat.wear={...player.cat.wear,[k]:it.id};wearSlot=it.slot;return 'wear'},gift:{common:55,uncommon:35,rare:10},
+    tiers:{small:{name:Lx("Деревянный сундук","Wooden chest"),cost:5,desc:Lx("Чаще всего обычные вещи","Mostly common items"),w:{common:58,uncommon:28,rare:10,epic:3,legend:1,mythic:0}},rare:{name:Lx("Волшебный сундук","Magic chest"),cost:15,desc:Lx("Много редких вещей","Lots of rare items"),w:{common:8,uncommon:28,rare:36,epic:20,legend:7,mythic:1}},royal:{name:Lx("Королевский сундук","Royal chest"),cost:40,desc:Lx("Эпические, легендарные и мифические вещи","Epic, legendary and mythic items"),w:{common:0,uncommon:4,rare:24,epic:36,legend:28,mythic:8}}}},
+  cats:{title:Lx("Сундуки с котятами","Kitten chests"),note:Lx("Разные головы, тела, уши, глаза и хвосты: пушистые, кибер, кубики, драконы и мифические котята","Different heads, bodies, ears, eyes and tails: fluffy, cyber, cubies, dragons and mythic kittens"),pool:SKINS,get:()=>player.cat.skins,add:id=>player.cat.skins=[...player.cat.skins,id],
+    preview:s=>skinPreview(s,'happy'),equip:it=>{setActive(indFromSkin(it));return 'skins'},gift:{common:55,uncommon:35,rare:10},
+    tiers:{small:{name:Lx("Коробка с котёнком","Kitten box"),cost:10,desc:Lx("Обычные породы","Common breeds"),w:{common:58,uncommon:28,rare:10,epic:3,legend:1,mythic:0}},rare:{name:Lx("Волшебная корзинка","Magic basket"),cost:25,desc:Lx("Редкие, эпические и кибер-котята","Rare, epic and cyber kittens"),w:{common:8,uncommon:28,rare:36,epic:20,legend:7,mythic:1}},royal:{name:Lx("Королевская переноска","Royal carrier"),cost:60,desc:Lx("Эпические, легендарные и мифические котята","Epic, legendary and mythic kittens"),w:{common:0,uncommon:4,rare:24,epic:36,legend:28,mythic:8}}}},
   room:{title:Lx("Сундуки обустройства","Furniture chests"),note:Lx("Лежанки, когтеточки, лампы, коврики, растения и окна для комнаты","Beds, scratching posts, lamps, rugs, plants and windows for the room"),pool:FURN,get:()=>player.room.owned,add:id=>player.room.owned=[...player.room.owned,id],
-    preview:furnPreview,equip:it=>{player.room.place={...player.room.place,[it.slot]:it.id};roomSlot=it.slot;return 'room'},gift:{common:70,rare:30,legend:0},
-    tiers:{small:{name:Lx("Ящик с мебелью","Furniture crate"),cost:6,desc:Lx("Простая мебель","Simple furniture"),w:{common:80,rare:18,legend:2}},rare:{name:Lx("Дизайнерский сундук","Designer chest"),cost:18,desc:Lx("Много редких вещей","Lots of rare items"),w:{common:25,rare:62,legend:13}},royal:{name:Lx("Дворцовый сундук","Palace chest"),cost:45,desc:Lx("Шанс на легендарную мебель","Chance of legendary furniture"),w:{common:0,rare:40,legend:60}}}}};
+    preview:furnPreview,equip:it=>{player.room.place={...player.room.place,[it.slot]:it.id};roomSlot=it.slot;return 'room'},gift:{common:55,uncommon:35,rare:10},
+    tiers:{small:{name:Lx("Ящик с мебелью","Furniture crate"),cost:6,desc:Lx("Простая мебель","Simple furniture"),w:{common:58,uncommon:28,rare:10,epic:3,legend:1,mythic:0}},rare:{name:Lx("Дизайнерский сундук","Designer chest"),cost:18,desc:Lx("Много редких вещей","Lots of rare items"),w:{common:8,uncommon:28,rare:36,epic:20,legend:7,mythic:1}},royal:{name:Lx("Дворцовый сундук","Palace chest"),cost:45,desc:Lx("Эпическая, легендарная и мифическая мебель","Epic, legendary and mythic furniture"),w:{common:0,uncommon:4,rare:24,epic:36,legend:28,mythic:8}}}}};
 function chestSVG(tier,set){const c={small:['#a0692f','#5c3a17','#c99700'],rare:['#7a4fd6','#3b2a6b','#e9e4ff'],royal:['#f4b400','#a06c00','#e63946'],gift:['#e63946','#8a1c25','#ffd166']}[tier];
   const emblem=set==='cats'?`<circle cx="60" cy="74" r="7" fill="#fff" opacity=".9"/><circle cx="50" cy="64" r="3.5" fill="#fff" opacity=".9"/><circle cx="58" cy="60" r="3.5" fill="#fff" opacity=".9"/><circle cx="66" cy="60" r="3.5" fill="#fff" opacity=".9"/><circle cx="72" cy="66" r="3.5" fill="#fff" opacity=".9"/>`
     :set==='room'?`<path d="M48 82 V70 L60 60 L72 70 V82 Z" fill="#fff" opacity=".9"/><rect x="56" y="72" width="8" height="10" fill="${c[1]}"/>`
@@ -1319,10 +1349,10 @@ function chestSVG(tier,set){const c={small:['#a0692f','#5c3a17','#c99700'],rare:
   <path d="M12 46 Q12 14 60 14 Q108 14 108 46 Z" fill="${c[0]}" stroke="${c[1]}" stroke-width="4"/>
   <rect x="12" y="42" width="96" height="10" fill="${c[1]}"/><rect x="52" y="38" width="16" height="16" rx="3" fill="${c[2]}" stroke="${c[1]}" stroke-width="3"/>
   <path d="M30 18 L30 94 M90 18 L90 94" stroke="${c[1]}" stroke-width="4" opacity=".6"/>${emblem}</svg>`}
-function rollItem(S,w){const owned=new Set(S.get());const total=w.common+w.rare+w.legend;const r=Math.random()*total;
-  const rar=r<w.common?'common':r<w.common+w.rare?'rare':'legend';
+function rollItem(S,w){const owned=new Set(S.get());const total=RAR_ORDER.reduce((a,k)=>a+(w[k]||0),0);let r=Math.random()*total,rar='common';
+  for(const k of RAR_ORDER){r-=w[k]||0;if(r<0){rar=k;break}}
   let pool=S.pool.filter(x=>x.r===rar&&!owned.has(x.id));
-  if(!pool.length){const order=rar==='legend'?['legend','rare','common']:rar==='rare'?['rare','legend','common']:['common','rare','legend'];
+  if(!pool.length){const i=RAR_ORDER.indexOf(rar);const order=[...RAR_ORDER].sort((a,b)=>Math.abs(RAR_ORDER.indexOf(a)-i)-Math.abs(RAR_ORDER.indexOf(b)-i)||RAR_ORDER.indexOf(a)-RAR_ORDER.indexOf(b));
     for(const o of order){pool=S.pool.filter(x=>x.r===o&&!owned.has(x.id));if(pool.length)break}}
   if(!pool.length){const same=S.pool.filter(x=>x.r===rar);return {item:pick(same.length?same:S.pool),dupe:true}}
   return {item:pick(pool),dupe:false}}
@@ -1394,8 +1424,10 @@ function setParent(w,ind){if(w==='A'){selA=ind.id;if(selB===ind.id)selB=null}els
 function catDetail(ind,newborn){const m=$('#modal');const O=ind.origin||{},d=ind.dna,P=ind.parents||[];const act=activeInd().id===ind.id;const isKit=!ind.skin;
   const src=k=>{const o=O[k];return o==='mut'?' <b class="mut">'+Lx("мутация!","mutation!")+'</b>':o==='mix'?' <em>'+Lx("смесь родителей","mix of parents")+'</em>':o==='A'&&P[0]?` <em>${Lx("от","from")} ${esc(P[0])}</em>`:o==='B'&&P[1]?` <em>${Lx("от","from")} ${esc(P[1])}</em>`:''};
   const sw=c=>`<span class="sw" style="background:${c}"></span>`;
-  const genes=[[Lx("Окрас","Coat"),`${sw(d.main)}${sw(d.dark)}${sw(d.belly)}`+src('coat')],[Lx("Порода","Breed"),RU.style[d.style]+src('style')],[Lx("Узор","Pattern"),RU.pat[d.pat]+src('pat')],
-    [Lx("Уши","Ears"),RU.ears[d.ears]+src('ears')],[Lx("Хвост","Tail"),RU.tail[d.tail]+src('tail')],[Lx("Глаза","Eyes"),(d.glow?`${Lx("Светятся","Glowing")} ${sw(d.glow)}`:Lx("Обычные","Normal"))+src('eyes')+(d.hetero?` ${Lx("· разного цвета","· different colors")} ${sw(d.hetero)}${src('hetero')}`:'')],
+  const genes=[[Lx("Окрас","Coat"),`${sw(d.main)}${sw(d.belly)}${sw(d.line)}`+src('coat')],[Lx("Узор","Pattern"),RU.pat[d.pat]+src('pat')],
+    [Lx("Голова","Head"),RU.head[d.head]+src('head')],[Lx("Тело","Body"),RU.body[d.body]+src('body')],[Lx("Уши","Ears"),RU.ears[d.ears]+src('ears')],
+    [Lx("Глаза","Eyes"),`${RU.eyes[d.eyes]}${src('eyes')} ${sw(d.eyeColor)}${d.glow?' '+Lx("светятся","glowing"):''}${src('eyeColor')}`+(d.hetero?` ${Lx("· разного цвета","· different colors")} ${sw(d.hetero)}${src('hetero')}`:'')],
+    [Lx("Хвост","Tail"),RU.tail[d.tail]+(d.tailColor?' '+sw(d.tailColor):'')+src('tail')],
     [Lx("Особенности","Features"),(d.extras.length?d.extras.map(x=>RU.extra[x]).join(', '):Lx("нет","none"))+src('extras')]];
   const inNest=player.nest&&(player.nest.a===ind.id||player.nest.b===ind.id);
   m.innerHTML=evOverlay(`${newborn?'<p class="rt r-legend" style="margin:0">'+Lx("Новый котёнок!","New kitten!")+'</p>':''}<div class="prize ${newborn?'glow':''}" style="width:150px;margin:0 auto">${catPic(ind,'happy')}</div>
