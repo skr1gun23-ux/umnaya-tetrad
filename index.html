@@ -172,6 +172,53 @@ input.field:focus{outline:3px solid var(--star);border-color:var(--ink)}
 .stage{background:var(--paper);border-radius:16px;padding:12px;text-align:center;border:2px solid var(--line)}
 .bigcat{width:100%;max-width:240px;cursor:pointer;display:block;margin:0 auto}
 .bigcat.purr{animation:purr .5s}
+.homeroom{margin-top:16px}
+.roomcat.walk{animation:catwalk 16s linear infinite;transform-box:fill-box;transform-origin:center bottom}
+@keyframes catwalk{0%{transform:translateX(0) scaleX(1)}22%{transform:translateX(120px) scaleX(1)}25%{transform:translateX(120px) scaleX(-1)}47%{transform:translateX(0) scaleX(-1)}50%{transform:translateX(0) scaleX(-1)}72%{transform:translateX(-110px) scaleX(-1)}75%{transform:translateX(-110px) scaleX(1)}97%{transform:translateX(0) scaleX(1)}100%{transform:translateX(0) scaleX(1)}}
+.roomcat.walk .leg{transform-box:fill-box;transform-origin:50% 0;animation:legsw .45s ease-in-out infinite alternate}.roomcat.walk .leg.l2{animation-direction:alternate-reverse}
+.roomcat.walk .arm{transform-box:fill-box;transform-origin:50% 0;animation:legsw .45s ease-in-out infinite alternate-reverse}.roomcat.walk .arm.a2{animation-direction:alternate}
+@keyframes legsw{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+@media (prefers-reduced-motion:reduce){.roomcat.walk,.roomcat.walk .leg,.roomcat.walk .arm{animation:none}}
+.fight{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:12px}
+.fcard{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:8px;text-align:center;display:flex;flex-direction:column;gap:4px;min-width:0}
+.fcat{width:min(150px,100%);margin:0 auto}.fcat.flip svg{transform:scaleX(-1)}.fcat svg{display:block;width:100%;height:auto}
+.vs{font:900 26px Neucha,cursive;color:var(--bad)}
+.track.hp{height:12px}.track.hp .fill{background:linear-gradient(90deg,#e5243b,#ffd166 50%,#2e9e5b);transition:width .4s}
+.hpn{font-weight:800;font-size:13px}
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.zones h5{margin:0 0 6px}
+.zb{display:block;width:100%;margin:0 0 6px;padding:9px 8px;border:2px solid var(--line);border-radius:10px;background:var(--paper);font:700 14px Nunito,sans-serif;color:var(--text);cursor:pointer}
+.zb[aria-pressed="true"]{background:var(--xp);border-color:var(--xp);color:#fff}
+[data-atk].zb[aria-pressed="true"]{background:var(--bad);border-color:var(--bad)}
+.flog{margin-top:12px;max-height:280px;overflow-y:auto;background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:8px 12px;font-size:14px}
+.flog p{margin:4px 0}.flog .round{margin-top:10px;color:var(--muted)}.flog .crit{color:var(--bad)}.flog .dodge,.flog .block{color:var(--muted)}.flog .dmg{color:var(--bad);font-weight:900}
+.hitfx{animation:hitfx .45s}@keyframes hitfx{20%{transform:translateX(-6px) rotate(-4deg);filter:brightness(1.6)}50%{transform:translateX(5px)}80%{transform:translateX(-2px)}}
+.sheet.arena{background:linear-gradient(180deg,color-mix(in srgb,#7a4fd6 8%,var(--card)),var(--card) 260px)}
+@media (max-width:520px){.zones{grid-template-columns:1fr 1fr}.zb{font-size:12.5px;padding:8px 4px}.vs{font-size:18px}}
+.roomscroll{background:var(--card);border:2px solid var(--line);border-radius:18px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.roomscroll>svg{display:block;width:100%;min-width:680px;height:auto}
+.hot{cursor:pointer;outline:none;transition:filter .15s}
+.hot:hover,.hot:focus-visible{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 6px var(--xp)) brightness(1.06)}
+.pill{pointer-events:none}
+.bdg{animation:bdg 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes bdg{50%{transform:scale(1.18)}}
+.roomcat.purr{animation:purr .5s;transform-box:fill-box;transform-origin:center bottom}
+.hud{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 14px}
+.paintwrap{position:relative;margin:14px auto 0;border:2px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.paintwrap.wall{overflow-x:auto}.paintwrap.wall>svg{display:block;width:100%;min-width:680px;height:auto}
+.paintwrap.wall canvas{position:absolute;left:0;top:0;width:100%;min-width:680px;height:auto;aspect-ratio:760/190;touch-action:none;cursor:crosshair}
+.paintwrap.pic{max-width:480px}.paintwrap.pic canvas{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+.ptools .row{flex-wrap:wrap;gap:6px;margin-top:8px}
+.pc{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}.pc.on{outline:3px solid var(--xp);outline-offset:2px}
+.sheet.lab{background:linear-gradient(180deg,color-mix(in srgb,#39ff14 6%,var(--card)),var(--card) 240px)}
+.tdev{display:flex;flex-direction:column;align-items:center;margin:18px auto 6px}
+.tring{width:44px;height:30px;border:6px solid #b8bfcc;border-bottom:none;border-radius:24px 24px 0 0;margin-bottom:-4px}
+.tshell{position:relative;width:min(340px,92vw);padding:34px 30px 26px;border-radius:50% 50% 46% 46%/56% 56% 44% 44%;background:radial-gradient(circle at 35% 25%,#ffd1e6,#ff8fc1 55%,#e0457b);box-shadow:inset 0 -10px 20px rgba(0,0,0,.18),0 10px 24px rgba(0,0,0,.18)}
+.tscreen{background:#f6f2e8;border-radius:16px;padding:8px;box-shadow:inset 0 3px 8px rgba(0,0,0,.25)}.tscreen svg{display:block;width:100%;height:auto}
+.tbtns{display:flex;justify-content:center;gap:18px;margin-top:16px}
+.tb{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;font:900 18px Nunito,sans-serif;color:#7a2e50;background:radial-gradient(circle at 35% 30%,#fff,#ffd166 60%,#d99a00);box-shadow:0 4px 0 #a57c00,0 6px 10px rgba(0,0,0,.2)}
+.tb:active{transform:translateY(3px);box-shadow:0 1px 0 #a57c00}
+.tb:nth-child(2){margin-top:14px}
+.treset{position:absolute;right:6px;top:50%;width:12px;height:12px;border-radius:50%;border:2px solid #b0306a;background:#7a2e50;cursor:pointer;padding:0}
+.treset::after{content:'reset';position:absolute;left:-30px;top:14px;font:700 9px Nunito,sans-serif;color:#7a2e50;opacity:.7}
 @keyframes purr{30%{transform:scale(1.04) rotate(-2deg)}60%{transform:scale(.98) rotate(2deg)}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap}
 .tabs button{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;border:2px solid var(--line);font-weight:700;font-size:15px}
@@ -321,7 +368,13 @@ const EARS={
  round:{o:'M-18 6 A18 18 0 1 1 18 6 Z',i:'M-10 4 A10 10 0 1 1 10 4 Z'},
  long:{o:'M-16 6 L-2 -54 L16 6 Z',i:'M-8 2 L-2 -40 L8 2 Z',tuft:true},
  fold:{o:'M-20 6 Q-18 -22 14 -14 Q2 -6 -4 10 Z',i:'M-12 2 Q-10 -12 4 -10 Q-2 -4 -6 4 Z'},
- bat:{o:'M-22 8 L-20 -40 L-6 -24 L4 -44 L22 8 Z',i:'M-12 2 L-12 -26 L-2 -14 L4 -30 L12 2 Z'}};
+ bat:{o:'M-22 8 L-20 -40 L-6 -24 L4 -44 L22 8 Z',i:'M-12 2 L-12 -26 L-2 -14 L4 -30 L12 2 Z'},
+ /* Секретные уши: только мутацией при скрещивании двух мифических котов */
+ crystal:{secret:true,o:'M-16 6 L-9 -28 L0 -46 L9 -28 L16 6 Z',i:'M-8 2 L0 -34 L8 2 Z',fill:'#bfefff',ic:'#7fd8ff',line:'#3a8fc0',glow:'#7fd8ff',fx:'<path d="M0 -46 L0 2 M-9 -28 L9 -28" stroke="#fff" stroke-width="1.5" opacity=".8"/>'},
+ flame:{secret:true,o:'M-18 6 Q-22 -20 -8 -30 Q-8 -16 0 -14 Q-2 -34 10 -48 Q8 -26 18 -18 Q20 -4 18 6 Z',i:'M-8 2 Q-8 -12 0 -18 Q4 -8 8 2 Z',fill:'#ff6b35',ic:'#ffd166',line:'#a32b00',glow:'#ff8c1a'},
+ antenna:{secret:true,o:'M-15 6 A15 13 0 1 1 15 6 Z',i:'M-8 4 A8 6 0 1 1 8 4 Z',fx:'<path d="M0 -6 L6 -40" stroke="#3d4654" stroke-width="3" stroke-linecap="round"/><circle cx="6" cy="-43" r="5.5" fill="NEON" filter="url(#FID)"/><circle cx="6" cy="-43" r="4" fill="NEON"/>'},
+ feather:{secret:true,o:'M-12 8 Q-26 -30 4 -58 Q16 -30 12 8 Z',i:'M-4 4 Q-10 -24 4 -46 Q6 -20 4 4 Z',fill:'#ffffff',ic:'#ffe9a3',line:'#b8a46a',fx:'<path d="M2 4 Q-2 -26 4 -54 M0 -14 L-10 -22 M1 -26 L-8 -36 M2 -14 L10 -20 M3 -28 L10 -36" stroke="#d9c88f" stroke-width="1.5" fill="none"/>'},
+ starry:{secret:true,o:'M0 -48 L7 -30 L26 -30 L11 -18 L17 4 L0 -8 L-17 4 L-11 -18 L-26 -30 L-7 -30 Z',i:'M0 -34 L4 -24 L14 -24 L6 -18 L9 -8 L0 -14 L-9 -8 L-6 -18 L-14 -24 L-4 -24 Z',fill:'#ffd166',ic:'#fff3c4',line:'#a57c00',glow:'#ffd166'}};
 /* Тела: где передние лапки, задние лапки, грудь (украшения и спина) и хвост */
 const BODIES={
  round:{path:'M56 172 A44 40 0 1 0 144 172 A44 40 0 1 0 56 172 Z',pawL:[80,184],pawR:[120,184],feet:[[78,210],[122,210]],chest:[100,148],tail:[136,194],w:44},
@@ -334,7 +387,14 @@ const TAILS={
  short:{d:['M0 0 C14 2 22 -6 22 -18'],w:[22,16]},
  curly:{d:['M0 0 C34 4 46 -24 30 -40 C18 -52 4 -38 16 -30'],w:[15,9]},
  double:{d:['M0 0 C40 2 50 -36 32 -68','M-4 4 C46 18 62 -14 56 -40'],w:[15,9]},
- zigzag:{d:['M0 0 L22 -10 L12 -26 L34 -38 L22 -56 L42 -66'],w:[14,8]}};
+ zigzag:{d:['M0 0 L22 -10 L12 -26 L34 -38 L22 -56 L42 -66'],w:[14,8]},
+ /* Секретные хвосты */
+ comet:{secret:true,d:['M0 0 C30 0 46 -30 36 -64'],w:[13,7],color:'#ffd166',glow:'#ffd166',tips:[[36,-64]],tip:'<circle r="11" fill="#fff3a0" filter="url(#FID)"/><path d="M0 -12 L3 -3 L12 0 L3 3 L0 12 L-3 3 L-12 0 L-3 -3 Z" fill="#fff"/>'},
+ phoenix:{secret:true,d:['M0 0 C30 4 50 -20 54 -54','M0 0 C34 8 62 -8 76 -34','M0 0 C24 0 32 -36 24 -72'],w:[12,7],color:'#ff6b35',glow:'#ff8c1a',tips:[[54,-54],[76,-34],[24,-72]],tip:'<ellipse rx="7" ry="11" fill="#ffd166" stroke="#c2410c" stroke-width="2"/><circle r="3" fill="#e5243b"/>'},
+ dragon:{secret:true,d:['M0 0 C40 2 56 -30 40 -64'],w:[17,11],tips:[[40,-64]],tip:'<path d="M-12 6 L0 -16 L12 6 Z" fill="#2a9d8f" stroke="#1d6b62" stroke-width="2.5" stroke-linejoin="round"/>',
+   fx:'<path d="M22 -2 L26 -14 L32 -4 M38 -16 L46 -24 L48 -12 M44 -34 L56 -38 L50 -26 M42 -50 L52 -58 L48 -46" fill="#2a9d8f" stroke="#1d6b62" stroke-width="2" stroke-linejoin="round"/>'},
+ crystal:{secret:true,d:['M0 0 L18 -8 L26 -26 L40 -36 L42 -58'],w:[14,9],color:'#bfefff',glow:'#7fd8ff',tips:[[42,-58]],tip:'<path d="M0 -18 L9 -4 L0 10 L-9 -4 Z" fill="#e8fbff" stroke="#3a8fc0" stroke-width="2"/>'},
+ nine:{secret:true,d:['M0 0 C40 2 50 -36 32 -68','M0 0 C46 10 66 -18 64 -48','M0 0 C24 -4 22 -44 6 -66'],w:[24,17],tips:[[32,-68],[64,-48],[6,-66]],tip:'<circle r="9" fill="#ffffff" stroke="LINE" stroke-width="2.5"/>'}};
 const EYE_SHAPES=['round','almond','big','sleepy','slit','star'];
 
 /* Костюмы овощей и фруктов: капюшон вокруг любой головы, комбинезон на тело, листики сверху */
@@ -535,21 +595,30 @@ function patternSVG(G,part,dark){const p=G.pat,n=G.neon||'#00e5ff';
   if(p==='shine')return `<ellipse cx="72" cy="158" rx="9" ry="16" fill="#fff" opacity=".35"/>`;
   return ''}
 
+/* Котик стоит как человек: туловище, ножки и ручки строятся из ширины тела */
+function standBody(B0){const rx=Math.round(B0.w*.68),lx=Math.round(rx*.45);
+  const path=B0===BODIES.square?`M${100-rx} 150 Q${100-rx} 136 ${100-rx+14} 136 L${100+rx-14} 136 Q${100+rx} 136 ${100+rx} 150 L${100+rx} 182 Q${100+rx} 196 ${100+rx-14} 196 L${100-rx+14} 196 Q${100-rx} 196 ${100-rx} 182 Z`
+    :`M${100-rx} 166 A${rx} 30 0 1 0 ${100+rx} 166 A${rx} 30 0 1 0 ${100-rx} 166 Z`;
+  return {path,stand:true,rx,pawL:[100-rx-10,186],pawR:[100+rx+10,186],shL:[100-rx+5,150],shR:[100+rx-5,150],feet:[[100-lx,220],[100+lx,220]],chest:[100,150],tail:[100+Math.round(rx*.5),192],w:rx,belly:[100,174,Math.round(rx*.62),19]}}
 function catSVG(cat,mood){const G=catGenes(cat);const LK=G.look&&SKIN_BY_ID[G.look]&&SKIN_BY_ID[G.look].look;const wear={...(LK||{}),...((cat&&cat.wear)||{})};
   const it=s=>{const w=WEAR_BY_ID[wear[s]];return w&&(w.slot===s||(w.slot==='hand'&&(s==='handL'||s==='handR')))?w:null};
   const eyeIt=it('eyes');const E=eyeIt?{...G,glow:eyeIt.eye.glow??G.glow,eyeColor:eyeIt.eye.color||G.eyeColor,eyes:eyeIt.eye.shape||G.eyes,hetero:null}:G;
-  const H=HEADS[G.head]||HEADS.round,B=BODIES[G.body]||BODIES.round,EA=EARS[G.ears]||EARS.pointed,T=TAILS[G.tail]||TAILS.thin;
+  const CO=COSTUMES[G.costume];const stand=(cat&&cat.pose==='stand')||G.stand===true,B0=BODIES[G.body]||BODIES.round,B=stand?standBody(B0):B0,H=HEADS[G.head]||HEADS.round,EA=EARS[G.ears]||EARS.pointed,T=TAILS[G.tail]||TAILS.thin;
   const id=uid('c'),hid=uid('h'),fid=uid('f'),gb=uid('g');const L=G.line,dark=mixC(G.main,L,.45),light=mixC(G.main,'#ffffff',.35),edge=mixC(G.main,L,.18);
   const pt=G.pat==='points'?dark:G.main,tailC=G.tailColor||pt;const fx=w=>w?(w.glowy?w.svg.replace(/FID/g,fid):w.svg):'';
   const at=([x,y],svg,flip)=>`<g transform="translate(${x} ${y})${flip?' scale(-1,1)':''}">${svg}</g>`;
-  const ear=([x,y,a],side)=>`<g transform="translate(${x} ${y}) rotate(${a}) scale(${side},1)"><path d="${EA.o}" fill="${pt}" stroke="${L}" stroke-width="3" stroke-linejoin="round"/><path d="${EA.i}" fill="#ffb3c7"/>${EA.tuft?`<path d="M-2 -54 L-6 -66 M-2 -54 L2 -66" stroke="${L}" stroke-width="3" stroke-linecap="round"/>`:''}</g>`;
+  const ear=([x,y,a],side)=>`<g transform="translate(${x} ${y}) rotate(${a}) scale(${side},1)">${EA.glow?`<path d="${EA.o}" fill="${EA.glow}" filter="url(#${fid})" opacity=".8"/>`:''}<path d="${EA.o}" fill="${EA.fill||pt}" stroke="${EA.line||L}" stroke-width="3" stroke-linejoin="round"/><path d="${EA.i}" fill="${EA.ic||'#ffb3c7'}"/>${EA.fx?EA.fx.replace(/NEON/g,G.neon||G.eyeColor).replace(/FID/g,fid):''}${EA.tuft?`<path d="M-2 -54 L-6 -66 M-2 -54 L2 -66" stroke="${L}" stroke-width="3" stroke-linecap="round"/>`:''}</g>`;
   const ghost=G.pat==='ghost'?' opacity=".8"':'';const dy=H.top-50,cy=B.chest[1]-148;
   const back=it('back'),body=it('body'),chest=it('chest'),hR=it('handR'),hL=it('handL'),wr=it('wrist'),gl=it('glasses'),hat=it('hat');
   const paw=([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="13" ry="11" fill="${pt}" stroke="${L}" stroke-width="3"/><path d="M${x-5} ${y-7} L${x-5} ${y-3} M${x} ${y-8} L${x} ${y-4} M${x+5} ${y-7} L${x+5} ${y-3}" stroke="${L}" stroke-width="1.5" opacity=".45"/>`;
   const foot=([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="15" ry="9" fill="${pt}" stroke="${L}" stroke-width="3"/><circle cx="${x-5}" cy="${y+1}" r="2" fill="#ffb3c7"/><circle cx="${x}" cy="${y+2}" r="2" fill="#ffb3c7"/><circle cx="${x+5}" cy="${y+1}" r="2" fill="#ffb3c7"/>`;
-  const PL=hL?[B.pawL[0]-30,B.pawL[1]-14]:B.pawL,PR=hR?[B.pawR[0]+30,B.pawR[1]-14]:B.pawR;
-  const hold=(w,P,flip)=>w?`${at([P[0],P[1]-6],fx(w),flip)}<g${ghost}><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${L}" stroke-width="15" stroke-linecap="round"/><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${pt}" stroke-width="10" stroke-linecap="round"/>${paw(P)}</g>${wr?at([P[0]+(flip?6:-6),P[1]+9],fx(wr)):''}`:'';
-  const CO=COSTUMES[G.costume],hc=(H.top+144)/2,htop=hc-(hc-H.top)*1.22,cid=uid('k');
+  const PL=hL?(stand?[B.pawL[0]-12,B.pawL[1]-22]:[B.pawL[0]-30,B.pawL[1]-14]):B.pawL,PR=hR?(stand?[B.pawR[0]+12,B.pawR[1]-22]:[B.pawR[0]+30,B.pawR[1]-14]):B.pawR;
+  const limbC=CO&&CO.kind!=='dress'?CO.body:pt;
+  const armPath=(S,P)=>`<path d="M${S[0]} ${S[1]} Q${(S[0]+P[0])/2+(P[0]<100?-4:4)} ${(S[1]+P[1])/2} ${P[0]} ${P[1]}" fill="none" stroke="${L}" stroke-width="17" stroke-linecap="round"/><path d="M${S[0]} ${S[1]} Q${(S[0]+P[0])/2+(P[0]<100?-4:4)} ${(S[1]+P[1])/2} ${P[0]} ${P[1]}" fill="none" stroke="${limbC}" stroke-width="11" stroke-linecap="round"/>`;
+  const arm=(P,side)=>`<g class="arm ${side<0?'a2':'a1'}">${armPath(side>0?B.shL:B.shR,P)}${paw(P)}</g>`;
+  const legs=stand?B.feet.map(([x,y],i)=>`<g class="leg ${i?'l2':'l1'}"><rect x="${x-10}" y="184" width="20" height="${y-184}" rx="9" fill="${limbC}" stroke="${L}" stroke-width="3"/>${foot([x,y])}</g>`).join(''):'';
+  const hold=(w,P,flip)=>w?`${at([P[0],P[1]-6],fx(w),flip)}<g${ghost}>${stand?armPath(flip?B.shL:B.shR,P):`<path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${L}" stroke-width="15" stroke-linecap="round"/><path d="M${P[0]+(flip?16:-16)} ${P[1]+16} Q${P[0]+(flip?12:-12)} ${P[1]+4} ${P[0]} ${P[1]}" fill="none" stroke="${pt}" stroke-width="10" stroke-linecap="round"/>`}${paw(P)}</g>${wr?at([P[0]+(flip?6:-6),P[1]+9],fx(wr)):''}`:'';
+  const hc=(H.top+144)/2,htop=hc-(hc-H.top)*1.22,cid=uid('k');
   const hoodT=`translate(100 ${hc}) scale(1.22) translate(-100 ${-hc})`;
   const hood=CO&&CO.kind!=='dress'?`<defs><clipPath id="${cid}"><path d="${H.path}" transform="${hoodT}"/></clipPath></defs><path d="${H.path}" transform="${hoodT}" fill="${CO.hood}"/><g clip-path="url(#${cid})">${CO.hd}<ellipse cx="70" cy="${htop+26}" rx="20" ry="9" fill="#fff" opacity=".18" transform="rotate(-24 70 ${htop+26})"/></g><path d="${H.path}" transform="${hoodT}" fill="none" stroke="${CO.edge}" stroke-width="2.6"/><g transform="translate(100 ${htop+2})">${CO.top}</g>`:'';
   const extras=G.extras||[];const blush=mood==='happy'||mood==='sleep';
@@ -557,16 +626,16 @@ function catSVG(cat,mood){const G=catGenes(cat);const LK=G.look&&SKIN_BY_ID[G.lo
   <defs><clipPath id="${id}"><path d="${B.path}"/></clipPath><clipPath id="${hid}"><path d="${H.path}"/></clipPath>
   <radialGradient id="${gb}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${light}"/><stop offset=".55" stop-color="${G.main}"/><stop offset="1" stop-color="${edge}"/></radialGradient>
   <filter id="${fid}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
-  <ellipse cx="100" cy="221" rx="56" ry="7" fill="#000" opacity=".12"/>
+  <ellipse cx="100" cy="${stand?224:221}" rx="${stand?46:56}" ry="7" fill="#000" opacity=".12"/>
   ${back?at([100,148+cy],fx(back)):''}${CO&&CO.wings?at([100,148+cy],CO.wings.replace(/FID/g,fid)):''}
-  <g${ghost}>${T.d.map(d=>`<g transform="translate(${B.tail[0]} ${B.tail[1]})"><path d="${d}" fill="none" stroke="${L}" stroke-width="${T.w[0]}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${tailC}" stroke-width="${T.w[1]}" stroke-linecap="round" stroke-linejoin="round"/></g>`).join('')}
-  <path d="${B.path}" fill="url(#${gb})"/>
-  <g clip-path="url(#${id})">${patternSVG(G,'body',dark)}<ellipse cx="100" cy="190" rx="${G.pat==='bicolor'?32:26}" ry="${G.pat==='bicolor'?30:26}" fill="${G.belly}"/>${CO?`<rect x="30" y="120" width="140" height="102" fill="${CO.body}"/>${CO.bd}`:''}${body&&body.clip?body.clip:''}</g>
+  <g${ghost}><g transform="translate(${B.tail[0]} ${B.tail[1]})">${T.d.map(d=>`${T.glow?`<path d="${d}" fill="none" stroke="${T.glow}" stroke-width="${T.w[0]+6}" stroke-linecap="round" filter="url(#${fid})" opacity=".7"/>`:''}<path d="${d}" fill="none" stroke="${L}" stroke-width="${T.w[0]}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${G.tailColor||T.color||tailC}" stroke-width="${T.w[1]}" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}${T.fx||''}${(T.tips||[]).map(([x,y])=>`<g transform="translate(${x} ${y})">${T.tip.replace(/FID/g,fid).replace(/LINE/g,L)}</g>`).join('')}</g>
+  ${legs}<path d="${B.path}" fill="url(#${gb})"/>
+  <g clip-path="url(#${id})">${patternSVG(G,'body',dark)}${B.belly?`<ellipse cx="${B.belly[0]}" cy="${B.belly[1]}" rx="${B.belly[2]+(G.pat==='bicolor'?6:0)}" ry="${B.belly[3]+(G.pat==='bicolor'?4:0)}" fill="${G.belly}"/>`:`<ellipse cx="100" cy="190" rx="${G.pat==='bicolor'?32:26}" ry="${G.pat==='bicolor'?30:26}" fill="${G.belly}"/>`}${CO?`<rect x="30" y="120" width="140" height="102" fill="${CO.body}"/>${CO.bd}`:''}${body&&body.clip?body.clip:''}</g>
   <path d="${B.path}" fill="none" stroke="${L}" stroke-width="3"/>
   ${extras.includes('glowspots')?`<g filter="url(#${fid})">${[[76,166],[124,182],[106,158]].map(([x,y])=>`<circle cx="${x}" cy="${y+cy}" r="6" fill="${G.eyeColor}"/>`).join('')}</g>`:''}
-  ${B.feet.map(foot).join('')}</g>${CO&&CO.skirt?CO.skirt(B.chest[1]+30,B.w+10):''}
+  ${stand?'':B.feet.map(foot).join('')}</g>${CO&&CO.skirt?CO.skirt(B.chest[1]+30,B.w+10):''}
   ${chest?at([100,148+cy],fx(chest)):''}
-  <g${ghost}>${hL?'':paw(PL)}${hR?'':paw(PR)}</g>
+  <g${ghost}>${hL?'':stand?arm(PL,1):paw(PL)}${hR?'':stand?arm(PR,-1):paw(PR)}</g>
   ${wr&&!hL?at([PL[0],PL[1]+8],fx(wr)):''}${wr&&!hR?at([PR[0],PR[1]+8],fx(wr)):''}
   <g${ghost}>${hood||ear(H.earL,1)+ear(H.earR,-1)}
   <path d="${H.path}" fill="url(#${gb})"/><g clip-path="url(#${hid})">${patternSVG(G,'head',dark)}<ellipse cx="74" cy="${70+dy}" rx="18" ry="9" fill="#fff" opacity=".22" transform="rotate(-20 74 ${70+dy})"/></g>
@@ -699,16 +768,49 @@ SKINS.push(
  lk('sk_mage','Маг Мурлин','Merlin the mage','mythic',g('wide','chubby','pointed','sleepy','#c77dff','fluffy','#a7adb8','#e6e8ec','#3d424d',{glow:true,pat:'tabby',extras:['star']}),{hat:'hat_wizard',glasses:'gl_mono',handR:'ty_staff',handL:'ty_book',chest:'nk_dragon',back:'bk_cape'}));
 for(const s of SKINS)SKIN_BY_ID[s.id]=s;
 
+/* Рыцари: доспехи, меч, котики, которые стоят и ходят как люди */
+WEAR.push(
+ {id:'bd_armor',slot:'body',name:Lx('Рыцарские доспехи','Knight armor'),r:'epic',clip:`<rect x="30" y="120" width="140" height="102" fill="#cfd6e0"/><path d="M30 146 Q100 166 170 146" fill="none" stroke="#ff8fc1" stroke-width="5"/><path d="M100 140 V222" stroke="#9aa6b8" stroke-width="3"/><path d="M64 170 Q100 182 136 170 M60 194 Q100 206 140 194" fill="none" stroke="#9aa6b8" stroke-width="3"/><ellipse cx="76" cy="160" rx="7" ry="12" fill="#fff" opacity=".55"/><circle cx="100" cy="158" r="7" fill="#ff8fc1" stroke="#c2185b" stroke-width="2"/>`},
+ HAND('ty_knightsword',Lx('Рыцарский меч','Knight sword'),'rare',`<path d="M-4 -14 L-4 -62 L0 -72 L4 -62 L4 -14 Z" fill="#eef2f7" stroke="#7a8699" stroke-width="2" stroke-linejoin="round"/><path d="M0 -66 V-18" stroke="#c9d1dc" stroke-width="1.5"/><rect x="-13" y="-16" width="26" height="6" rx="3" fill="#ffd166" stroke="#a57c00" stroke-width="1.5"/><rect x="-3" y="-10" width="6" height="14" rx="2" fill="#8b5a2b"/><circle cx="0" cy="7" r="4" fill="#ff8fc1" stroke="#c2185b" stroke-width="1.5"/>`),
+ {id:'hat_knight',slot:'hat',name:Lx('Шлем рыцаря с пером','Plumed knight helmet'),r:'epic',svg:`<path d="M58 70 Q56 26 100 24 Q144 26 142 70 Z" fill="#cfd6e0" stroke="#7a8699" stroke-width="3"/><path d="M100 26 V68" stroke="#9aa6b8" stroke-width="3"/><path d="M100 24 Q112 0 136 -2 Q122 8 120 22" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><rect x="56" y="62" width="88" height="10" rx="4" fill="#ffd166" stroke="#a57c00" stroke-width="2"/>`});
+for(const w of WEAR)WEAR_BY_ID[w.id]=w;
+SKINS.push(
+ lk('sk_knightgirl','Рыцарша Искорка','Sparkle the knight','epic',g('heart','round','pointed','big','#3a86ff','fluffy','#fbf3e6','#ffffff','#7a6a5a',{stand:true,extras:['freckles']}),{hat:'hat_bow',body:'bd_armor',handR:'ty_knightsword',handL:'ty_shield',chest:'nk_heart'}),
+ lk('sk_knight','Рыцарь Барсик','Sir Barsik','legend',g('round','square','pointed','almond','#57c785','thin','#f4a259','#fde3c4','#6b3d1f',{stand:true,pat:'tabby'}),{hat:'hat_knight',body:'bd_armor',handR:'ty_knightsword',handL:'ty_shield',back:'bk_cape'}));
+for(const s of SKINS)SKIN_BY_ID[s.id]=s;
+
+/* ===== Киберпанк-котята и кибер-вещи ===== */
+WEAR.push(
+ {id:'hat_cyberhood',slot:'hat',name:Lx('Кибер-капюшон','Cyber hood'),r:'rare',glowy:true,svg:`<path d="M42 104 Q38 30 100 26 Q162 30 158 104 L146 104 Q148 46 100 44 Q52 46 54 104 Z" fill="#1d2235" stroke="#0b0d16" stroke-width="3"/><path d="M50 98 Q50 40 100 36 Q150 40 150 98" fill="none" stroke="#00e5ff" stroke-width="3" filter="url(#FID)"/><path d="M50 98 Q50 40 100 36 Q150 40 150 98" fill="none" stroke="#bff8ff" stroke-width="1.5"/>`},
+ {id:'gl_hud',slot:'glasses',name:Lx('Голо-монокль','Holo monocle'),r:'rare',glowy:true,svg:`<path d="M134 88 L160 82" stroke="#3d4654" stroke-width="4"/><rect x="104" y="84" width="34" height="24" rx="5" fill="rgba(57,255,20,.3)" stroke="#39ff14" stroke-width="2.5" filter="url(#FID)"/><rect x="104" y="84" width="34" height="24" rx="5" fill="rgba(57,255,20,.25)" stroke="#39ff14" stroke-width="2"/><path d="M110 92 H126 M110 98 H120" stroke="#d9ffd0" stroke-width="2"/>`},
+ HAND('ty_holo',Lx('Голо-планшет','Holo tablet'),'epic',`<rect x="-14" y="-10" width="28" height="6" rx="2" fill="#3d4654"/><path d="M-12 -12 L-20 -44 L20 -44 L12 -12 Z" fill="rgba(0,229,255,.25)" stroke="#00e5ff" stroke-width="2" filter="url(#FID)"/><path d="M-12 -12 L-20 -44 L20 -44 L12 -12 Z" fill="rgba(0,229,255,.2)" stroke="#7ff2ff" stroke-width="1.5"/><path d="M-12 -36 H8 M-10 -28 H12 M-8 -20 H4" stroke="#bff8ff" stroke-width="2"/>`,{glowy:true}),
+ HAND('ty_katana',Lx('Неоновая катана','Neon katana'),'legend',`<g transform="rotate(12)"><path d="M0 -6 L0 -70" stroke="#ff2bd6" stroke-width="8" stroke-linecap="round" filter="url(#FID)"/><path d="M0 -6 L0 -70" stroke="#ffd6f6" stroke-width="3.5" stroke-linecap="round"/><rect x="-9" y="-8" width="18" height="4" rx="2" fill="#ffd166"/><rect x="-3" y="-4" width="6" height="16" rx="2" fill="#1d2235"/></g>`,{glowy:true}),
+ {id:'nk_chip',slot:'chest',name:Lx('Чип-кулон','Chip pendant'),r:'epic',glowy:true,svg:`<path d="M-28 -18 Q0 -2 28 -18" fill="none" stroke="#3d4654" stroke-width="3"/><rect x="-11" y="-6" width="22" height="18" rx="3" fill="#1d2235" stroke="#39ff14" stroke-width="2" filter="url(#FID)"/><rect x="-11" y="-6" width="22" height="18" rx="3" fill="#1d2235" stroke="#39ff14" stroke-width="2"/><path d="M-15 -2 H-11 M-15 4 H-11 M-15 10 H-11 M11 -2 H15 M11 4 H15 M11 10 H15" stroke="#39ff14" stroke-width="2"/><rect x="-5" y="0" width="10" height="6" fill="#39ff14"/>`},
+ {id:'wr_holo',slot:'wrist',name:Lx('Голо-браслеты','Holo bands'),r:'rare',glowy:true,svg:`<rect x="-12" y="-3" width="24" height="7" rx="3" fill="#1d2235"/><rect x="-8" y="-1" width="16" height="3" rx="1.5" fill="#00e5ff" filter="url(#FID)"/><rect x="-8" y="-1" width="16" height="3" rx="1.5" fill="#bff8ff"/>`},
+ {id:'bd_techsuit',slot:'body',name:Lx('Техно-костюм','Tech suit'),r:'epic',clip:`<rect x="30" y="120" width="140" height="102" fill="#2a2f45"/><path d="M62 140 L100 156 L138 140 M100 156 V222" fill="none" stroke="#00e5ff" stroke-width="3"/><rect x="70" y="176" width="18" height="12" rx="2" fill="#3c4363" stroke="#ff2bd6" stroke-width="2"/><rect x="112" y="176" width="18" height="12" rx="2" fill="#3c4363" stroke="#ff2bd6" stroke-width="2"/>`},
+ {id:'bk_antenna',slot:'back',name:Lx('Кибер-ранец с антеннами','Cyber pack with antennas'),r:'epic',glowy:true,svg:`<rect x="-36" y="-14" width="72" height="44" rx="10" fill="#3d4654" stroke="#1d2235" stroke-width="3"/><path d="M-26 -14 L-40 -60 M26 -14 L44 -56" stroke="#1d2235" stroke-width="3"/><circle cx="-40" cy="-62" r="6" fill="#ff3355" filter="url(#FID)"/><circle cx="44" cy="-58" r="6" fill="#00e5ff" filter="url(#FID)"/><circle cx="-40" cy="-62" r="4" fill="#ffd0d8"/><circle cx="44" cy="-58" r="4" fill="#d0fbff"/>`});
+for(const w of WEAR)WEAR_BY_ID[w.id]=w;
+
+SKINS.push(
+ lk('sk_cy_runner','Неон-бегун Вольт','Volt the neon runner','rare',g('round','slim','pointed','slit','#00e5ff','zigzag','#2a2f45','#3c4363','#0b0d16',{glow:true,pat:'circuit',neon:'#00e5ff'}),{hat:'hat_cyberhood',wrist:'wr_neon',body:'bd_jacket',back:'bk_jet'}),
+ lk('sk_cy_mech','Мех-кот Болт','Bolt the mech cat','rare',g('square','square','pointed','round','#ff3355','short','#c9d1dc','#eef2f7','#3d4654',{glow:true,pat:'circuit',neon:'#ff3355'}),{glasses:'gl_hud',wrist:'wr_holo',body:'bd_techsuit',back:'bk_antenna'}),
+ lk('sk_cy_hacker','Хакер Байт','Byte the hacker','epic',g('round','round','pointed','almond','#39ff14','thin','#26262e','#3a3a46','#0a0a0e',{glow:true,pat:'circuit',neon:'#39ff14'}),{hat:'hat_cyberhood',glasses:'gl_hud',handR:'ty_holo',wrist:'wr_holo',chest:'nk_chip',body:'bd_techsuit'}),
+ lk('sk_cy_dj','Диджей Глитч','DJ Glitch','epic',g('wide','chubby','bat','big','#ff2bd6','curly','#3b2340','#563360','#12070f',{glow:true,pat:'circuit',neon:'#ff2bd6',tailColor:'#ff2bd6'}),{hat:'hat_phones',glasses:'gl_pixel',handR:'ty_holo',chest:'nk_cyber',body:'bd_jacket',back:'bk_neon'}),
+ lk('sk_cy_ghost','Голограмма Пиксель','Pixel the hologram','epic',g('heart','slim','long','big','#00e5ff','fluffy','#9fe8ff','#e0fbff','#1f6f8b',{glow:true,pat:'ghost',neon:'#00e5ff'}),{hat:'hat_cyberhood',chest:'nk_chip',wrist:'wr_holo'}),
+ lk('sk_cy_samurai','Кибер-самурай Рэн','Ren the cyber samurai','legend',g('square','slim','pointed','slit','#ff3355','zigzag','#2e2e38','#45454f','#0a0a0e',{glow:true,pat:'circuit',neon:'#ff3355',tailColor:'#ff3355'}),{glasses:'gl_cyber',handR:'ty_katana',chest:'nk_chip',body:'bd_jacket',back:'bk_antenna'}),
+ lk('sk_cy_queen','Неоновая королева Вайпер','Viper the neon queen','mythic',g('heart','slim','bat','star','#ff2bd6','double','#1b1f4d','#3a3f8f','#05061a',{glow:true,pat:'circuit',neon:'#ff2bd6',tailColor:'#ff2bd6',extras:['glowspots']}),{hat:'hat_crown',glasses:'gl_cyber',handR:'ty_katana',handL:'ty_holo',chest:'nk_chip',body:'bd_techsuit',back:'bk_neon'}));
+for(const s of SKINS)SKIN_BY_ID[s.id]=s;
+
 /* ===== Генетика котят: гены внешности, свойства, характеристики, скрещивание ===== */
 const HEX=/^#[0-9a-f]{6}$/i;
 const PATS=['none','tabby','bicolor','points','calico','spots','stars','rainbow','shine','flame','circuit','ghost'];
-const HEAD_T=Object.keys(HEADS),BODY_T=Object.keys(BODIES),EAR_T=Object.keys(EARS),TAIL_T=Object.keys(TAILS),EYE_T=EYE_SHAPES,EXTRAS=['horns','star','freckles','glowspots'];
+const HEAD_T=Object.keys(HEADS),BODY_T=Object.keys(BODIES),EAR_ALL=Object.keys(EARS),TAIL_ALL=Object.keys(TAILS),EAR_T=EAR_ALL.filter(k=>!EARS[k].secret),TAIL_T=TAIL_ALL.filter(k=>!TAILS[k].secret),EYE_T=EYE_SHAPES,EXTRAS=['horns','star','freckles','glowspots'];
 const RU={pat:{none:Lx("Однотонный","Solid"),tabby:Lx("Полоски","Stripes"),bicolor:Lx("Белая грудка","White chest"),points:Lx("Тёмные ушки и лапки","Dark ears and paws"),calico:Lx("Трёхцветный","Calico"),spots:Lx("Пятнышки","Spots"),stars:Lx("Звёздочки","Little stars"),rainbow:Lx("Радуга","Rainbow"),shine:Lx("Блеск","Shine"),flame:Lx("Пламя","Flame"),circuit:Lx("Киберсхемы","Cyber circuits"),ghost:Lx("Призрачный","Ghostly")},
   head:{round:Lx("Круглая","Round"),square:Lx("Квадратная","Square"),wide:Lx("Широкая","Wide"),heart:Lx("Сердечком","Heart-shaped")},
   body:{round:Lx("Круглое","Round"),slim:Lx("Стройное","Slim"),chubby:Lx("Пухлое","Chubby"),square:Lx("Квадратное","Square")},
-  ears:{pointed:Lx("Острые","Pointed"),round:Lx("Круглые","Round"),long:Lx("С кисточками","Tufted"),fold:Lx("Вислоухие","Folded"),bat:Lx("Как у летучей мыши","Bat ears")},
+  ears:{pointed:Lx("Острые","Pointed"),round:Lx("Круглые","Round"),long:Lx("С кисточками","Tufted"),fold:Lx("Вислоухие","Folded"),bat:Lx("Как у летучей мыши","Bat ears"),crystal:Lx("✨ Кристальные","✨ Crystal"),flame:Lx("✨ Огненные","✨ Flame"),antenna:Lx("✨ Кибер-антенны","✨ Cyber antennas"),feather:Lx("✨ Перья ангела","✨ Angel feathers"),starry:Lx("✨ Звёздные","✨ Star-shaped")},
   eyes:{round:Lx("Круглые","Round"),almond:Lx("Миндальные","Almond"),big:Lx("Большие","Big"),sleepy:Lx("Сонные","Sleepy"),slit:Lx("Хищные","Hunter"),star:Lx("Звёздные","Starry")},
-  tail:{thin:Lx("Тонкий","Thin"),fluffy:Lx("Пушистый","Fluffy"),short:Lx("Короткий","Short"),curly:Lx("Колечком","Curly"),double:Lx("Два хвоста","Two tails"),zigzag:Lx("Молния","Zigzag")},
+  tail:{thin:Lx("Тонкий","Thin"),fluffy:Lx("Пушистый","Fluffy"),short:Lx("Короткий","Short"),curly:Lx("Колечком","Curly"),double:Lx("Два хвоста","Two tails"),zigzag:Lx("Молния","Zigzag"),comet:Lx("✨ Хвост кометы","✨ Comet tail"),phoenix:Lx("✨ Перья феникса","✨ Phoenix feathers"),dragon:Lx("✨ Драконий","✨ Dragon tail"),crystal:Lx("✨ Кристальный","✨ Crystal tail"),nine:Lx("✨ Три лисьих хвоста","✨ Three fox tails")},
   costume:Object.fromEntries(Object.entries(COSTUMES).map(([k,v])=>[k,v.name])),
   extra:{horns:Lx("Рожки","Horns"),star:Lx("Звезда на лбу","Star on the forehead"),freckles:Lx("Веснушки","Freckles"),glowspots:Lx("Светящиеся пятна","Glowing spots")}};
 const NEONS=['#00e5ff','#ff2bd6','#39ff14','#ff3355','#ffd166','#c77dff'];
@@ -719,9 +821,9 @@ function cleanDna(d){if(!d||typeof d!=='object')return null;const h=(v,f)=>HEX.t
   if(!d.head&&(d.style||d.ears in OLD_EARS)){const brick=d.style==='brick';
     d={...d,head:brick?'square':'round',body:brick?'square':'round',ears:OLD_EARS[d.ears]||'pointed',tail:OLD_TAIL[d.tail]||'thin',eyes:d.glow?'slit':'round',
       eyeColor:HEX.test(d.glow)?d.glow:'#5aa05a',glow:HEX.test(d.glow),pat:d.pat==='multi'?'rainbow':d.pat}}
-  return {head:one(d.head,HEAD_T,'round'),body:one(d.body,BODY_T,'round'),ears:one(d.ears,EAR_T,'pointed'),eyes:one(d.eyes,EYE_T,'round'),eyeColor:h(d.eyeColor,'#5aa05a'),glow:d.glow===true,
-    tail:one(d.tail,TAIL_T,'thin'),tailColor:HEX.test(d.tailColor)?d.tailColor:null,main:h(d.main,'#f4a259'),belly:h(d.belly,'#fde3c4'),line:h(d.line,'#6b3d1f'),
-    costume:COSTUMES[d.costume]?d.costume:null,look:typeof d.look==='string'&&SKIN_BY_ID[d.look]&&SKIN_BY_ID[d.look].look?d.look:null,pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
+  return {head:one(d.head,HEAD_T,'round'),body:one(d.body,BODY_T,'round'),ears:one(d.ears,EAR_ALL,'pointed'),eyes:one(d.eyes,EYE_T,'round'),eyeColor:h(d.eyeColor,'#5aa05a'),glow:d.glow===true,
+    tail:one(d.tail,TAIL_ALL,'thin'),tailColor:HEX.test(d.tailColor)?d.tailColor:null,main:h(d.main,'#f4a259'),belly:h(d.belly,'#fde3c4'),line:h(d.line,'#6b3d1f'),
+    costume:COSTUMES[d.costume]?d.costume:null,stand:d.stand===true,look:typeof d.look==='string'&&SKIN_BY_ID[d.look]&&SKIN_BY_ID[d.look].look?d.look:null,pat:one(d.pat,PATS,'none'),neon:HEX.test(d.neon)?d.neon:null,extras:[...new Set((Array.isArray(d.extras)?d.extras:[]).filter(x=>EXTRAS.includes(x)))].slice(0,3),hetero:HEX.test(d.hetero)?d.hetero:null}}
 function skinToDna(s){return cleanDna(s.g)}
 
 const CAT_TRAITS=[
@@ -773,12 +875,16 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   else{src=from();['main','belly','line'].forEach(k=>d[k]=src[1][k]);O.coat=src[0]}
   const gene=(k,list,p)=>{if(Math.random()<p){d[k]=pick(list);O[k]='mut'}else{const s=from();d[k]=s[1][k];O[k]=s[0]}};
   gene('pat',PATS,.07);gene('head',HEAD_T,.06);gene('body',BODY_T,.06);gene('ears',EAR_T,.07);gene('tail',TAIL_T,.07);gene('eyes',EYE_T,.06);
+  /* Два мифических родителя: крошечный шанс на секретные уши и хвост */
+  const rarOf=x=>x.skin?SKIN_BY_ID[x.skin].r:kitRarity(x);
+  if(rarOf(A)==='mythic'&&rarOf(B)==='mythic'){if(Math.random()<SECRET_CHANCE){d.ears=pick(EAR_ALL.filter(k=>EARS[k].secret));O.ears='mut'}if(Math.random()<SECRET_CHANCE){d.tail=pick(TAIL_ALL.filter(k=>TAILS[k].secret));O.tail='mut'}}
   if(Math.random()<.06){d.glow=true;d.eyeColor=pick(NEONS);O.eyeColor='mut'}
   else{const s=from();d.glow=s[1].glow;d.eyeColor=Math.random()<.2?mixHex(a.eyeColor,b.eyeColor):s[1].eyeColor;O.eyeColor=s[0]}
   if(Math.random()<.05){d.tailColor=pick([...NEONS,'#ffffff','#3a3a44']);O.tail='mut'}else d.tailColor=from()[1].tailColor;
   if(Math.random()<.03){d.costume=pick(Object.keys(COSTUMES));O.costume='mut'}
   else{const has=[['A',a],['B',b]].filter(x=>x[1].costume);if(has.length&&Math.random()<.5){const x=pick(has);d.costume=x[1].costume;O.costume=x[0]}else d.costume=null}
   {const has=[['A',a],['B',b]].filter(x=>x[1].look);if(has.length&&Math.random()<.5){const x=pick(has);d.look=x[1].look;O.look=x[0]}else d.look=null}
+  if(Math.random()<.02){d.stand=true;O.stand='mut'}else{const s=from();d.stand=!!s[1].stand;O.stand=s[0]}
   d.neon=a.neon||b.neon||(d.pat==='circuit'?pick(NEONS):null);
   d.extras=[...new Set([...a.extras,...b.extras])].filter(()=>Math.random()<.5);if(Math.random()<.08){const n=pick(EXTRAS.filter(x=>!d.extras.includes(x)));if(n){d.extras.push(n);O.extras='mut'}}
   if(Math.random()<.05){d.hetero=pick(['#3a86ff','#2e9e5b','#ffd166','#c77dff','#e63946']);O.hetero='mut'}else d.hetero=(a.hetero||b.hetero)&&Math.random()<.4?(a.hetero||b.hetero):null;
@@ -787,9 +893,11 @@ function breed(A,B){const a=A.dna,b=B.dna,O={},d={};const from=()=>Math.random()
   const stats={};CSTATS.forEach(([k])=>{let v=(Math.random()<.5?A:B).stats[k]+rnd(-1,1);if(Math.random()<.04){v+=2;O['s_'+k]='mut'}stats[k]=clamp(v,1,10)});
   return cleanKitten({id:'k'+Date.now().toString(36)+rnd(10,99),name:pick(KIT_NAMES),dna:d,traits,stats,gen:Math.max(A.gen,B.gen)+1,parents:[A.name,B.name],born:Date.now(),origin:O})}
 const kitRarity=k=>{const d=k.dna;const s=d.extras.length+(d.glow?1:0)+(d.hetero?1:0)+(d.tailColor?.5:0)+(['rainbow','flame','circuit','ghost','stars','shine'].includes(d.pat)?1:0)
-  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0)+(d.costume?1:0)+(d.look?1:0)+(d.costume==='goldapple'?2:0);
+  +(['bat','long'].includes(d.ears)?.5:0)+(['double','zigzag'].includes(d.tail)?.5:0)+(['star'].includes(d.eyes)?.5:0)+(d.head==='heart'?.5:0)+(d.costume?1:0)+(d.look?1:0)+(EARS[d.ears].secret?2:0)+(TAILS[d.tail].secret?2:0)+(d.costume==='goldapple'?2:0);
   return s>=6?'mythic':s>=4.5?'legend':s>=3?'epic':s>=1.5?'rare':s>=.5?'uncommon':'common'};
-const BREED_COST=10,BREED_TIME=20*60e3,KENNEL_MAX=24;
+const BREED_COST=10,BREED_TIME=60*60e3,KENNEL_MAX=24,SECRET_CHANCE=.03;
+/* Ускорить рождение: 1 ★ за каждые 4 минуты ожидания */
+const rushCost=left=>Math.max(1,Math.ceil(left/(4*60e3)));
 
 /* ===== Комната котёнка: сцена 400×280, стена до y=190, дальше пол ===== */
 const WALLS=[
@@ -850,23 +958,6 @@ const FURN=[
  {id:'bw_gold',slot:'bowl',name:Lx("Золотая миска","Golden bowl"),r:'legend',box:[128,240,50,34],svg:`<path d="M138 258 L166 258 L162 268 L142 268 Z" fill="#ffd166" stroke="#c99700" stroke-width="2"/>${star5(170,248,6,'#fff3c4','#ffd166')}`}];
 const FURN_BY_ID=Object.fromEntries(FURN.map(f=>[f.id,f]));
 
-function roomSVG(pl,art){const R=pl.room;const id=uid('r'),fid=uid('f');
-  const W=WALL_BY_ID[R.wp]||WALLS[0],FL=FLOOR_BY_ID[R.fl]||FLOORS[0];
-  const pw=W.pat?W.pat(id+'w'):'',pf=FL.pat(id+'f');const at=s=>{const f=FURN_BY_ID[R.place[s]];return f&&f.slot===s?f.svg.replace(/FID/g,fid):''};
-  const win=FURN_BY_ID[R.place.window];
-  const cat=catSVG(pl.cat,mood()).replace('<svg ','<svg x="150" y="148" width="100" height="124" ');
-  return `<svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${Lx("Комната котёнка","Kitten's room")}">
-  <defs>${pw}${pf}<filter id="${fid}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>
-  <rect width="400" height="190" fill="${W.bg}"/>${pw?`<rect width="400" height="190" fill="url(#${id}w)"/>`:''}
-  <rect y="190" width="400" height="90" fill="${FL.bg}"/><rect y="190" width="400" height="90" fill="url(#${id}f)"/>
-  <rect y="184" width="400" height="8" fill="#000" opacity=".15"/>
-  <rect x="146" y="26" width="108" height="98" fill="#fff" stroke="#8b5a2b" stroke-width="4"/>
-  ${win&&win.view?at('window'):`<rect x="150" y="30" width="100" height="90" fill="#9fd8ff"/><circle cx="224" cy="54" r="12" fill="#ffd166"/><ellipse cx="176" cy="96" rx="18" ry="7" fill="#fff"/>`}
-  <path d="M200 30 V120 M150 75 H250" stroke="#8b5a2b" stroke-width="4"/>
-  ${win&&!win.view?at('window'):''}
-  ${art?`<rect x="268" y="34" width="84" height="66" fill="#fff" stroke="#8b5a2b" stroke-width="4"/><image href="${art}" x="272" y="38" width="76" height="58" preserveAspectRatio="xMidYMid slice"/>`:''}
-  ${at('wall')}${at('lamp')}${at('rug')}${at('tower')}${at('bed')}${at('plant')}${at('bowl')}${cat}
-  ${[[92,268],[262,272],[118,236],[300,276],[60,262]].slice(0,pl.cat.poops||0).map(([x,y])=>`<text x="${x}" y="${y}" font-size="20" text-anchor="middle">💩</text>`).join('')}</svg>`}
 function furnPreview(f){const fid=uid('f');const [x,y,w,h]=f.box;
   const bg=f.slot==='window'?`<rect x="146" y="26" width="108" height="98" fill="#fff" stroke="#8b5a2b" stroke-width="4"/>${f.view?'':'<rect x="150" y="30" width="100" height="90" fill="#9fd8ff"/>'}`:'';
   return `<svg viewBox="${x-6} ${y-6} ${w+12} ${h+12}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(f.name)}"><defs><filter id="${fid}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>${bg}${f.svg.replace(/FID/g,fid)}</svg>`}
@@ -1150,7 +1241,7 @@ function normalize(p){if(!p)return p;
   const wear={};if(c.wear&&typeof c.wear==='object')for(let [s,id] of Object.entries(c.wear)){s=OLD_SLOT[s]||s;const w=WEAR_BY_ID[id];
     if(w&&c.owned.includes(id)&&(w.slot===s||(w.slot==='hand'&&(s==='handR'||s==='handL'))))wear[s]=id}c.wear=wear;
   const N=(v,d)=>v==null?d:clamp(+v||0,0,100);c.food=N(c.food,80);c.joy=N(c.joy,70);c.fun=N(c.fun,70);c.sport=N(c.sport,60);c.energy=N(c.energy,90);
-  const now0=Date.now();c.t=+c.t||now0;c.sleepUntil=+c.sleepUntil||0;c.poops=clamp(Math.floor(+c.poops||0),0,5);c.bag=Math.max(0,Math.floor(+c.bag||0));
+  const now0=Date.now();const isNewCat=!c.t;c.t=+c.t||now0;c.sleepUntil=+c.sleepUntil||0;c.poops=clamp(Math.floor(+c.poops||0),0,5);c.bag=Math.max(0,Math.floor(+c.bag||0));
   c.poopNext=+c.poopNext||now0+rnd(8,15)*36e5;
   c.feeder=c.feeder&&typeof c.feeder==='object'?{n:clamp(Math.floor(+c.feeder.n||0),0,FEEDER_MAX),next:+c.feeder.next||now0+FEEDER_EVERY}:{n:2,next:now0+FEEDER_EVERY};
   const inv={};if(c.inv&&typeof c.inv==='object')for(const [k,n] of Object.entries(c.inv))if(FOOD_BY_ID[k]&&+n>0)inv[k]=Math.min(99,Math.floor(+n));c.inv=inv;
@@ -1158,6 +1249,7 @@ function normalize(p){if(!p)return p;
   p.nest=p.nest&&typeof p.nest==='object'&&typeof p.nest.a==='string'&&typeof p.nest.b==='string'?{a:p.nest.a.slice(0,40),b:p.nest.b.slice(0,40),until:+p.nest.until||0}:null;
   if(c.kid){const k=p.kennel.find(x=>x.id===c.kid);if(k)c.dna=k.dna;else{delete c.kid;delete c.dna}}else delete c.dna;
   p.nextEv=+p.nextEv||now0+5*60e3;p.tDate=typeof p.tDate==='string'?p.tDate:'';p.tClass=+p.tClass||0;p.tScore=+p.tScore||0;
+  c.pose=c.pose==='stand'?'stand':'sit';p.tama=cleanTama(p.tama);p.arena=cleanArena(p.arena);cleanLife(c,isNewCat);
   const cards={};if(p.cards&&typeof p.cards==='object')for(const [k,n] of Object.entries(p.cards))if((WEAR_BY_ID[k]||SKIN_BY_ID[k]||FURN_BY_ID[k])&&+n>0)cards[k]=Math.min(999,Math.floor(+n));p.cards=cards;
   const r=p.room=p.room&&typeof p.room==='object'?p.room:{};
   r.owned=[...new Set([...(Array.isArray(r.owned)?r.owned:[]),'wp_plain','fl_wood'])].filter(id=>FURN_BY_ID[id]||WALL_BY_ID[id]||FLOOR_BY_ID[id]);
@@ -1179,20 +1271,25 @@ const FOOD_BY_ID=Object.fromEntries(FOODS.map(f=>[f.id,f]));
 const STATS=[['food',Lx("Сытость","Fullness"),'var(--ok)'],['joy',Lx("Настроение","Mood"),'var(--star)'],['fun',Lx("Развлечение","Fun"),'#e76f51'],['sport',Lx("Спорт","Sport"),'#3a86ff'],['energy',Lx("Энергия","Energy"),'#9b5de5']];
 const STAT_NAME=Object.fromEntries(STATS.map(s=>[s[0],s[1]]));
 const sleeping=()=>player&&player.cat.sleepUntil>Date.now();
-function tick(){if(!player)return;const c=player.cat,now=Date.now();if(now<=c.t){c.t=now;return}
+function tick(){if(!player)return;const c=player.cat,now=Date.now();if(c.hospital){if(c.hospital>now){c.t=now;return}c.t=Math.max(c.t,c.hospital)}if(now<=c.t){c.t=now;lifeTick(now,now,c.food);return}
+  const foodBefore=c.food;
   const from=c.t,sleepEnd=Math.max(from,Math.min(now,c.sleepUntil));const hs=(sleepEnd-from)/36e5,ha=(now-sleepEnd)/36e5;
   if(hs>0){c.energy=clamp(c.energy+100/SLEEP_H*hs,0,100);c.food=clamp(c.food-3*hs,0,100);c.joy=clamp(c.joy-1*hs,0,100);c.fun=clamp(c.fun-1*hs,0,100);c.sport=clamp(c.sport-1*hs,0,100)}
   const gm=hasTr('glutton')?1.3:1,em=hasTr('sleepy')?.7:hasTr('fidget')?1.3:1,lm=hasTr('lazy')?1.3:1;
-  if(ha>0){c.food=clamp(c.food-6*gm*ha,0,100);c.joy=clamp(c.joy-(4+2*c.poops)*ha,0,100);c.fun=clamp(c.fun-5*ha,0,100);c.sport=clamp(c.sport-4*lm*ha,0,100);c.energy=clamp(c.energy-5*em*ha,0,100)}
+  const sk=c.sick?1.4:1,fat=isFat(c)?1.4:1;
+  if(ha>0){c.food=clamp(c.food-6*gm*sk*ha,0,100);c.joy=clamp(c.joy-(4+2*c.poops)*sk*ha,0,100);c.fun=clamp(c.fun-5*sk*ha,0,100);c.sport=clamp(c.sport-4*lm*fat*ha,0,100);c.energy=clamp(c.energy-5*em*sk*ha,0,100)}
   while(c.poopNext<=now){c.poops=Math.min(5,c.poops+1);c.poopNext+=(hasTr('clean')?rnd(12,20):rnd(8,15))*36e5}
   while(c.feeder.next<=now){c.feeder.n=Math.min(FEEDER_MAX,c.feeder.n+1);c.feeder.next+=FEEDER_EVERY}
   while(c.food<40&&c.feeder.n>0){c.food=clamp(c.food+30,0,100);c.feeder.n--}
   if(c.energy<=0&&c.sleepUntil<now)c.sleepUntil=now+SLEEP_H*36e5;
-  c.t=now}
-function mood(){if(!player)return 'normal';const c=player.cat;if(sleeping())return 'sleep';const low=Math.min(c.food,c.joy,c.fun,c.sport,c.energy);
+  lifeTick(from,now,foodBefore);c.t=now}
+function mood(){if(!player)return 'normal';const c=player.cat;if(sleeping())return 'sleep';if(c.sick||c.call&&c.call.type==='whim')return 'sad';const low=Math.min(c.food,c.joy,c.fun,c.sport,c.energy);
   return low<20||c.poops>=3?'sad':(c.food+c.joy+c.fun+c.sport+c.energy)/5>=62?'happy':'normal'}
 const emptyStat=()=>{const c=player.cat;const s=STATS.find(([k])=>c[k]<=0);return s?s[1]:null};
-function canPlayWithCat(){tick();if(sleeping())return Lx("Котёнок спит. Поиграть можно, когда он проснётся.","Your kitten is asleep. You can play when it wakes up.");const e=emptyStat();if(e)return `${Lx("Шкала «","The “")}${e}${Lx("» пустая. Сначала позаботься о котёнке.","” bar is empty. Take care of your kitten first.")}`;
+function canPlayWithCat(){tick();if(inHospital())return Lx("Котёнок в ветклинике. Забери его домой во вкладке ухода.","Your kitten is at the vet. Take it home on the care screen.");
+  if(player.cat.sick)return Lx("Котёнок болеет. Сначала дай ему лекарство (миска → уход).","Your kitten is sick. Give it medicine first (bowl → care).");
+  if(player.cat.call&&player.cat.call.type==='whim')return Lx("Котёнок капризничает. Сначала воспитай его кнопкой «😾 Воспитать».","Your kitten is being naughty. Discipline it first with the “😾 Discipline” button.");
+  if(sleeping())return Lx("Котёнок спит. Поиграть можно, когда он проснётся.","Your kitten is asleep. You can play when it wakes up.");const e=emptyStat();if(e)return `${Lx("Шкала «","The “")}${e}${Lx("» пустая. Сначала позаботься о котёнке.","” bar is empty. Take care of your kitten first.")}`;
   if(player.cat.energy<10)return Lx("Котёнок слишком устал. Отправь его спать.","Your kitten is too tired. Send it to bed.");return null}
 function applyEffects(eff,gourmet){const c=player.cat;for(let [k,v] of Object.entries(eff)){if(!(k in c))continue;if(v>0){if(k==='sport')v*=(hasTr('athlete')?1.5:1)*(hasTr('fidget')?1.25:1);if(k==='fun'&&hasTr('joker'))v*=1.5;if(gourmet&&hasTr('gourmet'))v*=1.25}c[k]=clamp(c[k]+Math.round(v),0,100)}}
 
@@ -1204,13 +1301,18 @@ function saveLocal(){if(!player)return;const all=localPlayers();all[nickKey(play
 function savePlayer(now){saveLocal();if(store.mode!=='online')return;clearTimeout(store.writeTimer);
   const go=()=>{const data={...player,updated:Date.now()};store.writeQ=store.writeQ.then(()=>store.db.doc('players/'+store.uid).set(data)).catch(()=>{})};
   if(now)go();else store.writeTimer=setTimeout(go,1200)}
+/* Рисунки игрока: надписи на стене и три картины в рамках */
+const ART_MAX=450e3;
+const okImg=v=>typeof v==='string'&&/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(v)&&v.length<ART_MAX?v:null;
+function cleanArt(a){if(typeof a==='string')return {wall:null,pics:[okImg(a),null,null]};if(!a||typeof a!=='object')return {wall:null,pics:[null,null,null]};
+  const p=Array.isArray(a.pics)?a.pics:[a.p0,a.p1,a.p2];return {wall:okImg(a.wall),pics:[0,1,2].map(i=>okImg(p[i]))}}
 async function loadArt(){if(store.art!==undefined)return store.art;
-  if(store.mode==='online'){try{const s=await store.db.doc('players/'+store.uid+'/art/main').get();store.art=s.exists&&typeof s.data().img==='string'&&s.data().img.startsWith('data:image/')?s.data().img:null}catch(e){store.art=null}}
-  else{const a=LS.get('ut2_art:'+nickKey(player.nick),null);store.art=typeof a==='string'&&a.startsWith('data:image/')?a:null}
+  if(store.mode==='online'){try{const s=await store.db.doc('players/'+store.uid+'/art/main').get();const d=s.exists?s.data():null;store.art=cleanArt(d&&(d.img&&!d.p0&&!d.wall?d.img:{wall:d.wall,pics:[d.p0,d.p1,d.p2]}))}catch(e){store.art=cleanArt(null)}}
+  else store.art=cleanArt(LS.get('ut2_art:'+nickKey(player.nick),null));
   return store.art}
-async function saveArt(url){store.art=url;
-  if(store.mode==='online'){try{await store.db.doc('players/'+store.uid+'/art/main').set({img:url,t:Date.now()})}catch(e){}}
-  else LS.set('ut2_art:'+nickKey(player.nick),url)}
+async function saveArt(art){store.art=cleanArt(art);const A=store.art;
+  if(store.mode==='online'){try{await store.db.doc('players/'+store.uid+'/art/main').set({wall:A.wall,p0:A.pics[0],p1:A.pics[1],p2:A.pics[2],t:Date.now()})}catch(e){toast(Lx("Не получилось сохранить рисунок","Couldn't save the drawing"))}}
+  else{try{LS.set('ut2_art:'+nickKey(player.nick),A)}catch(e){toast(Lx("Не хватило места для рисунка","Not enough space for the drawing"))}}}
 
 async function initStore(){
   if(window.claude&&typeof window.claude.use==='function'){
@@ -1237,7 +1339,7 @@ async function claimNick(nick){const key=nickKey(nick);
 function grant(stars,xp){const before=lvlInfo(player.xp).l;player.stars+=stars;player.xp+=xp;
   const after=lvlInfo(player.xp).l;const bonus=after>before?5*(after-before):0;player.stars+=bonus;return {xp,up:after>before,level:after,bonus}}
 function record(game,stars,xp,value,lowerBetter,bestKey=game){
-  xp=Math.round(xp*(hasTr('smart')?1.2:1)*(1+(cstat('int')-5)*.04));
+  xp=Math.round(xp*(hasTr('smart')?1.2:1)*(player.cat.form==='angel'?1.1:1)*(1+(cstat('int')-5)*.04));
   const b=player.buff||{};if(b.xp2>0){xp*=2;player.buff={...b,xp2:b.xp2-1}}
   player.games+=1;const {up,level:after,bonus}=grant(stars,xp);
   tick();player.cat.joy=clamp(player.cat.joy+15,0,100);player.cat.food=clamp(player.cat.food-3,0,100);
@@ -1246,11 +1348,295 @@ function record(game,stars,xp,value,lowerBetter,bestKey=game){
 
 function renderMe(){const el=$('#me');if(!player){el.innerHTML='';return}const L=lvlInfo(player.xp);
   el.innerHTML=`<span class="chip" title="${esc(L.title)}"><i>${Lx("Ур.","Lv.")} ${L.l}</i><b>★</b>${wallet()}<span style="color:var(--text)">· ${esc(player.nick)}</span></span>
-  <button class="link" id="toCat">${Lx("Котёнок","Kitten")}</button><button class="link" id="toLeaders">${Lx("Лидеры","Leaders")}</button>${store.mode==='local'?'<button class="link" id="logout">'+Lx("Сменить игрока","Switch player")+'</button>':''}`;
-  $('#toLeaders').onclick=leaders;$('#toCat').onclick=()=>catScreen('wear');
+  <button class="link" id="toCat">${Lx("🏠 Комната","🏠 Room")}</button><button class="link" id="toLeaders">${Lx("Лидеры","Leaders")}</button>${store.mode==='local'?'<button class="link" id="logout">'+Lx("Сменить игрока","Switch player")+'</button>':''}`;
+  $('#toLeaders').onclick=leaders;$('#toCat').onclick=()=>player&&menu();
   const lo=$('#logout');if(lo)lo.onclick=()=>{LS.set('ut2_current',null);player=null;store.art=undefined;renderMe();login()}}
 function xpBar(){const L=lvlInfo(player.xp);return `<div class="lvl"><b>${Lx("Уровень","Level")} ${L.l}</b><em>${esc(L.title)} ${Lx("· опыт","· XP")} ${L.cur} ${Lx("из","of")} ${L.need}</em></div>
   <div class="track"><div class="fill" style="width:${Math.round(L.cur/L.need*100)}%;background:var(--xp)"></div></div>`}
+
+/* ===== Жизнь главного котёнка по правилам тамагочи: рост, характер, вес, болезни, дисциплина, сигналы, ветклиника ===== */
+const LIFE={teen:1*DAY_MS(),adult:3*DAY_MS(),callWait:15*60e3,sickDeadline:12*36e5,hungryDeadline:12*36e5,dirtyToSick:2*36e5,hospital:6*36e5,hospitalCost:10};
+function DAY_MS(){return 864e5}
+const STAGES={baby:Lx("Малыш","Baby"),teen:Lx("Подросток","Teen"),adult:Lx("Взрослый","Grown-up")};
+const FORMS={angel:[Lx("Ангелочек","Little angel"),Lx("+10% опыта за задания","+10% XP for tasks"),'😇'],normal:[Lx("Добряк","Good kitty"),Lx("+1 ★ за победу на арене","+1 ★ for an arena win"),'😺'],rascal:[Lx("Хулиган","Rascal"),Lx("+2 к силе на арене, но чаще капризничает","+2 strength in the arena, but more whims"),'😼']};
+const CALLS={sick:Lx("заболел и просит лекарство","is sick and needs medicine"),hungry:Lx("очень голоден","is very hungry"),dirty:Lx("просит убрать за ним","wants you to clean up"),tired:Lx("валится с лап от усталости","is falling over from tiredness"),
+  bored:Lx("скучает и грустит","is bored and sad"),night:Lx("уже ночь — уложи его спать","it's night, put it to bed"),whim:Lx("капризничает без причины — воспитай его","is being naughty for no reason, discipline it")};
+const lifeStage=c=>{const a=Date.now()-c.born;return a<LIFE.teen?'baby':a<LIFE.adult?'teen':'adult'};
+const idealWeight=c=>({baby:2,teen:3,adult:4.5})[lifeStage(c)];
+const isFat=c=>c.weight>idealWeight(c)*1.35;
+const isNight=(t=Date.now())=>{const h=new Date(t).getHours();return h>=21||h<8};
+const inHospital=()=>player&&player.cat.hospital>Date.now();
+const nextMorning=(t=Date.now())=>{const d=new Date(t);if(d.getHours()>=8)d.setDate(d.getDate()+1);d.setHours(8,0,0,0);return +d};
+
+FOODS.push(
+ {id:'candy',name:Lx("Кошачья конфетка","Kitty candy"),icon:'🍬',grade:Lx("Сладкое","Sweet"),r:'uncommon',price:2,eff:{joy:20,fun:10},sweet:.3},
+ {id:'cake',name:Lx("Тортик","Little cake"),icon:'🍰',grade:Lx("Сладкое","Sweet"),r:'rare',price:4,eff:{joy:35,fun:15,food:10},sweet:.5},
+ {id:'med',name:Lx("Лекарство","Medicine"),icon:'💉',grade:Lx("Аптечка","First aid"),r:'common',price:3,eff:{},med:true});
+for(const f of FOODS)FOOD_BY_ID[f.id]=f;
+const FOOD_W={fish:.1,milk:.05,chicken:.15,shrimp:.12,vitamin:0,salmon:.2,feast:.3};
+
+function cleanLife(c,isNew){const now=Date.now();const n=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?clamp(v,a,b):d};
+  c.born=+c.born>0&&+c.born<=now?+c.born:isNew?now:now-LIFE.adult;
+  c.weight=n(c.weight,1,15,idealWeight(c));c.sick=n(c.sick,0,3,0)|0;c.sickSince=+c.sickSince||0;c.disc=n(c.disc,0,100,isNew?0:50)|0;c.mistakes=n(c.mistakes,0,999,0)|0;
+  c.call=c.call&&CALLS[c.call.type]?{type:c.call.type,at:+c.call.at||now,counted:!!c.call.counted}:null;c.nextWhim=+c.nextWhim||now+3*36e5;
+  c.poopSince=+c.poopSince||0;c.zeroSince=+c.zeroSince||0;c.hospital=+c.hospital||0;c.form=FORMS[c.form]?c.form:(isNew?null:lifeStage(c)==='adult'?'normal':null);
+  c.stageGot=['baby','teen','adult'].includes(c.stageGot)?c.stageGot:lifeStage(c);c.sweets=(Array.isArray(c.sweets)?c.sweets:[]).map(Number).filter(t=>now-t<36e5).slice(-5);c.lifeT=+c.lifeT||now}
+function makeSick(c,t,why){if(c.sick)return;c.sick=lifeStage(c)==='baby'?1:2;c.sickSince=t||Date.now();if(why&&player)toast(`🤒 ${esc(c.name)} ${why}`)}
+function sendToHospital(c,t){c.hospital=t+LIFE.hospital;c.mistakes+=2;c.sick=0;c.sickSince=0;c.zeroSince=0;c.call=null;Object.assign(c,{food:60,joy:40,fun:40,sport:40,energy:80});c.poops=0;c.poopSince=0}
+/* Вызывается из tick(): события между from и now */
+function lifeTick(from,now,foodBefore){const c=player.cat;
+  if(c.hospital){if(c.hospital<=now){c.hospital=0;toast(`🏥 ${esc(c.name)} ${Lx("вернулся из ветклиники здоровым!","came back from the vet healthy!")}`)}else return}
+  /* рост и характер */
+  const st=lifeStage(c);
+  if(st!==c.stageGot){if(st==='teen'){player.stars+=3;toast(`🎉 ${esc(c.name)} ${Lx("подрос и стал подростком! +3 ★","grew into a teen! +3 ★")}`)}
+    if(st==='adult'){c.form=c.mistakes<=3&&c.disc>=50?'angel':c.mistakes>8||c.disc<25||hasTr('fidget')&&c.disc<40?'rascal':'normal';const bonus=c.form==='angel'?10:5;player.stars+=bonus;
+      toast(`🎉 ${esc(c.name)} ${Lx("вырос! Характер:","grew up! Personality:")} ${FORMS[c.form][0]}. +${bonus} ★`)}
+    c.stageGot=st}
+  /* грязь → болезнь */
+  if(c.poops>0&&!c.poopSince)c.poopSince=Math.max(from,now-1);if(!c.poops)c.poopSince=0;
+  if(c.poops>0&&!c.sick&&now-c.poopSince>LIFE.dirtyToSick){makeSick(c,c.poopSince+LIFE.dirtyToSick,Lx("заболел: в комнате долго было грязно!","got sick: the room was dirty for too long!"));c.poopSince=now}
+  /* голод */
+  if(c.food<=0){if(!c.zeroSince){const rate=6*(hasTr('glutton')?1.3:1);c.zeroSince=Math.min(now,from+Math.max(0,foodBefore)/rate*36e5)}}else c.zeroSince=0;
+  if(c.zeroSince&&now-c.zeroSince>LIFE.hungryDeadline){sendToHospital(c,now);toast(`🏥 ${esc(c.name)} ${Lx("долго был голодным, и его забрали в ветклинику.","was hungry for too long and was taken to the vet.")}`);return}
+  if(c.sick&&now-c.sickSince>LIFE.sickDeadline){sendToHospital(c,now);toast(`🏥 ${esc(c.name)} ${Lx("долго болел без лекарства, и его забрали в ветклинику.","was sick without medicine for too long and was taken to the vet.")}`);return}
+  /* сигналы о помощи */
+  const sl=c.sleepUntil>now;
+  const need=c.sick?'sick':c.food<15?'hungry':c.poops>=2?'dirty':!sl&&c.energy<12?'tired':!sl&&(c.fun<12||c.joy<12)?'bored':!sl&&isNight(now)&&lifeStage(c)!=='baby'?'night':null;
+  if(c.call&&c.call.type!=='whim'&&c.call.type!==need)c.call=null;
+  if(need&&(!c.call||c.call.type==='whim')){let at=now;if(need==='night'){const d=new Date(now);if(d.getHours()>=21)d.setHours(21,0,0,0);else{d.setDate(d.getDate()-1);d.setHours(21,0,0,0)}at=Math.max(from,+d)}c.call={type:need,at,counted:false}}
+  if(!c.call&&!sl&&lifeStage(c)!=='baby'&&now>=c.nextWhim){c.call={type:'whim',at:Math.max(from,c.nextWhim),counted:false};c.nextWhim=now+(c.form==='rascal'?2:3+Math.random()*3)*36e5}
+  if(c.call&&c.call.type==='whim'&&now-c.call.at>LIFE.callWait){c.call=null}
+  if(c.call&&c.call.type!=='whim'&&!c.call.counted&&now-c.call.at>LIFE.callWait){c.mistakes++;c.call.counted=true}
+  c.lifeT=now}
+const calling=()=>{const c=player&&player.cat;return !!(c&&!inHospital()&&c.call)};
+const callText=()=>{const c=player.cat;return c.call?`${esc(c.name)} ${CALLS[c.call.type]}!`:''};
+
+/* Действия */
+function giveMedicine(){const c=player.cat;if(!c.sick){toast(Lx("Котёнок здоров, лекарство не нужно","Your kitten is healthy, no medicine needed"));return false}
+  c.sick--;if(!c.sick){c.sickSince=0;toast(`💉 ${esc(c.name)} ${Lx("выздоровел!","is all better!")}`)}else toast(Lx("💉 Нужна ещё одна доза","💉 One more dose needed"));tone(880,0,.08);return true}
+function scold(){const c=player.cat;if(sleeping()){toast(Lx("Тсс, котёнок спит","Shh, your kitten is asleep"));return}
+  if(c.call&&c.call.type==='whim'){c.disc=Math.min(100,c.disc+25);c.call=null;toast(`😾 ${Lx("Воспитан! Дисциплина","Disciplined! Discipline")} ${c.disc}%`);tone(500,0,.1)}
+  else{c.joy=clamp(c.joy-15,0,100);toast(Lx("😿 Ругать без причины нельзя — котёнок обиделся","😿 Don't scold for no reason, your kitten got upset"));tone(300,0,.2)}
+  savePlayer(true)}
+function putToSleep(){const c=player.cat,now=Date.now();if(sleeping()||inHospital())return false;
+  if(!isNight(now)&&c.energy>=90){toast(Lx("Котёнок не хочет спать, он полон сил!","Your kitten doesn't want to sleep, it's full of energy!"));return false}
+  c.sleepUntil=isNight(now)?Math.min(nextMorning(now),now+11*36e5):now+SLEEP_H*36e5;if(c.call&&(c.call.type==='night'||c.call.type==='tired'))c.call=null;savePlayer(true);
+  toast(`💤 ${esc(c.name)} ${Lx("уснул до","is asleep until")} ${new Date(c.sleepUntil).toLocaleTimeString(lang==='en'?'en-GB':'ru-RU',{hour:'2-digit',minute:'2-digit'})}`);return true}
+/* Еда с правилами тамагочи: сладкое и переедание */
+function eatFood(f){const c=player.cat,now=Date.now();
+  if(f.med)return giveMedicine();
+  if(!f.sweet&&lifeStage(c)!=='baby'&&c.disc<40&&Math.random()<.2){toast(Lx("😼 Капризничает и не хочет есть. Воспитывай его!","😼 It's being naughty and won't eat. Discipline it!"));return false}
+  const full=c.food>=95;applyEffects(f.eff,true);c.weight=Math.min(15,c.weight+(f.sweet||FOOD_W[f.id]||.1)+(full?.3:0));
+  if(f.sweet){c.sweets=[...c.sweets,now].filter(t=>now-t<36e5);if(c.sweets.length>=3&&Math.random()<.6)makeSick(c,now,Lx("объелся сладкого и заболел!","ate too many sweets and got sick!"))}
+  if(full&&!f.sweet&&Math.random()<.3)makeSick(c,now,Lx("переел и заболел!","overate and got sick!"));
+  if(isFat(c)&&Math.random()<.15)makeSick(c,now,Lx("слишком толстый и заболел. Больше спорта!","is too chubby and got sick. More sport!"));
+  return true}
+const loseWeight=k=>{const c=player.cat;c.weight=Math.max(idealWeight(c)*.8,c.weight-k)};
+function hospitalHTML(){const c=player.cat;const left=c.hospital-Date.now();
+  return `<div class="nest" style="text-align:center"><p style="font-size:40px;margin:0">🏥</p><p><b>${esc(c.name)} ${Lx("в ветклинике.","is at the vet.")}</b> ${Lx("Вернётся через","Back in")} ${fmtLeft(left)}.</p>
+  <button class="btn small" id="hospOut" ${wallet()<LIFE.hospitalCost?'disabled':''}>${Lx("Забрать сейчас за ★","Take home now for ★")} ${LIFE.hospitalCost}</button></div>`}
+function bindHospital(after){const b=$('#hospOut');if(b)b.onclick=()=>{if(wallet()<LIFE.hospitalCost)return;player.spent+=LIFE.hospitalCost;player.cat.hospital=0;savePlayer(true);renderMe();toast(Lx("🏠 Котёнок снова дома!","🏠 Your kitten is home again!"));after()}}
+function lifeHTML(){const c=player.cat;const st=lifeStage(c),age=Math.floor((Date.now()-c.born)/864e5);const F=c.form&&FORMS[c.form];
+  return `<h4>${Lx("Здоровье и воспитание","Health and upbringing")}</h4>
+  <div class="genes" style="margin-top:4px"><div class="gr"><span>${Lx("Возраст","Age")}</span><span>${STAGES[st]} · ${age} ${plural(age,[Lx("день","day"),Lx("дня","days"),Lx("дней","days")])}${st!=='adult'?` · ${Lx("вырастет через","grows up in")} ${fmtLeft(c.born+(st==='baby'?LIFE.teen:LIFE.adult)-Date.now())}`:''}</span></div>
+  <div class="gr"><span>${Lx("Характер","Personality")}</span><span>${F?`${F[2]} ${F[0]} — ${F[1]}`:Lx("появится, когда вырастет. Чем меньше ошибок ухода и больше дисциплины, тем лучше.","appears when it grows up. Fewer care mistakes and more discipline make it better.")}</span></div>
+  <div class="gr"><span>${Lx("Вес","Weight")}</span><span>${c.weight.toFixed(1)} ${Lx("кг","kg")} ${isFat(c)?Lx("· толстячок! Меньше сладкого, больше игр","· chubby! Fewer sweets, more games"):Lx("· в норме","· healthy")}</span></div>
+  <div class="gr"><span>${Lx("Здоровье","Health")}</span><span>${c.sick?`🤒 ${Lx("болеет — нужно лекарств:","sick, medicine needed:")} ${c.sick}`:Lx("💚 здоров","💚 healthy")}</span></div>
+  <div class="gr"><span>${Lx("Дисциплина","Discipline")}</span><span><span class="track" style="display:inline-block;width:110px;vertical-align:middle;margin-right:6px"><span class="fill" style="display:block;width:${c.disc}%;background:var(--xp)"></span></span>${c.disc}%</span></div>
+  <div class="gr"><span>${Lx("Ошибки ухода","Care mistakes")}</span><span>${c.mistakes} ${Lx("(сигнал без ответа больше 15 минут)","(a call left unanswered for over 15 minutes)")}</span></div></div>
+  <div class="row"><button class="btn alt small" id="lfMed" ${c.sick?'':'disabled'}>${Lx("💉 Дать лекарство","💉 Give medicine")}${c.inv.med?` (×${c.inv.med})`:` (★ ${FOOD_BY_ID.med.price})`}</button><button class="btn alt small" id="lfScold">${Lx("😾 Воспитать","😾 Discipline")}</button></div>
+  <p class="note" style="margin:4px 0 0">${Lx("Как в тамагочи: котёнок пищит, когда ему плохо или когда капризничает. Капризы лечатся воспитанием, а ругать без причины нельзя. Сладкое поднимает настроение, но от него толстеют и болеют. Грязь больше 2 часов — болезнь. Если 12 часов не кормить или не лечить, котёнка заберут в ветклинику.","Like a Tamagotchi: your kitten beeps when it feels bad or is being naughty. Whims are fixed with discipline, but don't scold for no reason. Sweets lift the mood but make it chubby and sick. Dirt for over 2 hours means sickness. If it isn't fed or treated for 12 hours, it gets taken to the vet.")}</p>`}
+function bindLife(after){const m=$('#lfMed');if(m)m.onclick=()=>{const c=player.cat;if(!c.sick)return;
+    if(c.inv.med){c.inv={...c.inv,med:c.inv.med-1};if(!c.inv.med)delete c.inv.med}else{if(wallet()<FOOD_BY_ID.med.price){toast(Lx("Не хватает звёзд","Not enough stars"));return}player.spent+=FOOD_BY_ID.med.price}
+    giveMedicine();savePlayer(true);renderMe();after()};
+  const s=$('#lfScold');if(s)s.onclick=()=>{scold();after()}}
+
+/* ===== Ретро-брелок «Тамагочи»: экран 32×16, три кнопки A/B/C, встроенные часы, жизнь в реальном времени ===== */
+const MIN=60e3,HOUR=36e5,DAY=864e5;
+const TAMA_RATES={baby:{h:12,j:10,poop:30},child:{h:50,j:45,poop:120},adult:{h:75,j:65,poop:180},old:{h:65,j:55,poop:180}};
+const TAMA_HATCH=3,TAMA_BABY=60,TAMA_CHILD=60*24,TAMA_OLD_DAYS=4,TAMA_END_DAYS=7,CALL_WAIT=15*MIN;
+const TAMA_FORMS={angel:Lx("Пушистик","Fluffkin"),normal:Lx("Котяра","Big cat"),rascal:Lx("Хулиган","Rascal")};
+const TAMA_STAGE={egg:Lx("Яйцо","Egg"),baby:Lx("Малыш","Baby"),child:Lx("Ребёнок","Child"),adult:Lx("Взрослый","Adult"),old:Lx("Старичок","Elder")};
+function newTama(now=Date.now()){return {born:now,t:now,stage:'egg',hunger:4,happy:4,disc:0,weight:5,poop:0,poopSince:0,sick:0,sickSince:0,light:true,sleep:false,
+  mistakes:0,call:null,nextPoop:now+(TAMA_HATCH+20)*MIN,nextWhim:now+3*HOUR,form:null,snacks:[],zeroSince:0,dead:null,pend:0,log:''}}
+function cleanTama(T){if(!T||typeof T!=='object'||!(+T.born>0))return null;const n=(v,a,b,d)=>{v=+v;return Number.isFinite(v)?clamp(v,a,b):d};
+  const st=['egg','baby','child','adult','old'].includes(T.stage)?T.stage:'egg';
+  return {born:+T.born,t:n(T.t,+T.born,Date.now()+DAY,Date.now()),stage:st,hunger:n(T.hunger,0,4,4)|0,happy:n(T.happy,0,4,4)|0,disc:n(T.disc,0,100,0)|0,weight:n(T.weight,1,99,5)|0,
+    poop:n(T.poop,0,4,0)|0,poopSince:+T.poopSince||0,sick:n(T.sick,0,3,0)|0,sickSince:+T.sickSince||0,light:T.light!==false,sleep:!!T.sleep,mistakes:n(T.mistakes,0,99,0)|0,
+    call:T.call&&['need','whim','light'].includes(T.call.type)?{type:T.call.type,at:+T.call.at||Date.now(),counted:!!T.call.counted}:null,
+    nextPoop:+T.nextPoop||Date.now()+HOUR,nextWhim:+T.nextWhim||Date.now()+3*HOUR,form:TAMA_FORMS[T.form]?T.form:null,
+    snacks:(Array.isArray(T.snacks)?T.snacks:[]).map(Number).filter(Boolean).slice(-5),zeroSince:+T.zeroSince||0,
+    dead:['old','neglect','sick'].includes(T.dead)?T.dead:null,pend:n(T.pend,0,100,0)|0,log:''}}
+const tamaAgeDays=(T,now=Date.now())=>Math.floor((now-T.born)/DAY);
+const tamaNight=(T,ms)=>{if(T.stage==='egg'||T.stage==='baby')return false;const h=new Date(ms).getHours();return h>=21||h<8};
+
+/* Одна минута жизни питомца */
+function tamaStep(T,ms){if(T.dead)return;const ageMin=(ms-T.born)/MIN;
+  const grow=(st,stars,msg)=>{T.stage=st;T.pend+=stars;T.log=msg};
+  if(T.stage==='egg'&&ageMin>=TAMA_HATCH){grow('baby',1,Lx("Из яйца вылупился малыш!","A baby hatched from the egg!"));T.nextPoop=ms+TAMA_RATES.baby.poop*MIN}
+  else if(T.stage==='baby'&&ageMin>=TAMA_HATCH+TAMA_BABY)grow('child',2,Lx("Малыш подрос!","The baby grew up!"));
+  else if(T.stage==='child'&&ageMin>=TAMA_HATCH+TAMA_BABY+TAMA_CHILD){T.form=T.mistakes<=2&&T.disc>=50?'angel':T.mistakes<=5?'normal':'rascal';
+    grow('adult',T.form==='angel'?8:5,`${Lx("Вырос во взрослого:","Grew up into:")} ${TAMA_FORMS[T.form]}!`)}
+  else if(T.stage==='adult'&&ms-T.born>=TAMA_OLD_DAYS*DAY)grow('old',5,Lx("Питомец стал мудрым старичком.","Your pet became a wise elder."));
+  else if(T.stage==='old'&&ms-T.born>=TAMA_END_DAYS*DAY){T.dead='old';T.pend+=10;T.log=Lx("Питомец улетел домой на планету Мяу. Спасибо за заботу!","Your pet flew home to Planet Meow. Thanks for caring!");return}
+  if(T.stage==='egg')return;
+  const night=tamaNight(T,ms);
+  if(night&&!T.sleep){T.sleep=true;if(T.light)T.call={type:'light',at:ms,counted:false}}
+  if(!night&&T.sleep){T.sleep=false;T.light=true;if(T.call&&T.call.type==='light')T.call=null}
+  if(T.call&&!T.call.counted&&T.call.type!=='whim'&&ms-T.call.at>CALL_WAIT){T.mistakes++;T.call.counted=true}
+  if(T.sleep)return;
+  const R=TAMA_RATES[T.stage];T.hAcc=(T.hAcc||0)+(T.sick?1.5:1);T.jAcc=(T.jAcc||0)+(T.sick?1.5:1);
+  if(T.hAcc>=R.h){T.hAcc=0;T.hunger=Math.max(0,T.hunger-1)}
+  if(T.jAcc>=R.j){T.jAcc=0;T.happy=Math.max(0,T.happy-1)}
+  if(ms>=T.nextPoop){T.poop=Math.min(4,T.poop+1);if(!T.poopSince)T.poopSince=ms;T.nextPoop=ms+R.poop*MIN*(.7+Math.random()*.6)}
+  if(T.poop&&!T.sick&&ms-T.poopSince>2*HOUR){T.sick=T.stage==='baby'?1:2;T.sickSince=ms;T.poopSince=ms;T.log=Lx("Грязно — питомец заболел!","It's dirty, your pet got sick!")}
+  const needs=T.hunger===0||T.happy===0;
+  if(needs&&(!T.call||T.call.type==='whim'))T.call={type:'need',at:ms,counted:false};
+  if(T.call&&T.call.type==='need'&&!needs)T.call=null;
+  if((T.stage==='child'||T.stage==='adult')&&!T.call&&ms>=T.nextWhim){T.call={type:'whim',at:ms,counted:false};T.nextWhim=ms+(3+Math.random()*3)*HOUR}
+  if(T.call&&T.call.type==='whim'&&ms-T.call.at>CALL_WAIT)T.call=null;
+  if(T.hunger===0){T.zeroSince=T.zeroSince||ms;if(ms-T.zeroSince>12*HOUR){T.dead='neglect';T.log=Lx("Питомца забыли покормить, и он улетел на родную планету…","Your pet was not fed and flew back to its home planet…")}}else T.zeroSince=0;
+  if(T.sick&&ms-T.sickSince>12*HOUR){T.dead='sick';T.log=Lx("Питомца не вылечили, и он улетел на родную планету…","Your pet wasn't treated and flew back to its home planet…")}}
+/* Догоняем всё время, пока брелок был закрыт (не больше 10 дней) */
+function tamaTick(now=Date.now()){if(!player||!player.tama)return null;const T=player.tama;
+  if(now-T.t>10*DAY)T.t=now-10*DAY;
+  while(T.t+MIN<=now){T.t+=MIN;tamaStep(T,T.t);if(T.dead)break}
+  if(T.dead)T.t=now;
+  if(T.pend){player.stars+=T.pend;toast(`🥚 ${Lx("Брелок:","Keychain:")} +${T.pend} ★`);T.pend=0;renderMe();savePlayer(true)}
+  return T}
+const tamaCalling=()=>{const T=player&&player.tama;return !!(T&&!T.dead&&(T.call||(T.sick&&!T.sleep)))};
+
+/* ---- Пиксельные спрайты (# — точка горит) ---- */
+const SPR={
+ egg:["...####...","..#....#..",".#......#.",".#.#..#.#.","#........#","#..#..#..#","#........#","#.#..#...#","#........#",".#......#.","..#....#..","...####..."],
+ baby:["#......#","##....##","########","#.####.#","########","###..###",".######."],
+ child:["#........#","##......##","#.#....#.#","#..####..#","#.#....#.#","#........#","#...##...#",".#......#.",".########.","..#....#.."],
+ adult:["..#.......#...","..##.....##...","..#.#####.#...","..#.......#...",".#..#...#..#..",".#.........#..",".#....#....#..","..#..#.#..#...","...#######....","..#.......#.##",".#.........##.",".#.#.....#.#..","..##.....##..."],
+ ghost:["..######..",".#......#.","#..#..#..#","#........#","#...##...#","#........#","#........#","#.#.##.#.#","##.#..#.##"],
+ ufo:[".....####.....","....#....#....","..##########..",".#..#..#..#.#.","##############","..#...#...#...",".#...#.#...#.."],
+ poop:["..#..",".##..",".###.","#####"],skull:[".###.","#.#.#","#####",".#.#."],
+ meal:[".####.","######","#....#",".####."],snack:["#.###.#","##...##","#.###.#"],
+ heart:[".#.#.","#####",".###.","..#.."],hollow:["##.##","#...#",".#.#.","..#.."],z:["###",".#.","###"],
+ bulb:[".###.","#...#","#...#",".###.","..#.."],cross:["..#..","..#..","#####","..#..","..#.."],wave:[".#.#.#","#.#.#."],no:["#...#",".#.#.","..#..",".#.#.","#...#"],
+ left:["..#",".##","###",".##","..#"],right:["#..","##.","###","##.","#.."],q:["###","..#",".##","...",".#."],bang:["#","#","#",".","#"]};
+SPR.angel=["....#####.....",...SPR.adult];
+SPR.rascal=["......###.....",...SPR.adult.slice(0,4),".#.##...##.#..",...SPR.adult.slice(5)];
+SPR.old=[...SPR.adult.slice(0,3),"..#.##.##.#...",...SPR.adult.slice(4)];
+const DIG={0:["###","#.#","#.#","#.#","###"],1:[".#.","##.",".#.",".#.","###"],2:["###","..#","###","#..","###"],3:["###","..#","###","..#","###"],4:["#.#","#.#","###","..#","..#"],
+ 5:["###","#..","###","..#","###"],6:["###","#..","###","#.#","###"],7:["###","..#",".#.",".#.",".#."],8:["###","#.#","###","#.#","###"],9:["###","#.#","###","..#","###"],':':[".","#",".","#","."]};
+const flipS=s=>s.map(r=>[...r].reverse().join(''));
+
+/* ---- Интерфейс брелока ---- */
+const TICONS=[['food',Lx("Еда","Food")],['light',Lx("Свет","Light")],['game',Lx("Игра","Game")],['med',Lx("Лекарство","Medicine")],['bath',Lx("Уборка","Clean")],['status',Lx("Статус","Status")],['disc',Lx("Воспитание","Discipline")],['call',Lx("Внимание","Attention")]];
+const ICON_SVG={food:'<path d="M-5 -7 V7 M-7 -7 V-2 Q-5 0 -3 -2 V-7 M4 7 V-7 Q8 -4 4 0" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+ light:'<circle cy="-2" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M-2 4 H2 M-2 7 H2" stroke="currentColor" stroke-width="1.8"/>',
+ game:'<circle r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M-6 0 H6 M0 -6 Q-4 0 0 6" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+ med:'<path d="M-6 6 L4 -4 M2 -6 L6 -2 M-3 -1 L1 3 M5 -7 L7 -5" stroke="currentColor" stroke-width="2"/>',
+ bath:'<path d="M-7 1 H7 Q6 7 0 7 Q-6 7 -7 1 Z M-4 1 V-6 H-1" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+ status:'<path d="M-6 6 V2 M-2 6 V-1 M2 6 V-4 M6 6 V-7" stroke="currentColor" stroke-width="2.2"/>',
+ disc:'<path d="M-5 5 L3 -3 M1 -7 L7 -1 L3 3 L-3 -3 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+ call:'<circle cy="-4" r="3" fill="currentColor"/><path d="M-6 7 Q0 -3 6 7 Z" fill="currentColor"/>'};
+let TU={mode:'home',sel:-1,sub:0,page:0,anim:null,game:null,x:12,dir:1,frame:0,caption:''};
+function tamaScreen(){screen='tama';stopTimer();
+  if(!player.tama){player.tama=newTama();savePlayer(true)}tamaTick();TU={mode:'home',sel:-1,sub:0,page:0,anim:null,game:null,x:12,dir:1,frame:0,caption:''};
+  app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${Lx("🥚 Брелок-тамагочи","🥚 Tamagotchi keychain")}</h2><span class="chip"><b>★</b>${wallet()}</span></div>
+  <div class="tdev"><div class="tring"></div><div class="tshell"><div class="tscreen" id="tlcd"></div>
+    <div class="tbtns"><button class="tb" id="tA" aria-label="${Lx("Кнопка A: листать","Button A: browse")}">A</button><button class="tb" id="tB" aria-label="${Lx("Кнопка B: выбрать","Button B: select")}">B</button><button class="tb" id="tC" aria-label="${Lx("Кнопка C: назад","Button C: back")}">C</button></div>
+    <button class="treset" id="tR" aria-label="${Lx("Скрытая кнопка Reset","Hidden Reset button")}" title="Reset"></button></div></div>
+  <p class="note" id="tcap" style="text-align:center;min-height:2.6em;font-weight:700"></p>
+  <details class="note"><summary>${Lx("Как играть","How to play")}</summary><p>${Lx("A — листать значки, B — выбрать, C — отменить или показать часы. Питомец живёт в настоящем времени, даже когда брелок закрыт: вылупляется из яйца, растёт (малыш → ребёнок → взрослый → старичок). Корми его (сладкое поднимает настроение, но от него толстеют и болеют), играй в «Влево или вправо», убирай какашки, лечи, выключай свет ночью (с 21:00 до 8:00). Если питомец пищит без причины — это каприз, нажми «Воспитание». Когда загорается значок внимания, помоги быстро, иначе это ошибка ухода: от ошибок зависит, кем он вырастет. Если 12 часов не кормить или не лечить, он улетит на родную планету. Начать заново — скрытая кнопка Reset сбоку брелока. За каждый этап роста дают звёзды.","A browses the icons, B selects, C cancels or shows the clock. The pet lives in real time even when the keychain is closed: it hatches from an egg and grows (baby → child → adult → elder). Feed it (snacks raise mood but make it fat and sick), play Left or Right, clean up poop, give medicine, turn off the light at night (21:00 to 8:00). If it beeps for no reason, it's a whim: use Discipline. When the attention icon lights up, help quickly or it counts as a care mistake: mistakes decide what it grows into. If it isn't fed or treated for 12 hours, it flies back to its home planet. To start over, press the hidden Reset button on the side. Every growth stage gives stars.")}</p></details></section>`;
+  $('#back').onclick=menu;
+  const press=k=>{tone(k==='A'?1200:k==='B'?1500:900,0,.05,'square',.04);tamaPress(k)};
+  $('#tA').onclick=()=>press('A');$('#tB').onclick=()=>press('B');$('#tC').onclick=()=>press('C');$('#tR').onclick=tamaReset;
+  const key=e=>{if(screen!=='tama'){document.removeEventListener('keydown',key);return}const k={a:'A',b:'B',c:'C',1:'A',2:'B',3:'C','ф':'A','и':'B','с':'C'}[e.key.toLowerCase()];if(k&&!e.target.closest('input')){press(k)}};
+  document.addEventListener('keydown',key);
+  let lastBeep=0;tamaDraw();
+  const iv=setInterval(()=>{if(screen!=='tama'||!document.body.contains($('#tlcd'))){clearInterval(iv);return}TU.frame++;
+    const T=tamaTick();if(T&&T.log){TU.caption=T.log;T.log='';savePlayer(true)}
+    if(tamaCalling()&&Date.now()-lastBeep>20e3&&!TU.anim){lastBeep=Date.now();tone(1800,0,.08,'square',.05);tone(1800,.16,.08,'square',.05);tone(1800,.32,.08,'square',.05)}
+    if(TU.frame%2===0&&TU.mode==='home'&&!TU.anim){TU.x+=TU.dir*(Math.random()<.7?1:0);if(TU.x<4||TU.x>17||Math.random()<.12)TU.dir*=-1;TU.x=clamp(TU.x,4,17)}
+    tamaDraw()},400)}
+function tamaReset(){const T=player.tama;const m=$('#modal');
+  const go=()=>{player.tama=newTama();TU.mode='home';TU.sel=-1;TU.anim=null;TU.caption=Lx("Новое яйцо! Скоро кто-то вылупится.","A new egg! Someone will hatch soon.");savePlayer(true);tone(600,0,.1);tone(900,.12,.1);tone(1200,.24,.12);tamaDraw()};
+  if(!T||T.dead){go();return}
+  m.innerHTML=evOverlay(`<h3>${Lx("Начать заново?","Start over?")}</h3><p>${Lx("Питомец исчезнет, и появится новое яйцо.","Your pet will disappear and a new egg will appear.")}</p><div class="btns"><button class="btn" id="rsY" style="background:var(--bad)">${Lx("Да, Reset","Yes, reset")}</button><button class="btn alt" id="rsN">${Lx("Отмена","Cancel")}</button></div>`);
+  $('#rsN').onclick=()=>m.innerHTML='';$('#rsY').onclick=()=>{m.innerHTML='';go()};$('#rsN').focus()}
+function tamaAnim(type,ms,after){TU.anim={type,until:Date.now()+ms,after}}
+function tamaPress(k){const T=player.tama;if(!T)return;
+  if(TU.anim)return;
+  if(T.dead){TU.caption=Lx("Нажми скрытую кнопку Reset сбоку брелока, чтобы начать заново.","Press the hidden Reset button on the side of the keychain to start over.");tamaDraw();return}
+  const say=t=>{TU.caption=t};const save=()=>savePlayer(true);
+  if(TU.mode==='clock'){TU.mode='home';say('');tamaDraw();return}
+  if(TU.mode==='game'){tamaGame(k);return}
+  if(TU.mode==='status'){if(k==='A')TU.page=(TU.page+1)%4;else if(k==='C'){TU.mode='home'}tamaDraw();return}
+  if(TU.mode==='food'||TU.mode==='light'){if(k==='A')TU.sub=1-TU.sub;else if(k==='C')TU.mode='home';else{const sub=TU.sub;TU.mode='home';
+      if(TU.lastMenu==='food')tamaFeed(sub);else{T.light=sub===0;if(!T.light&&T.call&&T.call.type==='light')T.call=null;say(T.light?Lx("Свет включён.","Light on."):Lx("Свет выключен. Спокойной ночи!","Light off. Good night!"));save()}}
+    tamaDraw();return}
+  if(k==='A'){TU.sel=(TU.sel+1)%7;say(TICONS[TU.sel][1]);tamaDraw();return}
+  if(k==='C'){if(TU.sel>=0){TU.sel=-1;say('')}else{TU.mode='clock';say(Lx("Часы. Нажми любую кнопку, чтобы вернуться.","Clock. Press any button to go back."))}tamaDraw();return}
+  if(TU.sel<0){say(Lx("Нажми A, чтобы выбрать значок.","Press A to choose an icon."));tamaDraw();return}
+  const id=TICONS[TU.sel][0];
+  if(T.stage==='egg'){say(Lx("Это ещё яйцо. Подожди, пока кто-нибудь вылупится!","It's still an egg. Wait for someone to hatch!"));tamaDraw();return}
+  if(T.sleep&&id!=='light'&&id!=='status'){say(Lx("Тсс… питомец спит.","Shh… your pet is sleeping."));tamaDraw();return}
+  const whimRefuse=()=>T.disc<50&&Math.random()<.25;
+  if(id==='food'||id==='light'){TU.lastMenu=id;TU.mode=id;TU.sub=id==='light'?(T.light?0:1):0}
+  else if(id==='status'){TU.mode='status';TU.page=0}
+  else if(id==='game'){if(whimRefuse()){tamaAnim('no',1200);say(Lx("Капризничает и не хочет играть.","It's being naughty and won't play."))}else{TU.mode='game';TU.game={round:0,wins:0,phase:'ask'};say(Lx("Влево или вправо? A — влево, B — вправо.","Left or right? A for left, B for right."))}}
+  else if(id==='med'){if(T.sick){T.sick--;if(!T.sick)T.sickSince=0;tamaAnim('med',1500);say(T.sick?Lx("Ещё одну дозу!","One more dose!"):Lx("Выздоровел!","All better!"));save()}else{tamaAnim('no',1200);say(Lx("Он здоров и не хочет лекарство.","It's healthy and doesn't want medicine."))}}
+  else if(id==='bath'){if(T.poop){T.poop=0;T.poopSince=0;tamaAnim('wave',1400);say(Lx("Чистота!","All clean!"));save()}else say(Lx("Убирать нечего.","Nothing to clean."))}
+  else if(id==='disc'){if(T.call&&T.call.type==='whim'){T.disc=Math.min(100,T.disc+25);T.call=null;tamaAnim('scold',1200);say(`${Lx("Воспитан! Дисциплина","Disciplined! Discipline")} ${T.disc}%`)}else{T.happy=Math.max(0,T.happy-1);tamaAnim('no',1200);say(Lx("Ругать без причины нельзя — он расстроился.","Scolding for no reason upset it."))}save()}
+  tamaDraw()}
+function tamaFeed(snack){const T=player.tama,now=Date.now();const lim={baby:15,child:30,adult:40,old:40}[T.stage];
+  if(!snack){if(T.hunger>=4){tamaAnim('no',1200);TU.caption=Lx("Он сыт и не хочет есть.","It's full and doesn't want to eat.");return}
+    if(T.disc<50&&Math.random()<.25){tamaAnim('no',1200);TU.caption=Lx("Капризничает и не ест.","It's being naughty and won't eat.");return}
+    T.hunger++;T.weight++;tamaAnim('meal',1600);TU.caption=Lx("Ням-ням!","Yum-yum!")}
+  else{T.happy=Math.min(4,T.happy+1);T.weight+=2;T.snacks=[...T.snacks,now].filter(t=>now-t<HOUR);tamaAnim('snack',1600);TU.caption=Lx("Сладкое! Только не увлекайся.","A treat! Just don't overdo it.");
+    if(T.snacks.length>=3&&Math.random()<.6&&!T.sick){T.sick=T.stage==='baby'?1:2;T.sickSince=now;TU.caption=Lx("Слишком много сладкого — заболел!","Too many sweets, it got sick!")}}
+  if(T.weight>lim&&!T.sick&&Math.random()<.5){T.sick=T.stage==='baby'?1:2;T.sickSince=now;TU.caption=Lx("Переел и заболел! Нужен врач.","It overate and got sick! It needs medicine.")}
+  savePlayer(true)}
+function tamaGame(k){const T=player.tama,G=TU.game;
+  if(k==='C'){TU.mode='home';TU.game=null;TU.caption='';tamaDraw();return}
+  if(G.phase!=='ask'||(k!=='A'&&k!=='B'))return;
+  const guess=k==='A'?'L':'R',dir=Math.random()<.5?'L':'R';G.dir=dir;G.phase='show';G.ok=guess===dir;if(G.ok)G.wins++;G.round++;
+  tone(G.ok?1400:500,0,.12,'square',.05);TU.caption=`${G.ok?Lx("Угадал!","Correct!"):Lx("Мимо!","Missed!")} ${G.round}/5`;
+  setTimeout(()=>{if(!TU.game)return;if(G.round>=5){const win=G.wins>=3;if(win)T.happy=Math.min(4,T.happy+1);T.weight=Math.max(1,T.weight-1);
+      TU.caption=`${win?Lx("Победа!","Victory!"):Lx("Не повезло.","No luck.")} ${G.wins}/5${win?' '+Lx("· настроение +1","· mood +1"):''}`;TU.mode='home';TU.game=null;savePlayer(true);if(win)tamaAnim('happy',1500)}
+    else{G.phase='ask'}tamaDraw()},1100);tamaDraw()}
+
+function tamaDraw(){const el=$('#tlcd');if(!el)return;const T=player.tama;const W=32,H=16;const px=new Uint8Array(W*H);
+  const put=(s,x,y)=>s.forEach((r,j)=>[...r].forEach((c,i)=>{if(c==='#'){const X=x+i,Y=y+j;if(X>=0&&X<W&&Y>=0&&Y<H)px[Y*W+X]=1}}));
+  const num=(n,x,y)=>{String(n).split('').forEach(ch=>{put(DIG[ch],x,y);x+=ch===':'?2:4});};
+  const now=Date.now(),f=TU.frame;let dark=false;
+  const petSpr=()=>{if(T.stage==='egg')return SPR.egg;if(T.stage==='baby')return SPR.baby;if(T.stage==='child')return SPR.child;if(T.stage==='old')return SPR.old;return SPR[T.form||'normal']||SPR.adult};
+  if(T.dead){const s=T.dead==='old'?SPR.ufo:SPR.ghost;put(s,9+((f>>1)%3)-1,Math.max(-8,1-((f>>2)%10)))}
+  else if(TU.mode==='clock'){const d=new Date();const hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');num(hh,6,5);put(f%2?DIG[':']:[".",".",".",".","."],14,5);num(mm,17,5)}
+  else if(TU.mode==='status'){const p=TU.page;
+    if(p===0){num(Math.min(99,tamaAgeDays(T)),3,5);num(Math.min(99,T.weight),19,5);TU.caption=`${Lx("Возраст:","Age:")} ${tamaAgeDays(T)} ${Lx("дн.","d")} · ${Lx("Вес:","Weight:")} ${T.weight} ${Lx("г","g")} · ${TAMA_STAGE[T.stage]}${T.form?' · '+TAMA_FORMS[T.form]:''} (A →)`}
+    else if(p===1){for(let i=0;i<4;i++){const on=T.disc>=(i+1)*25;for(let y=0;y<6;y++)for(let x=0;x<5;x++)if(on||y===0||y===5||x===0||x===4)px[(5+y)*W+4+i*6+x]=1}TU.caption=`${Lx("Дисциплина","Discipline")} ${T.disc}% (A →)`}
+    else{const v=p===2?T.hunger:T.happy;for(let i=0;i<4;i++)put(i<v?SPR.heart:SPR.hollow,3+i*7,6);TU.caption=`${p===2?Lx("Сытость","Fullness"):Lx("Настроение","Happiness")} ${v}/4 (A →)`}}
+  else if(TU.mode==='food'||TU.mode==='light'){const opts=TU.mode==='food'?[SPR.meal,SPR.snack]:[SPR.bulb,SPR.z];
+    put(SPR.right,3,3+TU.sub*7);put(opts[0],9,3);put(opts[1],9,10);
+    TU.caption=TU.mode==='food'?`${TU.sub?Lx("Сладкое","Snack"):Lx("Еда","Meal")} — ${Lx("A листать, B дать, C назад","A browse, B give, C back")}`:`${TU.sub?Lx("Выключить свет","Light off"):Lx("Включить свет","Light on")} — ${Lx("B выбрать","B select")}`}
+  else if(TU.mode==='game'){const G=TU.game;const s=petSpr();
+    if(G.phase==='show'){put(G.dir==='L'?s:flipS(s),9,2);put(G.dir==='L'?SPR.left:SPR.right,G.dir==='L'?3:27,6)}else{put(s,9,2);put(SPR.q,26,4)}}
+  else{const A=TU.anim&&TU.anim.until>now?TU.anim:null;if(TU.anim&&!A)TU.anim=null;const s=petSpr();
+    if(T.stage==='egg'){put(SPR.egg,11+(f%4===0?1:f%4===2?-1:0),2)}
+    else if(T.sleep&&!T.light){dark=true}
+    else if(A){put(A.type==='no'?(f%2?s:flipS(s)):s,6,2);
+      if(A.type==='meal')put(f%2?SPR.meal:SPR.meal.slice(1),22,6);if(A.type==='snack')put(SPR.snack,22,7);if(A.type==='med')put(SPR.cross,23,5);if(A.type==='scold')put(SPR.bang,24,4);
+      if(A.type==='wave')put(SPR.wave,(f*3)%28,13);if(A.type==='happy'&&f%2)put(SPR.heart,23,2);if(A.type==='no')put(SPR.no,24,5)}
+    else{const x=T.stage==='adult'||T.stage==='old'?Math.min(TU.x,15):TU.x;put(TU.dir<0?flipS(s):s,x,T.stage==='baby'?7:T.stage==='child'?4:2);
+      if(T.stage==='old')for(let y=6;y<15;y++)px[y*W+Math.min(31,x+15)]=1;
+      if(T.sleep)put(SPR.z,26,1+(f%2));
+      if(T.sick)put(SPR.skull,26,1);
+      for(let i=0;i<T.poop;i++)put(SPR.poop,27-(i%2)*6,i<2?11:6)}}
+  if(!TU.caption&&!T.dead&&TU.mode==='home'){TU.caption=T.call?(T.call.type==='light'?Lx("Пищит: пора выключить свет!","Beeping: time to turn off the light!"):T.call.type==='whim'?Lx("Пищит… а всё в порядке? Похоже на каприз.","Beeping… but everything's fine? Looks like a whim."):Lx("Пищит! Посмотри статус: голоден или скучает.","Beeping! Check the status: hungry or bored.")):''}
+  const cell=7,lit='#1c2416',off='rgba(28,36,22,.07)';let rects='';
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const on=dark?!px[y*W+x]&&false:px[y*W+x];rects+=`<rect x="${x*cell+1}" y="${y*cell+1}" width="${cell-1}" height="${cell-1}" fill="${on?lit:off}"/>`}
+  const icon=(i,cx,cy)=>{const [id,n]=TICONS[i];const on=i===7?tamaCalling():TU.sel===i;return `<g transform="translate(${cx} ${cy})" style="color:${i===7&&on?'#c2181e':on?'#111':'rgba(28,36,22,.32)'}"><title>${n}</title>${on&&i!==7?'<rect x="-10" y="-10" width="20" height="20" rx="4" fill="rgba(28,36,22,.12)"/>':''}${ICON_SVG[id]}</g>`};
+  el.innerHTML=`<svg viewBox="0 0 226 166" role="img" aria-label="${Lx("Экран брелока","Keychain screen")}"><rect width="226" height="166" rx="10" fill="${dark?'#4a5a3a':'#b9c99a'}"/>
+   ${[0,1,2,3].map(i=>icon(i,30+i*55,14)).join('')}<g transform="translate(1 30)">${dark?'':rects}</g>${[4,5,6,7].map(i=>icon(i,30+(i-4)*55,152)).join('')}</svg>`;
+  const cap=$('#tcap');if(cap)cap.textContent=TU.caption||(T.dead?Lx("Нажми скрытую кнопку Reset сбоку брелока.","Press the hidden Reset button on the side."):T.stage==='egg'?Lx("Яйцо скоро треснет…","The egg will crack soon…"):'')}
 
 /* ===== Каталог игр ===== */
 const GROUPS=[
@@ -1293,7 +1679,7 @@ const bestText=(k,v)=>`${v} ${Lx("из 10","of 10")}`;
 
 let screen='';let timerId=null;
 function stopTimer(){if(timerId){clearInterval(timerId);timerId=null}}
-const backBtn=()=>`<button class="link" id="back">${Lx("← Все игры","← All games")}</button>`;
+const backBtn=()=>`<button class="link" id="back">${Lx("← Назад","← Back")}</button>`;
 const fmtLeft=ms=>{const s=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
   return h?`${h} ${Lx("ч","h")} ${m} ${Lx("мин","min")}`:m?`${m} ${Lx("мин","min")} ${String(sec).padStart(2,'0')} ${Lx("с","s")}`:`${sec} ${Lx("с","s")}`};
 const dayKey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1315,6 +1701,8 @@ function login(){screen='login';stopTimer();
 
 const anyGift=()=>Object.values(player.gifts).some(Boolean);
 function catLine(){const c=player.cat,w=wallet(),n=esc(c.name);
+  if(inHospital())return `🏥 ${n} ${Lx("в ветклинике. Вернётся через","is at the vet. Back in")} ${fmtLeft(c.hospital-Date.now())}.`;
+  if(c.call)return `⚠️ ${callText()}`;
   if(sleeping())return `${n} ${Lx("спит. Проснётся через","is asleep. Wakes up in")} ${fmtLeft(c.sleepUntil-Date.now())}.`;
   if(c.poops>0)return `${n} ${Lx("оставил","left")} ${c.poops===1?Lx("какашку","a poop"):`${c.poops} ${plural(c.poops,[Lx("какашку","a poop"),Lx("какашки","poops"),Lx("какашек","poops")])}`}${Lx(". Убери за ним!",". Clean up after it!")}`;
   if(c.food<25)return `${n} ${Lx("проголодался. Покорми его!","is hungry. Feed it!")}`;
@@ -1330,21 +1718,6 @@ const buffNote=()=>player.buff.xp2>0?`<p class="tag" style="margin:8px 0 0;color
 
 function evBanner(){const left=player.nextEv-Date.now();
   return left<=0?`<button class="btn small" id="evNow">${Lx("✨ Событие готово! Начать","✨ Event ready! Start")}</button>`:`<span class="tag" id="evLeft">${Lx("✨ Следующее событие через","✨ Next event in")} ${fmtLeft(left)}</span>`}
-function menu(){screen='menu';stopTimer();tick();
-  app.innerHTML=`<section class="home"><div class="pet" id="petHome">${catSVG(player.cat,mood())}</div>
-  <div class="txt"><div class="bubble">${catLine()}</div>${buffNote()}${xpBar()}${needBars()}
-  <div class="row" id="evBox">${evBanner()}</div>
-  <div class="row"><button class="btn small" id="goCat">${Lx("Уход","Care")}</button><button class="btn alt small" id="goRoom">${Lx("Комната","Room")}</button><button class="btn alt small" id="goChest">${Lx("Сундуки","Chests")}${anyGift()?' '+Lx("· подарки!","· gifts!"):''}</button></div></div></section>`+
-  GROUPS.map(([name,note,games])=>`<h2 class="section">${name}${note?`<small>${note}</small>`:''}</h2><div class="menu">${Object.entries(games).map(([k,g])=>`
-  <button class="tile${g.hard?' hard':''}" data-g="${k}">${g.hard?'<span class="x2">×2 ★</span>':''}<span class="ic" style="background:${g.color}">${g.ic}</span>
-  <span><h3>${g.title}</h3><p>${g.desc}</p>${player.best[k]!=null&&g.gen?`<small>${Lx("Лучший результат:","Best score:")} ${bestText(k,player.best[k])}</small>`:''}${k==='tourney'&&player.tDate===dayKey()?`<small>${Lx("Сегодня:","Today:")} ${player.tScore} ${Lx("примеров","examples")}</small>`:''}</span></button>`).join('')}</div>`).join('');
-  $('#goCat').onclick=()=>catScreen('care');$('#goRoom').onclick=()=>catScreen('room');$('#goChest').onclick=()=>catScreen('chest');$('#petHome').onclick=()=>catScreen('care');
-  app.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{const k=b.dataset.g;GAMES[k].levels?pickLevel(k):start(k)});
-  const bindEv=()=>{const b=$('#evNow');if(b)b.onclick=()=>startEvent(pick(Object.keys(EVENTS)))};bindEv();
-  const iv=setInterval(()=>{if(screen!=='menu'){clearInterval(iv);return}const left=player.nextEv-Date.now();const el=$('#evLeft');
-    if(left<=0&&el){$('#evBox').innerHTML=evBanner();bindEv()}else if(el)el.textContent=`${Lx("✨ Следующее событие через","✨ Next event in")} ${fmtLeft(left)}`},1000);
-  window.scrollTo({top:0})}
-
 function start(k){const e=GAMES[k].engine;
   if(e==='cat'){const why=canPlayWithCat();if(why){toast(why);return}return catGame(k)}
   e==='mem'?memory():e==='schulte'?schulte():e==='tourney'?tourneyScreen(level):quiz(k)}
@@ -1352,7 +1725,7 @@ function pickLevel(key){screen='pick';const g=GAMES[key];
   app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${g.title}</h2></div>
   <p class="sub" style="text-align:center;margin-top:14px">${g.desc}${Lx(". Выбери свой класс:",". Choose your grade:")}</p>
   <div class="classes">${[1,2,3,4].map(l=>`<button data-l="${l}" aria-pressed="${l===level}"><b>${l}</b><span>${Lx("класс","grade")}</span></button>`).join('')}</div></section>`;
-  $('#back').onclick=menu;
+  $('#back').onclick=hub;
   app.querySelectorAll('.classes button').forEach(b=>b.onclick=()=>{level=+b.dataset.l;LS.set('ut2_level',level);start(key)});
   app.querySelector(`.classes button[data-l="${level}"]`).focus({preventScroll:true})}
 
@@ -1364,7 +1737,7 @@ async function tourneyScreen(cls){screen='tourney';stopTimer();const today=dayKe
   <div class="btns" style="justify-content:flex-start">${played?`<p class="bubble">${Lx('Сегодня ты уже участвовал: '+player.tScore+' '+plural(player.tScore,[Lx("пример","example"),Lx("примера","examples"),Lx("примеров","examples")])+', '+player.tClass+' '+Lx("класс. Приходи завтра!","grade. Come back tomorrow!"),'You already played today: '+player.tScore+' '+(player.tScore===1?'example':'examples')+', grade '+player.tClass+'. Come back tomorrow!')}</p>`
     :`<button class="btn" id="tGo">${Lx('Участвовать: '+cls+' '+Lx("класс","grade"),'Join: grade '+cls)}</button>`}</div>
   <div class="board" id="tBoard"><p class="empty">${Lx("Загружаем таблицу…","Loading the table…")}</p></div></section>`;
-  $('#back').onclick=menu;
+  $('#back').onclick=hub;
   app.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>tourneyScreen(+b.dataset.l));
   const go=$('#tGo');if(go)go.onclick=()=>{level=cls;LS.set('ut2_level',level);quiz('blitz')};
   const tl=$('#tLeft');const upd=()=>{if(!document.body.contains(tl)){clearInterval(iv);return}tl.textContent=`${Lx("Новый турнир через","New tournament in")} ${fmtLeft(toMidnight())}`};const iv=setInterval(upd,1000);upd();
@@ -1396,14 +1769,14 @@ function stageHTML(){const c=player.cat,sl=sleeping();
     ${c.poops?`<div class="poops" role="group" aria-label="${Lx("Убрать какашки","Clean up poop")}">${Array.from({length:c.poops},(_,i)=>`<button data-poop="${i}" aria-label="${Lx("Убрать какашку","Clean up poop")}">💩</button>`).join('')}</div>`:''}
     <div class="bubble" id="say">${catLine()}</div>${needBars()}
     <div class="row" style="justify-content:center"><button class="btn alt small" id="pet" ${sl?'disabled':''}>${Lx("Погладить","Pet")}</button>
-    <button class="btn alt small" id="sleep" ${sl||c.energy>=90?'disabled':''}>${sl?Lx("Спит…","Asleep…"):Lx("Спать 4 ч","Sleep 4 h")}</button><button class="btn alt small" id="photo">${Lx("📷 Фото","📷 Photo")}</button></div>
+    <button class="btn alt small" id="sleep" ${sl||c.energy>=90&&!isNight()?'disabled':''}>${sl?Lx("Спит…","Asleep…"):isNight()?Lx("Спать до утра","Sleep till morning"):Lx("Спать 4 ч","Sleep 4 h")}</button><button class="btn alt small" id="scold2">${Lx("😾 Воспитать","😾 Discipline")}</button><button class="btn alt small" id="photo">${Lx("📷 Фото","📷 Photo")}</button></div>
     <div class="row"><input class="field" id="catname" maxlength="14" value="${esc(c.name)}" aria-label="${Lx("Имя котёнка","Kitten's name")}"><button class="btn alt small" id="rename">${Lx("Назвать","Rename")}</button></div></div>`}
 function bindStage(){const c=player.cat;
   const pet=()=>{if(sleeping())return;const el=$('#bigcat');el.classList.remove('purr');void el.offsetWidth;el.classList.add('purr');purr();
     if(c.joy<70)c.joy=clamp(c.joy+(hasTr('cuddly')?12:6)+Math.max(0,cstat('cha')-5),0,70);$('#say').textContent=pick([Lx("Мрррр…","Purrr…"),Lx("Мур-мур-мур!","Purr-purr-purr!"),Lx("Ещё! Ещё!","More! More!"),Lx("Мне так хорошо!","This feels so nice!")]);
     el.innerHTML=catSVG(c,'happy');const f=app.querySelectorAll('.stage .fill');if(f[1])f[1].style.width=Math.round(c.joy)+'%';savePlayer()};
   $('#bigcat').onclick=pet;$('#pet').onclick=pet;
-  $('#sleep').onclick=()=>{if(sleeping())return;c.sleepUntil=Date.now()+SLEEP_H*36e5;savePlayer(true);toast(`${esc(c.name)} ${Lx("уснул на","fell asleep for")} ${SLEEP_H} ${Lx("часа","hours")}`);catScreen()};
+  $('#sleep').onclick=()=>{if(putToSleep())catScreen()};$('#scold2').onclick=()=>{scold();catScreen()};
   $('#photo').onclick=catPhoto;
   app.querySelectorAll('[data-poop]').forEach(b=>b.onclick=()=>{c.poops=Math.max(0,c.poops-1);c.bag++;c.joy=clamp(c.joy+3,0,100);tone(400,0,.08);tone(600,.08,.1);savePlayer();catScreen()});
   $('#rename').onclick=()=>{const v=$('#catname').value.trim().replace(/\s+/g,' ');if(!v)return;c.name=v.slice(0,14);savePlayer(true);catScreen()}}
@@ -1413,7 +1786,7 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
   const tabs=`<div class="tabs big" role="group" aria-label="${Lx("Раздел","Section")}">${[['care',Lx("Уход и еда","Care and food")],['wear',Lx("Гардероб","Wardrobe")],['cats',Lx("Котята","Kittens")+(player.nest&&player.nest.until<=Date.now()?' '+Lx("· родился!","· born!"):'')],['merge',Lx("Слияние","Merge")],['room',Lx("Комната","Room")],['chest',Lx("Сундуки","Chests")+(anyGift()?' '+Lx("· подарки!","· gifts!"):'')]].map(([k,n])=>`<button data-t="${k}" aria-pressed="${catTab===k}">${n}</button>`).join('')}</div>`;
   let body='';
   if(catTab==='care'){const now=Date.now();
-    body=`<div class="catpage">${stageHTML()}<div>
+    body=`<div class="catpage">${inHospital()?hospitalHTML():stageHTML()}<div>${lifeHTML()}
     <h4 style="margin-top:0">${Lx("Еда в запасе","Food in stock")}</h4>${Object.keys(c.inv).length?`<div class="items">${FOODS.filter(f=>c.inv[f.id]).map(f=>`<button class="item r-${f.r}" data-eat="${f.id}" ${sleeping()?'aria-disabled="true"':''}><span style="font-size:42px">${f.icon}</span><span>${f.name} ×${c.inv[f.id]}</span><span class="rt r-${f.r}">${Lx("Дать","Feed")}</span></button>`).join('')}</div>`:'<p class="note" style="margin:0">'+Lx("Запас пуст. Купи еду в магазине ниже.","Nothing in stock. Buy food in the shop below.")+'</p>'}
     <h4>${Lx("Автокормушка","Auto feeder")}</h4><p class="note" style="margin:0">${Lx("Сухой корм без бонусов: +30 к сытости. Кормушка сама кормит котёнка, когда сытость ниже 40. Сейчас порций:","Dry food with no bonuses: +30 fullness. The feeder feeds your kitten by itself when fullness drops below 40. Portions now:")} <b>${c.feeder.n} ${Lx("из","of")} ${FEEDER_MAX}</b>${c.feeder.n<FEEDER_MAX?`${Lx(", следующая через",", next one in")} ${fmtLeft(c.feeder.next-now)}`:''}.</p>
     <h4>${Lx("Магазин еды","Food shop")}</h4><div class="items">${FOODS.map(f=>`<button class="item r-${f.r}" data-buy="${f.id}"><span style="font-size:42px">${f.icon}</span><span>${f.name}</span><span class="rt r-${f.r}">${f.grade}</span><span style="font-size:12px;color:var(--muted);font-weight:400">${effText(f)}</span><span class="price">★ ${f.price}</span></button>`).join('')}</div>
@@ -1422,7 +1795,9 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
     <h4>${Lx("Сон","Sleep")}</h4><p class="note" style="margin:0">${Lx("Котёнку нужно спать минимум","Your kitten needs to sleep at least")} ${SLEEP_H} ${Lx("часа в сутки. Если энергия кончится, он уснёт сам. Пока он спит или какая-то шкала пустая, играть с ним нельзя. Задания решать можно всегда.","hours a day. If its energy runs out, it falls asleep by itself. While it sleeps or any bar is empty, you can't play with it. You can always do the tasks.")}</p>
     </div></div>`}
   else if(catTab==='wear'){const owned=new Set(c.owned);
-    body=`<div class="catpage">${stageHTML()}<div><div class="tabs" role="group" aria-label="${Lx("Вещи","Items")}">${SLOTS.map(([s,n])=>`<button data-s="${s}" aria-pressed="${s===wearSlot}">${n}</button>`).join('')}</div>
+    const natStand=catGenes(c).stand===true;
+    body=`<div class="catpage">${stageHTML()}<div><div class="side" role="group" aria-label="${Lx("Поза котика","Kitten's pose")}" style="margin:0 0 10px">${natStand?`<span class="tag">${Lx("🧍 Эта порода всегда ходит как человек","🧍 This breed always walks like a human")}</span>`:[['sit',Lx("🐾 Сидит на четырёх лапках","🐾 Sits on four paws")],['stand',Lx("🧍 Ходит как человек","🧍 Walks like a human")]].map(([k,n])=>`<button class="btn small ${c.pose===k?'':'alt'}" data-pose="${k}" aria-pressed="${c.pose===k}">${n}</button>`).join('')}</div>
+    <div class="tabs" role="group" aria-label="${Lx("Вещи","Items")}">${SLOTS.map(([s,n])=>`<button data-s="${s}" aria-pressed="${s===wearSlot}">${n}</button>`).join('')}</div>
     ${wearSlot==='hand'?`<div class="side" role="group" aria-label="${Lx("Какая лапка","Which paw")}">${[['handL',Lx("🐾 Левая лапка","🐾 Left paw")],['handR',Lx("Правая лапка 🐾","Right paw 🐾")]].map(([k,n])=>`<button class="btn small ${handSide===k?'':'alt'}" data-hs="${k}" aria-pressed="${handSide===k}">${n}${c.wear[k]?' · '+esc(WEAR_BY_ID[c.wear[k]].name):''}</button>`).join('')}</div>`:''}
     <div class="items">${WEAR.filter(x=>x.slot===wearSlot).map(x=>owned.has(x.id)?`<button class="item r-${x.r}${(x.slot==='hand'?c.wear[handSide]===x.id:c.wear[x.slot]===x.id)?' on':''}" data-w="${x.id}">${cntBadge('clothes',x.id)}${wearPreview(x)}<span>${esc(x.name)}</span><span class="rt r-${x.r}">${RARITY[x.r].name}</span></button>`:lockedCard(x.r,wearPreview(x))).join('')}</div>
     <p class="note">${Lx("Нажми на вещь, чтобы надеть или снять. Серые вещи ждут в сундуках с одеждой. Собрано","Tap an item to put it on or take it off. Grey items are waiting in clothes chests. Collected")} ${c.owned.length} ${Lx("из","of")} ${WEAR.length}.</p></div></div>`}
@@ -1434,7 +1809,7 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
     else grid=FURN.filter(f=>f.slot===roomSlot).map(f=>owned.has(f.id)?`<button class="item r-${f.r}${R.place[f.slot]===f.id?' on':''}" data-p="${f.id}">${cntBadge('room',f.id)}${furnPreview(f)}<span>${esc(f.name)}</span><span class="rt r-${f.r}">${RARITY[f.r].name}</span></button>`:lockedCard(f.r,furnPreview(f))).join('');
     const furnCount=R.owned.filter(id=>FURN_BY_ID[id]).length;
     body=`<div class="roomview" style="margin-top:14px" id="roomv">${roomSVG(player,art)}</div>
-    <div class="row">${c.poops?`<button class="btn small" id="cleanAll">${Lx("Убрать какашки (","Clean up poop (")}${c.poops})</button>`:''}<button class="btn alt small" id="photo2">${Lx("📷 Фото комнаты","📷 Room photo")}</button></div>
+    <div class="row">${c.poops?`<button class="btn small" id="cleanAll">${Lx("Убрать какашки (","Clean up poop (")}${c.poops})</button>`:''}<button class="btn alt small" id="photo2">${Lx("📷 Фото комнаты","📷 Room photo")}</button><button class="btn alt small" id="toWall">${Lx("✏️ Рисовать на стене","✏️ Draw on the wall")}</button></div>
     <div class="tabs" style="margin-top:14px" role="group" aria-label="${Lx("Обустройство","Decor")}">${[['wp',Lx("Обои","Wallpaper")],['fl',Lx("Пол","Floor")],...RSLOTS].map(([s,n])=>`<button data-r="${s}" aria-pressed="${s===roomSlot}">${n}</button>`).join('')}</div>
     <div class="items">${grid}</div>
     <p class="note">${roomSlot==='wp'||roomSlot==='fl'?Lx("Обои и пол покупаются за звёзды сразу.","Wallpaper and floors are bought with stars right away."):`${Lx("Мебель выпадает из сундуков обустройства. Нажми на вещь, чтобы поставить или убрать. Собрано","Furniture comes from furniture chests. Tap an item to place or remove it. Collected")} ${furnCount} ${Lx("из","of")} ${FURN.length}.`}</p>`}
@@ -1444,14 +1819,17 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
       <button class="btn small" data-c="${k}:${t}:1" ${wallet()<T.cost?'disabled':''}>★ ${T.cost}</button>
       <button class="btn alt small" data-c="${k}:${t}:10" ${wallet()<ten?'disabled':''}>${Lx("×10 за ★","×10 for ★")} ${ten} <span class="tag" style="color:var(--ok)">−10%</span></button></div>`}).join('')}</div>`).join('')+
     `<p class="note">${Lx("У тебя ★","You have ★")} ${wallet()}${Lx(". Повторы складываются в стопки, а три одинаковые по редкости карты можно слить во вкладке «Слияние».",". Duplicates stack up, and three cards of the same rarity can be merged on the Merge tab.")}</p>`}
-  app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${catTab==='room'?Lx("Комната","Room"):Lx("Котёнок","Kitten")} ${esc(c.name)}</h2><span class="chip"><b>★</b>${wallet()}</span></div>${tabs}${body}</section>`;
+  const TITLE={care:Lx("🍽 Уход и еда","🍽 Care and food"),wear:Lx("👗 Гардероб","👗 Wardrobe"),cats:Lx("🐾 Котята","🐾 Kittens"),merge:Lx("🧪 Лаборатория","🧪 Laboratory"),room:Lx("🛠 Обустройство","🛠 Decorating"),chest:Lx("🎁 Сундуки","🎁 Chests")};
+  app.innerHTML=`<section class="sheet${catTab==='merge'?' lab':''}"><div class="top">${backBtn()}<h2>${TITLE[catTab]||''}</h2><span class="chip"><b>★</b>${wallet()}</span></div>${body}</section>`;
   $('#back').onclick=menu;
   app.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>catScreen(b.dataset.t));
-  if(catTab==='care'||catTab==='wear')bindStage();
+  if(catTab==='care'&&inHospital())bindHospital(()=>catScreen());else if(catTab==='care'||catTab==='wear')bindStage();
+  if(catTab==='care')bindLife(()=>catScreen());
   if(catTab==='cats')bindKennel();
   if(catTab==='merge')bindMerge();
   app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{wearSlot=b.dataset.s;catScreen()});
   app.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{roomSlot=b.dataset.r;catScreen()});
+  app.querySelectorAll('[data-pose]').forEach(b=>b.onclick=()=>{c.pose=b.dataset.pose;tone(660,0,.08,'triangle');savePlayer(true);catScreen()});
   app.querySelectorAll('[data-hs]').forEach(b=>b.onclick=()=>{handSide=b.dataset.hs;catScreen()});
   app.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const x=WEAR_BY_ID[b.dataset.w];const k=x.slot==='hand'?handSide:x.slot;c.wear={...c.wear,[k]:c.wear[k]===x.id?null:x.id};if(!c.wear[k])delete c.wear[k];
     c.joy=clamp(c.joy+2,0,100);tone(740,0,.12,'triangle');savePlayer();catScreen()});
@@ -1462,21 +1840,21 @@ async function catScreen(tab){screen='cat';stopTimer();tick();if(tab)catTab=tab;
   app.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const f=FOOD_BY_ID[b.dataset.buy];if(wallet()<f.price){toast(`${Lx("Нужно ещё ★","You need ★")} ${f.price-wallet()}`);return}
     player.spent+=f.price;c.inv={...c.inv,[f.id]:(c.inv[f.id]||0)+1};tone(660,0,.1);savePlayer(true);renderMe();toast(`${f.icon} ${f.name} ${Lx("в запасе","added to stock")}`);catScreen()});
   app.querySelectorAll('[data-eat]').forEach(b=>b.onclick=()=>{if(sleeping()){toast(Lx("Котёнок спит","Your kitten is asleep"));return}const f=FOOD_BY_ID[b.dataset.eat];if(!c.inv[f.id])return;
-    c.inv={...c.inv,[f.id]:c.inv[f.id]-1};if(!c.inv[f.id])delete c.inv[f.id];applyEffects(f.eff,true);if(f.xp2)player.buff={xp2:(player.buff.xp2||0)+f.xp2};
+    if(!eatFood(f)){catScreen();return}c.inv={...c.inv,[f.id]:c.inv[f.id]-1};if(!c.inv[f.id])delete c.inv[f.id];if(f.xp2)player.buff={xp2:(player.buff.xp2||0)+f.xp2};
     tone(520,0,.1);tone(620,.1,.12);savePlayer(true);catScreen();const s=$('#say');if(s)s.textContent=pick([Lx("Ням-ням! Спасибо!","Yum-yum! Thank you!"),Lx("Вкуснятина!","Yummy!"),Lx("Мяу, я сытый!","Meow, I'm full!")])});
   const sw=$('#swap');if(sw)sw.onclick=()=>{if(c.bag<10)return;c.bag-=10;player.stars+=1;fanfare();savePlayer(true);renderMe();toast(Lx("+1 ★ за уборку","+1 ★ for cleaning"));catScreen()};
   const ca=$('#cleanAll');if(ca)ca.onclick=()=>{c.bag+=c.poops;c.joy=clamp(c.joy+3*c.poops,0,100);c.poops=0;tone(500,0,.1);savePlayer();catScreen()};
-  const p2=$('#photo2');if(p2)p2.onclick=catPhoto;
+  const p2=$('#photo2');if(p2)p2.onclick=catPhoto;const tw=$('#toWall');if(tw)tw.onclick=()=>paintScreen('wall');
   app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const [s,t,n]=b.dataset.c.split(':');openChest(s,t,+n)})}
 
 /* ===== Фото котёнка ===== */
 const svgImage=svg=>new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)});
 async function catPhoto(){const m=$('#modal');m.innerHTML=evOverlay('<h3>'+Lx("Делаем фото…","Taking a photo…")+'</h3>');
-  const art=await loadArt();const im=await svgImage(roomSVG(player,art));const cv=document.createElement('canvas');cv.width=800;cv.height=660;const x=cv.getContext('2d');
-  x.fillStyle='#fffdf6';x.fillRect(0,0,800,660);if(im)x.drawImage(im,20,20,760,532);x.strokeStyle='#8b5a2b';x.lineWidth=6;x.strokeRect(20,20,760,532);
-  const L=lvlInfo(player.xp);x.fillStyle='#1f3a8a';x.font='bold 40px Neucha, cursive, sans-serif';x.textBaseline='middle';x.fillText(`${player.cat.name}`,30,600);
-  x.font='22px Nunito, sans-serif';x.fillStyle='#5a6478';x.fillText(`${player.nick} ${Lx("· уровень","· level")} ${L.l} · ${L.title} · ${new Date().toLocaleDateString('ru-RU')}`,30,638);
-  x.textAlign='right';x.font='bold 22px Nunito, sans-serif';x.fillStyle='#e0525a';x.fillText(Lx("Умная тетрадка","Smart Notebook"),780,600);
+  const art=await loadArt();const im=await svgImage(roomSVG(player,art));const cv=document.createElement('canvas');cv.width=800;cv.height=436;const x=cv.getContext('2d');
+  x.fillStyle='#fffdf6';x.fillRect(0,0,800,436);if(im)x.drawImage(im,20,20,760,290);x.strokeStyle='#8b5a2b';x.lineWidth=6;x.strokeRect(20,20,760,290);
+  const L=lvlInfo(player.xp);x.fillStyle='#1f3a8a';x.font='bold 40px Neucha, cursive, sans-serif';x.textBaseline='middle';x.fillText(`${player.cat.name}`,30,350);
+  x.font='22px Nunito, sans-serif';x.fillStyle='#5a6478';x.fillText(`${player.nick} ${Lx("· уровень","· level")} ${L.l} · ${L.title} · ${new Date().toLocaleDateString('ru-RU')}`,30,390);
+  x.textAlign='right';x.font='bold 22px Nunito, sans-serif';x.fillStyle='#e0525a';x.fillText(Lx("Умная тетрадка","Smart Notebook"),780,350);
   let url='';try{url=cv.toDataURL('image/png')}catch(e){}
   if(!url){m.innerHTML=evOverlay('<h3>'+Lx("Не получилось","That didn't work")+'</h3><p>'+Lx("Этот браузер не дал сделать фото.","This browser didn't allow taking a photo.")+'</p><div class="btns"><button class="btn" id="phClose">'+Lx("Закрыть","Close")+'</button></div>');$('#phClose').onclick=()=>m.innerHTML='';return}
   const file=`kotenok-${player.cat.name}.png`.replace(/[^\wа-яё.-]/gi,'_');
@@ -1544,8 +1922,159 @@ function resultScreen(big,st,msg,again,info,extra=''){const w=wallet();
   <div class="home" style="margin:10px auto;max-width:520px;justify-content:center"><div class="pet" style="width:90px">${catSVG(player.cat,mood()==='sleep'?'sleep':'happy')}</div>
   <div class="txt" style="text-align:left"><div class="bubble">${w>=5?`${Lx("У тебя ★","You have ★")} ${w}${Lx(". Хватает на сундук!",". Enough for a chest!")}`:`${Lx("Ещё","")} ${5-w} ${Lx("★ до первого сундука","★ more for your first chest")}`}</div>${xpBar()}</div></div>
   <div class="btns">${again?'<button class="btn" id="again">'+Lx("Ещё раз","Play again")+'</button>':''}<button class="btn alt" id="toMenu">${Lx("Все игры","All games")}</button><button class="btn alt" id="toChest">${Lx("Сундуки","Chests")}</button><button class="btn alt" id="toBoard">${Lx("Лидеры","Leaders")}</button></div></section>`;
-  const ag=$('#again');if(ag)ag.onclick=again;$('#toMenu').onclick=menu;$('#toChest').onclick=()=>catScreen('chest');$('#toBoard').onclick=leaders;
+  const ag=$('#again');if(ag)ag.onclick=again;$('#toMenu').onclick=hub;$('#toChest').onclick=()=>catScreen('chest');$('#toBoard').onclick=leaders;
   if(info.up){fanfare();toast(`${Lx("Уровень","Level")} ${info.level}! +${info.bonus} ★`)}}
+
+/* ===== Главное меню — интерактивная комната котёнка ===== */
+const RW=760,RH=290,OX=170;
+const FRAMES=[{x:440,y:34,w:80,h:62},{x:588,y:44,w:74,h:58},{x:98,y:8,w:64,h:46}];
+const pill=(x,y,t)=>{const w=t.length*6.4+14;return `<g class="pill" aria-hidden="true"><rect x="${x-w/2}" y="${y-10}" width="${w}" height="18" rx="9" fill="rgba(31,41,64,.82)"/><text x="${x}" y="${y+3}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="11.5" font-weight="800" fill="#fff">${t}</text></g>`};
+const badge=(x,y)=>`<g class="bdg"><circle cx="${x}" cy="${y}" r="9" fill="#e5243b" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+4.5}" text-anchor="middle" font-family="Nunito,sans-serif" font-size="13" font-weight="900" fill="#fff">!</text></g>`;
+function roomSVG(pl,art,o={}){const R=pl.room,c=pl.cat;const id=uid('r'),fid=uid('f');art=art||{wall:null,pics:[null,null,null]};
+  const W=WALL_BY_ID[R.wp]||WALLS[0],FL=FLOOR_BY_ID[R.fl]||FLOORS[0];const H=o.hot;
+  const hot=(go,label,inner)=>H?`<g class="hot" data-go="${go}" tabindex="0" role="button" aria-label="${label}"><title>${label}</title>${inner}</g>`:inner;
+  const pw=W.pat?W.pat(id+'w'):'',pf=FL.pat(id+'f');const at=s=>{const f=FURN_BY_ID[R.place[s]];return f&&f.slot===s?f.svg.replace(/FID/g,fid):''};
+  const win=FURN_BY_ID[R.place.window];const evReady=pl.nextEv<=Date.now();
+  const sc=pl===player?({baby:.72,teen:.86,adult:1})[lifeStage(c)]:1,cw=100*sc,chh=124*sc;
+  const cat=catSVG(c,mood()).replace('<svg ',`<svg x="${200-cw/2}" y="${272-chh}" width="${cw}" height="${chh}" `);
+  const hosp=pl===player&&inHospital(),callNow=pl===player&&calling(),dark=pl===player&&sleeping()&&isNight();
+  const nestReady=pl.nest&&pl.nest.until<=Date.now();const tamaCall=pl===player&&typeof tamaCalling==='function'&&tamaCalling();const gift=pl===player&&anyGift();
+  const L=s=>esc(s);
+  const door=(x,sign,col,extra)=>`<rect x="${x-4}" y="58" width="76" height="136" rx="4" fill="#8b5a2b"/><rect x="${x}" y="62" width="68" height="130" rx="3" fill="${col}"/>
+    <rect x="${x+8}" y="96" width="52" height="38" rx="3" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="3"/><rect x="${x+8}" y="142" width="52" height="40" rx="3" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="3"/>
+    <circle cx="${x+56}" cy="138" r="4.5" fill="#ffd166" stroke="#a57c00" stroke-width="1.5"/>${extra}
+    <rect x="${x+4}" y="68" width="60" height="20" rx="4" fill="#fffdf6" stroke="#5c3a17" stroke-width="2"/><text x="${x+34}" y="82.5" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="${sign.length>9?7.6:11}" fill="#3a2410">${sign}</text>`;
+  return `<svg viewBox="0 0 ${RW} ${RH}" xmlns="http://www.w3.org/2000/svg" role="${H?'group':'img'}" aria-label="${Lx("Комната котёнка","Kitten's room")}">
+  <defs>${pw}${pf}<filter id="${fid}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>
+  <rect width="${RW}" height="190" fill="${W.bg}"/>${pw?`<rect width="${RW}" height="190" fill="url(#${id}w)"/>`:''}
+  <rect y="190" width="${RW}" height="${RH-190}" fill="${FL.bg}"/><rect y="190" width="${RW}" height="${RH-190}" fill="url(#${id}f)"/>
+  <rect y="184" width="${RW}" height="8" fill="#000" opacity=".15"/>
+  ${art.wall&&!o.noWall?`<image href="${art.wall}" x="0" y="0" width="${RW}" height="190"/>`:''}
+  ${FRAMES.map((F,i)=>art.pics[i]?hot('pic'+i,Lx("Картина: нарисовать заново","Picture: draw again"),`<rect x="${F.x-4}" y="${F.y-4}" width="${F.w+8}" height="${F.h+8}" fill="#fff" stroke="#8b5a2b" stroke-width="4"/><image href="${art.pics[i]}" x="${F.x}" y="${F.y}" width="${F.w}" height="${F.h}" preserveAspectRatio="xMidYMid slice"/>`)
+    :H?hot('pic'+i,Lx("Пустая рамка: нарисовать картину","Empty frame: draw a picture"),`<rect x="${F.x}" y="${F.y}" width="${F.w}" height="${F.h}" fill="rgba(255,255,255,.35)" stroke="#8b5a2b" stroke-width="2.5" stroke-dasharray="6 4"/><text x="${F.x+F.w/2}" y="${F.y+F.h/2+8}" text-anchor="middle" font-size="24" font-weight="900" fill="#8b5a2b">+</text>`):'').join('')}
+  ${hot('games',Lx("Дверь в игры с котёнком","Door to kitten games"),door(14,Lx("ИГРЫ","GAMES"),'#e9a15a',`<text x="48" y="128" text-anchor="middle" font-size="22">⚽</text>`))}
+  ${hot('wardrobe',Lx("Шкаф: гардероб котёнка","Wardrobe: kitten's clothes"),`<rect x="92" y="60" width="76" height="148" rx="4" fill="#b5835a" stroke="#6b4423" stroke-width="3"/><rect x="88" y="56" width="84" height="10" rx="3" fill="#8b5a2b"/>
+    <path d="M130 66 V204" stroke="#6b4423" stroke-width="3"/><circle cx="124" cy="136" r="3.5" fill="#ffd166"/><circle cx="136" cy="136" r="3.5" fill="#ffd166"/>
+    <rect x="98" y="76" width="26" height="40" rx="3" fill="none" stroke="rgba(0,0,0,.15)" stroke-width="2"/><rect x="136" y="76" width="26" height="40" rx="3" fill="none" stroke="rgba(0,0,0,.15)" stroke-width="2"/>
+    <path d="M109 92 Q111 86 113 92 L120 98 H102 Z" fill="none" stroke="#6b4423" stroke-width="2"/><rect x="96" y="208" width="10" height="6" fill="#6b4423"/><rect x="154" y="208" width="10" height="6" fill="#6b4423"/>`)}
+  ${hot('lab',Lx("Дверь в лабораторию: слияние карт","Door to the lab: card merging"),door(684,Lx("ЛАБОРАТОРИЯ","LABORATORY"),'#8fa3bf',`<circle cx="718" cy="118" r="13" fill="#39ff14" opacity=".35" filter="url(#${fid})"/><circle cx="718" cy="118" r="11" fill="#c8ffd0" stroke="#3d4654" stroke-width="3"/><path d="M714 110 V114 L709 124 H727 L722 114 V110 Z" fill="#39ff14" stroke="#1d6b2a" stroke-width="1.5"/>`))}
+  <g transform="translate(${OX} 0)">
+   <rect x="146" y="26" width="108" height="98" fill="#fff" stroke="#8b5a2b" stroke-width="4"/>
+   ${win&&win.view?at('window'):`<rect x="150" y="30" width="100" height="90" fill="#9fd8ff"/><circle cx="224" cy="54" r="12" fill="#ffd166"/><ellipse cx="176" cy="96" rx="18" ry="7" fill="#fff"/>`}
+   <path d="M200 30 V120 M150 75 H250" stroke="#8b5a2b" stroke-width="4"/>${win&&!win.view?at('window'):''}
+   ${H?hot('window',evReady?Lx("Окно: началось событие!","Window: an event has started!"):Lx("Окно: когда будет событие","Window: when the next event is"),`<rect x="146" y="26" width="108" height="98" fill="transparent"/>${evReady?`<text x="200" y="84" text-anchor="middle" font-size="34">✨</text>`+badge(250,30):''}`):''}
+   ${at('wall')}${at('lamp')}${at('rug')}${at('tower')}
+   ${hot('bed',Lx("Лежанка: уложить спать","Bed: put to sleep"),at('bed')||`<rect x="56" y="234" width="88" height="28" rx="14" fill="#7fc8f8" stroke="#3a7bd5" stroke-width="3"/>`)}
+   ${at('plant')}
+   ${hot('bowl',Lx("Миска: еда и уход","Bowl: food and care"),at('bowl')||`<path d="M134 256 L170 256 L166 268 L138 268 Z" fill="#e63946" stroke="#9d1b28" stroke-width="2"/><ellipse cx="152" cy="256" rx="18" ry="4" fill="#c97b3a"/>`)}
+   ${hosp?hot('bowl',Lx("Котёнок в ветклинике","Your kitten is at the vet"),`<rect x="150" y="196" width="100" height="56" rx="8" fill="#fff" stroke="#e5243b" stroke-width="3"/><text x="200" y="222" text-anchor="middle" font-size="22">🏥</text><text x="200" y="242" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" font-weight="800" fill="#e5243b">${Lx("В ветклинике","At the vet")}</text>`)
+     :hot('cat',Lx("Погладить котёнка","Pet the kitten"),`<g class="roomcat${pl===player&&(c.pose==='stand'||catGenes(c).stand===true)&&!sleeping()&&!reduced?' walk':''}">${cat}</g>`)+(callNow?badge(200+cw/2-6,272-chh+6):'')}
+   ${[[92,268],[262,272],[118,236],[300,276],[60,262]].slice(0,c.poops||0).map(([x,y])=>hot('poop',Lx("Убрать какашку","Clean up the poop"),`<text x="${x}" y="${y}" font-size="20" text-anchor="middle">💩</text>`)).join('')}
+  </g>
+  ${hot('chest',Lx("Сундуки","Chests"),`<rect x="18" y="238" width="62" height="38" rx="4" fill="#a0692f" stroke="#5c3a17" stroke-width="3"/><path d="M18 248 Q18 222 49 222 Q80 222 80 248 Z" fill="#c4873f" stroke="#5c3a17" stroke-width="3"/><rect x="18" y="244" width="62" height="7" fill="#5c3a17"/><rect x="44" y="242" width="10" height="13" rx="2" fill="#ffd166" stroke="#5c3a17" stroke-width="2"/>${gift?badge(78,226):''}`)}
+  ${hot('decor',Lx("Ящик с инструментами: обустроить комнату","Toolbox: decorate the room"),`<rect x="174" y="262" width="44" height="24" rx="3" fill="#e63946" stroke="#9d1b28" stroke-width="2.5"/><path d="M186 262 V255 H206 V262" fill="none" stroke="#555" stroke-width="3"/><rect x="174" y="270" width="44" height="3" fill="#9d1b28"/><path d="M222 284 L240 258" stroke="#8b5a2b" stroke-width="4" stroke-linecap="round"/><rect x="234" y="250" width="14" height="9" rx="2" fill="#9aa6b8" transform="rotate(-36 241 254)"/>`)}
+  <rect x="580" y="198" width="96" height="9" rx="2" fill="#a0692f" stroke="#5c3a17" stroke-width="2"/><rect x="586" y="207" width="7" height="58" fill="#8b5a2b"/><rect x="663" y="207" width="7" height="58" fill="#8b5a2b"/><rect x="606" y="207" width="44" height="16" rx="2" fill="#b5835a" stroke="#5c3a17" stroke-width="1.5"/>
+  ${hot('tasks',Lx("Стол с учебниками: задания","Desk with textbooks: tasks"),`<rect x="584" y="188" width="34" height="10" rx="2" fill="#3a7bd5" stroke="#1f4f99" stroke-width="1.5"/><rect x="586" y="178" width="30" height="10" rx="2" fill="#e63946" stroke="#9d1b28" stroke-width="1.5"/><rect x="583" y="168" width="32" height="10" rx="2" fill="#2e9e5b" stroke="#1d6b3a" stroke-width="1.5"/><text x="599" y="176.5" text-anchor="middle" font-family="Nunito,sans-serif" font-size="7" font-weight="900" fill="#fff">2+2</text>`)}
+  ${hot('crayons',Lx("Мелки: рисовать на стене","Crayons: draw on the wall"),`<path d="M621 198 L623 182 H635 L637 198 Z" fill="#7fc8f8" stroke="#2c6e95" stroke-width="1.5"/>${['#e63946','#ffd166','#2e9e5b','#7a4fd6'].map((cl,i)=>`<rect x="${624+i*2.6}" y="${170-i%2*4}" width="2.4" height="14" fill="${cl}"/>`).join('')}`)}
+  ${hot('tama',Lx("Брелок-тамагочи","Tamagotchi keychain"),`<ellipse cx="648" cy="188" rx="9" ry="11" fill="#ff8fc1" stroke="#c2185b" stroke-width="1.5"/><rect x="643" y="182" width="10" height="8" rx="1" fill="#b9c99a"/><circle cx="648" cy="175" r="2.5" fill="none" stroke="#999" stroke-width="1.5"/>${tamaCall?badge(658,172):''}`)}
+  ${hot('leaders',Lx("Кубок: таблица лидеров","Trophy: leaderboard"),`<path d="M660 172 H674 L672 184 Q667 188 662 184 Z" fill="#ffd166" stroke="#a57c00" stroke-width="1.5"/><rect x="665" y="187" width="4" height="6" fill="#a57c00"/><rect x="661" y="193" width="12" height="5" rx="1" fill="#a57c00"/>`)}
+  ${hot('kittens',Lx("Корзинка: все котята и гнёздышко","Basket: all kittens and the nest"),`<ellipse cx="628" cy="276" rx="40" ry="11" fill="#b5835a" stroke="#7a5233" stroke-width="2.5"/><ellipse cx="628" cy="270" rx="33" ry="7" fill="#ff8fab"/><ellipse cx="616" cy="266" rx="11" ry="7" fill="#f4a259"/><ellipse cx="638" cy="266" rx="11" ry="7" fill="#a7adb8"/><path d="M609 262 L611 256 L615 261 M633 262 L635 256 L639 261" fill="#f4a259" stroke="#6b3d1f" stroke-width="1"/>${nestReady?badge(664,258):''}`)}
+  ${dark?`<rect width="${RW}" height="${RH}" fill="#0b1030" opacity=".5" pointer-events="none"/><text x="${OX+200}" y="150" text-anchor="middle" font-size="22" pointer-events="none">🌙</text>`:''}
+  ${hot('arena',Lx("Вход на Кошачью арену","Entrance to the Cat Arena"),`<path d="M27 4 H71 V22 Q71 34 49 39 Q27 34 27 22 Z" fill="#7a4fd6" stroke="#3b2a6b" stroke-width="3"/><path d="M38 10 L60 30 M60 10 L38 30" stroke="#ffd166" stroke-width="4.5" stroke-linecap="round"/><circle cx="49" cy="20" r="5" fill="#ff8fc1" stroke="#3b2a6b" stroke-width="2"/>`)}
+  ${H?pill(49,48,Lx("Арена","Arena"))+pill(48,206,Lx("Игры","Games"))+pill(130,222,Lx("Гардероб","Wardrobe"))+pill(718,206,Lx("Слияние","Merge"))+pill(616,160,Lx("Задания","Tasks"))+pill(49,282,Lx("Сундуки","Chests"))+pill(628,252,Lx("Котята","Kittens")):''}
+  </svg>`}
+
+/* ---- Главный экран ---- */
+let homeSay='';
+function menu(){screen='menu';stopTimer();tick();if(player.tama)tamaTick();
+  app.innerHTML=`<section class="homeroom"><div class="roomscroll" id="roomHome"><p class="empty">…</p></div>
+  <div class="hud"><div><div class="bubble" id="say">${homeSay||catLine()}</div>${buffNote()}<div class="row" id="evBox">${evBanner()}</div>
+  <div class="row"><span class="tag">${STAGES[lifeStage(player.cat)]}${player.cat.form?' · '+FORMS[player.cat.form][2]+' '+FORMS[player.cat.form][0]:''} · ${player.cat.weight.toFixed(1)} ${Lx("кг","kg")}${player.cat.sick?' · 🤒':''}</span>
+   <button class="btn alt small" id="hScold">${Lx("😾 Воспитать","😾 Discipline")}</button>${player.cat.sick?`<button class="btn small" id="hMed">${Lx("💉 Лечить","💉 Treat")}</button>`:''}</div></div><div>${xpBar()}${needBars()}</div></div>
+  <p class="note" style="text-align:center;margin:6px 0 0">${Lx("Нажимай на предметы в комнате: стол — задания, дверь «Игры», шкаф — гардероб, лаборатория — слияние, корзинка — котята, мелки — рисовать на стене, рамки — картины.","Tap things in the room: the desk for tasks, the Games door, the wardrobe, the lab for merging, the basket for kittens, crayons to draw on the wall, frames for pictures.")}</p></section>`;
+  homeSay='';
+  loadArt().then(art=>{if(screen!=='menu')return;const box=$('#roomHome');if(!box)return;box.innerHTML=roomSVG(player,art,{hot:true});bindRoom(box)});
+  const bindEv=()=>{const b=$('#evNow');if(b)b.onclick=()=>startEvent(pick(Object.keys(EVENTS)))};bindEv();
+  $('#hScold').onclick=()=>{scold();menu()};const hm=$('#hMed');if(hm)hm.onclick=()=>catScreen('care');
+  let beep=0;const iv=setInterval(()=>{if(screen!=='menu'){clearInterval(iv);return}
+    if(++beep%30===1&&calling()){tone(1800,0,.07,'square',.04);tone(1800,.15,.07,'square',.04);tone(1800,.3,.07,'square',.04)}const left=player.nextEv-Date.now();const el=$('#evLeft');
+    if(left<=0&&el){$('#evBox').innerHTML=evBanner();bindEv()}else if(el)el.textContent=`${Lx("✨ Следующее событие через","✨ Next event in")} ${fmtLeft(left)}`},1000);
+  window.scrollTo({top:0})}
+function bindRoom(box){const c=player.cat;
+  const act=go=>{
+    if(go==='tasks')return tasksScreen();if(go==='games')return gamesScreen();if(go==='wardrobe')return catScreen('wear');if(go==='lab')return catScreen('merge');
+    if(go==='kittens')return catScreen('cats');if(go==='chest')return catScreen('chest');if(go==='bowl')return catScreen('care');if(go==='decor')return catScreen('room');
+    if(go==='leaders')return leaders();if(go==='tama')return tamaScreen();if(go==='crayons')return paintScreen('wall');if(/^pic\d$/.test(go))return paintScreen(+go[3]);
+    if(go==='window'){if(player.nextEv<=Date.now())return startEvent(pick(Object.keys(EVENTS)));toast(`${Lx("✨ Следующее событие через","✨ Next event in")} ${fmtLeft(player.nextEv-Date.now())}`);return}
+    if(go==='arena')return arenaScreen();
+    if(go==='bed'){if(sleeping()){toast(Lx("Котёнок уже спит","Your kitten is already asleep"));return}if(inHospital())return catScreen('care');if(putToSleep())menu();return}
+    if(go==='poop'){c.poops=Math.max(0,c.poops-1);c.bag++;c.joy=clamp(c.joy+3,0,100);tone(400,0,.08);tone(600,.08,.1);savePlayer();return menu()}
+    if(go==='cat'){if(sleeping()){homeSay=Lx("Хрр… мрр… (котёнок спит)","Zzz… purr… (your kitten is asleep)");return menu()}
+      purr();if(c.joy<70)c.joy=clamp(c.joy+(hasTr('cuddly')?12:6)+Math.max(0,cstat('cha')-5),0,70);savePlayer();
+      const g=box.querySelector('.roomcat');if(g){g.classList.remove('purr');void g.getBoundingClientRect();g.classList.add('purr');g.innerHTML=catSVG(c,'happy').replace('<svg ','<svg x="150" y="148" width="100" height="124" ')}
+      const s=$('#say');if(s)s.textContent=pick([Lx("Мрррр…","Purrr…"),Lx("Мур-мур-мур!","Purr-purr-purr!"),Lx("Ещё! Ещё!","More! More!"),Lx("Мне так хорошо!","This feels so nice!")])}};
+  box.querySelectorAll('.hot').forEach(h=>{h.addEventListener('click',()=>act(h.dataset.go));h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act(h.dataset.go)}})})}
+
+/* ---- Задания и игры ---- */
+let lastHub='tasks';
+const hub=()=>lastHub==='games'?gamesScreen():tasksScreen();
+function tilesHTML(groups){return groups.map(([name,note,games])=>`<h2 class="section">${name}${note?`<small>${note}</small>`:''}</h2><div class="menu">${Object.entries(games).map(([k,g])=>`
+  <button class="tile${g.hard?' hard':''}" data-g="${k}">${g.hard?'<span class="x2">×2 ★</span>':''}<span class="ic" style="background:${g.color}">${g.ic}</span>
+  <span><h3>${g.title}</h3><p>${g.desc}</p>${player.best[k]!=null&&g.gen?`<small>${Lx("Лучший результат:","Best score:")} ${bestText(k,player.best[k])}</small>`:''}${k==='tourney'&&player.tDate===dayKey()?`<small>${Lx("Сегодня:","Today:")} ${player.tScore} ${Lx("примеров","examples")}</small>`:''}</span></button>`).join('')}</div>`).join('')}
+function bindTiles(){app.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{const k=b.dataset.g;GAMES[k].levels?pickLevel(k):start(k)})}
+function tasksScreen(){screen='tasks';lastHub='tasks';stopTimer();
+  app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${Lx("📚 Задания","📚 Tasks")}</h2><span class="chip"><b>★</b>${wallet()}</span></div>${tilesHTML(GROUPS.slice(1))}</section>`;
+  $('#back').onclick=menu;bindTiles();window.scrollTo({top:0})}
+function gamesScreen(){screen='games';lastHub='games';stopTimer();tick();const why=canPlayWithCat();
+  app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${Lx("🎮 Игры с котёнком","🎮 Kitten games")}</h2><span class="chip"><b>★</b>${wallet()}</span></div>
+  ${why?`<p class="bubble" style="margin-top:12px">${why}</p>`:''}${tilesHTML(GROUPS.slice(0,1))}
+  <h2 class="section">${Lx("Ещё","More")}</h2><div class="menu"><button class="tile" id="goArena"><span class="ic" style="background:#7a4fd6">⚔️</span><span><h3>${Lx("Кошачья арена","Cat Arena")}</h3><p>${Lx("Бои подушками: выбирай удар и блок","Pillow fights: choose a strike and a block")}</p></span></button><button class="tile" id="goTama"><span class="ic" style="background:#ff8fc1">🥚</span><span><h3>${Lx("Брелок-тамагочи","Tamagotchi keychain")}</h3><p>${Lx("Ретро-питомец с тремя кнопками","A retro pet with three buttons")}</p></span></button></div></section>`;
+  $('#back').onclick=menu;bindTiles();$('#goTama').onclick=tamaScreen;$('#goArena').onclick=arenaScreen;window.scrollTo({top:0})}
+
+/* ---- Рисование на стене и картины ---- */
+const READY_PICS=[
+ ['sunset',Lx("Закат","Sunset"),`<rect width="240" height="180" fill="#ffb26b"/><rect y="70" width="240" height="40" fill="#ff7b54"/><circle cx="120" cy="112" r="34" fill="#ffd56b"/><rect y="112" width="240" height="68" fill="#3a7bd5"/><path d="M20 130 H80 M140 146 H220 M60 160 H130" stroke="#9fd8ff" stroke-width="4" stroke-linecap="round"/>`],
+ ['mount',Lx("Горы","Mountains"),`<rect width="240" height="180" fill="#bfe3ff"/><circle cx="190" cy="40" r="18" fill="#ffd166"/><path d="M0 150 L60 60 L110 130 L160 50 L240 150 V180 H0 Z" fill="#6b8e9f"/><path d="M48 78 L60 60 L72 78 L66 74 L60 80 L54 74 Z M148 68 L160 50 L172 68 L166 64 L160 70 L154 64 Z" fill="#fff"/><rect y="150" width="240" height="30" fill="#7cc35e"/>`],
+ ['flowers',Lx("Цветы","Flowers"),`<rect width="240" height="180" fill="#fff4e6"/><path d="M96 180 L104 120 H136 L144 180 Z" fill="#7fc8f8" stroke="#2c6e95" stroke-width="3"/><path d="M120 120 V70 M110 120 Q96 90 84 80 M130 120 Q146 92 158 84" stroke="#2e9e5b" stroke-width="4" fill="none"/>${[[120,62,'#ff595e'],[82,74,'#ffca3a'],[160,78,'#c77dff']].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="14" fill="${c}"/><circle cx="${x}" cy="${y}" r="5" fill="#fff3a0"/>`).join('')}`],
+ ['night',Lx("Ночь","Night"),`<rect width="240" height="180" fill="#1f2a5a"/><circle cx="170" cy="50" r="24" fill="#fff3c4"/><circle cx="182" cy="44" r="22" fill="#1f2a5a"/>${[[30,30],[70,60],[110,24],[40,100],[210,110],[140,90]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.4" fill="#fff"/>`).join('')}<path d="M0 150 Q60 120 120 150 T240 140 V180 H0 Z" fill="#2b3a7a"/>`],
+ ['rainbow',Lx("Радуга","Rainbow"),`<rect width="240" height="180" fill="#dff4ff"/>${['#ff595e','#ff924c','#ffca3a','#8ac926','#1982c4','#6a4c93'].map((c,i)=>`<path d="M${20+i*10} 160 A${100-i*10} ${100-i*10} 0 0 1 ${220-i*10} 160" fill="none" stroke="${c}" stroke-width="10"/>`).join('')}<ellipse cx="40" cy="160" rx="34" ry="14" fill="#fff"/><ellipse cx="200" cy="160" rx="34" ry="14" fill="#fff"/>`]];
+const PCOLORS=['#1f2940','#ffffff','#e63946','#ff8c1a','#ffd166','#2e9e5b','#3a7bd5','#7a4fd6','#ff8fc1','#8b5a2b'];
+async function paintScreen(target){screen='paint';stopTimer();const art=await loadArt();const isWall=target==='wall';
+  const CW=isWall?RW:240,CH=isWall?190:180;
+  app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${isWall?Lx("✏️ Рисуем на стене","✏️ Drawing on the wall"):`${Lx("🖼 Картина","🖼 Picture")} ${target+1}`}</h2></div>
+  <div class="paintwrap ${isWall?'wall':'pic'}" id="pwrap">${isWall?roomSVG(player,art,{noWall:true}):''}<canvas id="pcv" width="${CW}" height="${CH}" aria-label="${Lx("Холст для рисования","Drawing canvas")}"></canvas></div>
+  <div class="ptools"><div class="row" role="group" aria-label="${Lx("Цвет","Color")}">${PCOLORS.map((c,i)=>`<button class="pc${i===0?' on':''}" data-pc="${c}" style="background:${c}" aria-label="${Lx("Цвет","Color")} ${i+1}"></button>`).join('')}</div>
+   <div class="row"><button class="btn alt small" data-ps="1">${Lx("Тонко","Thin")}</button><button class="btn small" data-ps="2">${Lx("Средне","Medium")}</button><button class="btn alt small" data-ps="3">${Lx("Толсто","Thick")}</button>
+   <button class="btn alt small" id="pEr">${Lx("🧽 Ластик","🧽 Eraser")}</button><button class="btn alt small" id="pUndo">${Lx("↩ Отменить","↩ Undo")}</button><button class="btn alt small" id="pClr">${Lx("🗑 Очистить","🗑 Clear")}</button></div>
+   <div class="row"><input class="field" id="pTxt" maxlength="24" placeholder="${Lx("Надпись, например: Мурзик","Text, e.g. Whiskers")}" style="max-width:220px"><button class="btn alt small" id="pTxtGo">${Lx("✍️ Нажми на холст, чтобы написать","✍️ Tap the canvas to write")}</button></div>
+   ${isWall?'':`<div class="row"><span class="tag">${Lx("Готовые картины:","Ready pictures:")}</span>${READY_PICS.map(([k,n])=>`<button class="btn alt small" data-rp="${k}">${n}</button>`).join('')}</div>`}
+   <div class="btns"><button class="btn" id="pSave">${Lx("Сохранить","Save")}</button>${isWall?'':`<button class="btn alt" id="pDel">${Lx("Снять картину","Take the picture down")}</button>`}<button class="btn alt" id="pCancel">${Lx("Отмена","Cancel")}</button></div></div>
+  <p class="note">${isWall?Lx("Рисуй прямо на стене пальцем или мышкой. Мебель и окно останутся поверх рисунка.","Draw right on the wall with your finger or mouse. Furniture and the window stay on top of the drawing."):Lx("Нарисуй свою картину или начни с готовой. Она повиснет в рамке на стене.","Draw your own picture or start from a ready one. It will hang in a frame on the wall.")}</p></section>`;
+  const cv=$('#pcv'),x=cv.getContext('2d');let color=PCOLORS[0],size=2,eraser=false,textMode=false;const hist=[];
+  const sizes=isWall?[3,7,14]:[2,5,10];
+  const snap=()=>{try{hist.push(x.getImageData(0,0,CW,CH));if(hist.length>15)hist.shift()}catch(e){}};
+  const bg=()=>{if(!isWall){x.fillStyle='#ffffff';x.fillRect(0,0,CW,CH)}else x.clearRect(0,0,CW,CH)};
+  bg();const old=isWall?art.wall:art.pics[target];if(old){const im=new Image();im.onload=()=>x.drawImage(im,0,0,CW,CH);im.src=old}
+  const pos=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*CW/r.width,(e.clientY-r.top)*CH/r.height]};
+  let down=false,last=null;
+  cv.addEventListener('pointerdown',e=>{e.preventDefault();const p=pos(e);snap();
+    if(textMode){const t=$('#pTxt').value.trim();if(t){x.globalCompositeOperation='source-over';x.fillStyle=color;x.font=`900 ${sizes[size-1]*3+8}px Nunito, sans-serif`;x.textAlign='center';x.fillText(t,p[0],p[1])}textMode=false;$('#pTxtGo').classList.add('alt');return}
+    down=true;last=p;try{cv.setPointerCapture(e.pointerId)}catch(_){}x.globalCompositeOperation=eraser&&isWall?'destination-out':'source-over';x.strokeStyle=eraser&&!isWall?'#ffffff':color;x.lineWidth=sizes[size-1]*(eraser?2:1);x.lineCap='round';x.lineJoin='round';
+    x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(p[0]+.1,p[1]+.1);x.stroke()});
+  cv.addEventListener('pointermove',e=>{if(!down)return;const p=pos(e);x.beginPath();x.moveTo(last[0],last[1]);x.lineTo(p[0],p[1]);x.stroke();last=p});
+  const up=()=>{down=false;x.globalCompositeOperation='source-over'};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+  app.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{color=b.dataset.pc;eraser=false;$('#pEr').classList.add('alt');app.querySelectorAll('[data-pc]').forEach(o=>o.classList.toggle('on',o===b))});
+  app.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>{size=+b.dataset.ps;app.querySelectorAll('[data-ps]').forEach(o=>o.classList.toggle('alt',o!==b))});
+  $('#pEr').onclick=()=>{eraser=!eraser;$('#pEr').classList.toggle('alt',!eraser)};
+  $('#pUndo').onclick=()=>{const h=hist.pop();if(h)x.putImageData(h,0,0)};
+  $('#pClr').onclick=()=>{snap();bg()};
+  $('#pTxtGo').onclick=()=>{if(!$('#pTxt').value.trim()){toast(Lx("Сначала напиши текст","Type some text first"));$('#pTxt').focus();return}textMode=true;$('#pTxtGo').classList.remove('alt');toast(Lx("Теперь нажми на холст","Now tap the canvas"))};
+  app.querySelectorAll('[data-rp]').forEach(b=>b.onclick=async()=>{const P=READY_PICS.find(p=>p[0]===b.dataset.rp);const im=await svgImage(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180">${P[2]}</svg>`);if(im){snap();x.drawImage(im,0,0,CW,CH)}});
+  const done=()=>menu();$('#back').onclick=done;$('#pCancel').onclick=done;
+  const del=$('#pDel');if(del)del.onclick=async()=>{const A=cleanArt(art);A.pics[target]=null;await saveArt(A);toast(Lx("Картину сняли","The picture was taken down"));menu()};
+  $('#pSave').onclick=async()=>{let url='';try{url=isWall?cv.toDataURL('image/png'):cv.toDataURL('image/jpeg',.85)}catch(e){}
+    if(!url||url.length>=ART_MAX){toast(Lx("Рисунок слишком большой, сотри немного","The drawing is too big, erase a bit"));return}
+    const A=cleanArt(art);if(isWall)A.wall=url;else A.pics[target]=url;await saveArt(A);tone(660,0,.1);tone(880,.1,.12);toast(Lx("Сохранено!","Saved!"));menu()}}
 
 /* ===== Питомник: все коты игрока, гнёздышко, гены ===== */
 let selA=null,selB=null;
@@ -1555,12 +2084,12 @@ function kennelHTML(){const n=player.nest,now=Date.now(),cats=allCats(),act=acti
   if(n){const A=findCat(n.a),B=findCat(n.b),ready=n.until<=now;
     nest=`<div class="nest"><div class="pair"><span class="mini">${A?catPic(A,'happy'):''}</span><span class="heart">💞</span><span class="mini">${B?catPic(B,'happy'):''}</span></div>
     <p>${esc(A?A.name:'?')} ${Lx("и","and")} ${esc(B?B.name:'?')} ${Lx("в гнёздышке.","are in the nest.")} ${ready?'<b>'+Lx("Котёнок родился!","A kitten was born!")+'</b>':`${Lx("Котёнок появится через","A kitten arrives in")} <b id="nestLeft">${fmtLeft(n.until-now)}</b>`}</p>
-    ${ready?'<button class="btn" id="nestGet">'+Lx("Забрать котёнка","Take the kitten")+'</button>':''}</div>`}
+    ${ready?'<button class="btn" id="nestGet">'+Lx("Забрать котёнка","Take the kitten")+'</button>':`<button class="btn small" id="nestRush" ${wallet()<rushCost(n.until-now)?'disabled':''}>${Lx("⚡ Родить сейчас за ★","⚡ Hatch now for ★")} <span id="rushCost">${rushCost(n.until-now)}</span></button><p class="note" style="margin:4px 0 0">${Lx("Чем меньше осталось ждать, тем дешевле: 1 ★ за каждые 4 минуты.","The less time is left, the cheaper it is: 1 ★ for every 4 minutes.")}</p>`}</div>`}
   else{const A=selA&&findCat(selA),B=selB&&findCat(selB);const full=player.kennel.length>=KENNEL_MAX;
     const slot=(id,X,n)=>`<button class="slot" id="${id}">${X?`<span class="mini">${catPic(X,'happy')}</span>`:'<span class="q">?</span>'}<em>${X?esc(X.name):n}</em></button>`;
     nest=`<div class="nest"><div class="pair">${slot('slA',A,Lx("Родитель 1","Parent 1"))}<span class="heart">💞</span>${slot('slB',B,Lx("Родитель 2","Parent 2"))}</div>
     <div class="btns"><button class="btn" id="doBreed" ${A&&B&&!full&&wallet()>=BREED_COST?'':'disabled'}>${Lx("Скрестить за ★","Breed for ★")} ${BREED_COST}</button></div>
-    <p class="note" style="margin:6px 0 0">${full?`${Lx("В питомнике уже","The cattery already has")} ${KENNEL_MAX} ${Lx("рождённых котят. Отдай кого-нибудь в добрые руки, чтобы освободить место.","born kittens. Give one to a loving home to make room.")}`:Lx("Нажми на кота ниже и выбери его родителем. Котёнок получит гены от обоих и родится через 20 минут. Иногда случаются мутации!","Tap a cat below and choose it as a parent. The kitten gets genes from both and is born in 20 minutes. Sometimes mutations happen!")}</p></div>`}
+    <p class="note" style="margin:6px 0 0">${full?`${Lx("В питомнике уже","The cattery already has")} ${KENNEL_MAX} ${Lx("рождённых котят. Отдай кого-нибудь в добрые руки, чтобы освободить место.","born kittens. Give one to a loving home to make room.")}`:Lx("Нажми на кота ниже и выбери его родителем. Котёнок получит гены от обоих и родится через 60 минут. Иногда случаются мутации!","Tap a cat below and choose it as a parent. The kitten gets genes from both and is born in 60 minutes. Sometimes mutations happen!")}</p></div>`}
   const KF={all:()=>true,born:i=>!i.skin,veg:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat!=='girl',dressed:i=>!!i.dna.look,girl:i=>!!i.dna.costume&&COSTUMES[i.dna.costume].cat==='girl',cyber:i=>i.dna.pat==='circuit',glow:i=>i.dna.glow,top:i=>['epic','legend','mythic'].includes(indRarity(i))};
   const f=KF[skinFilter]?skinFilter:'all';const shown=cats.filter(KF[f]);
   const grid=shown.map(ind=>`<button class="item r-${indRarity(ind)}${ind.id===act?' on':''}" data-cat="${ind.id}">${ind.skin?cntBadge('cats',ind.skin):''}${catPic(ind)}<span>${esc(ind.name)}</span>
@@ -1573,7 +2102,9 @@ function kennelHTML(){const n=player.nest,now=Date.now(),cats=allCats(),act=acti
   ${shown.length||locked.length?'':'<p class="empty">'+Lx("Здесь пока никого нет.","Nobody here yet.")+'</p>'}`}
 
 function bindKennel(){const nl=$('#nestLeft');if(nl){const iv=setInterval(()=>{if(!document.body.contains(nl)){clearInterval(iv);return}const left=player.nest?player.nest.until-Date.now():0;
-    if(left<=0){clearInterval(iv);catScreen()}else nl.textContent=fmtLeft(left)},1000)}
+    if(left<=0){clearInterval(iv);catScreen()}else{nl.textContent=fmtLeft(left);const rc=$('#rushCost'),rb=$('#nestRush');if(rc){const k=rushCost(left);rc.textContent=k;rb.disabled=wallet()<k}}},1000)}
+  const rush=$('#nestRush');if(rush)rush.onclick=()=>{const n=player.nest;if(!n)return;const k=rushCost(n.until-Date.now());if(wallet()<k)return;
+    player.spent+=k;player.nest={...n,until:Date.now()};savePlayer(true);renderMe();tone(880,0,.1);tone(1320,.1,.15);toast(Lx("⚡ Котёнок родился!","⚡ The kitten is born!"));catScreen()};
   const g=$('#nestGet');if(g)g.onclick=()=>{const n=player.nest;const A=findCat(n.a),B=findCat(n.b);if(!A||!B){player.nest=null;savePlayer(true);catScreen();return}
     const kit=breed(A,B);player.kennel=[...player.kennel,kit];player.nest=null;savePlayer(true);fanfare();catScreen();catDetail(kit,true)};
   const pickSlot=w=>{toast(`${Lx("Нажми на кота ниже, чтобы выбрать","Tap a cat below to choose the")} ${w==='A'?Lx("первого","first"):Lx("второго","second")} ${Lx("родителя","parent")}`);pendingSlot=w};
@@ -1593,6 +2124,7 @@ function catDetail(ind,newborn){const m=$('#modal');const O=ind.origin||{},d=ind
     [Lx("Голова","Head"),RU.head[d.head]+src('head')],[Lx("Тело","Body"),RU.body[d.body]+src('body')],[Lx("Уши","Ears"),RU.ears[d.ears]+src('ears')],
     [Lx("Глаза","Eyes"),`${RU.eyes[d.eyes]}${src('eyes')} ${sw(d.eyeColor)}${d.glow?' '+Lx("светятся","glowing"):''}${src('eyeColor')}`+(d.hetero?` ${Lx("· разного цвета","· different colors")} ${sw(d.hetero)}${src('hetero')}`:'')],
     [Lx("Хвост","Tail"),RU.tail[d.tail]+(d.tailColor?' '+sw(d.tailColor):'')+src('tail')],
+    ...(d.stand?[[Lx("Походка","Walk"),Lx("🧍 ходит как человек","🧍 walks like a human")+src('stand')]]:[]),
     ...(d.look?[[Lx("Образ","Look"),esc(SKIN_BY_ID[d.look].name)+src('look')]]:[]),
     ...(d.costume?[[Lx("Костюм","Costume"),RU.costume[d.costume]+src('costume')]]:[]),
     [Lx("Особенности","Features"),(d.extras.length?d.extras.map(x=>RU.extra[x]).join(', '):Lx("нет","none"))+src('extras')]];
@@ -1690,7 +2222,7 @@ function quiz(key){screen='quiz';stopTimer();const g=GAMES[key];let i=0,score=0,
     ${g.timed?`<span class="timer" id="tm">⏱ ${timeLeft} · ${score}</span>`:`<div class="progress">${Array.from({length:10},(_,k)=>`<i class="${res[k]||''}"></i>`).join('')}</div>`}</div>`}
   function step(){if(!alive())return;if(!g.timed&&i>=10)return finish();
     const t=g.gen();
-    if(t.pre){app.innerHTML=`<section class="sheet">${head()}<p class="hint" style="margin-top:18px">${Lx("Запомни!","Remember!")}</p>${t.pre}<p class="count" id="cd"></p></section>`;$('#back').onclick=menu;
+    if(t.pre){app.innerHTML=`<section class="sheet">${head()}<p class="hint" style="margin-top:18px">${Lx("Запомни!","Remember!")}</p>${t.pre}<p class="count" id="cd"></p></section>`;$('#back').onclick=hub;
       let left=Math.ceil(t.preMs/1000);const cd=$('#cd');cd.textContent=left;const iv=setInterval(()=>{left--;if(!alive()){clearInterval(iv);return}cd.textContent=left>0?left:''},1000);
       setTimeout(()=>{clearInterval(iv);if(alive())show(t)},t.preMs);return}
     show(t)}
@@ -1702,7 +2234,7 @@ function quiz(key){screen='quiz';stopTimer();const g=GAMES[key];let i=0,score=0,
     ${t.label?`<p class="daypart">${t.label}</p>`:''}
     ${t.svg?t.svg:t.q?`<div class="q ${t.cls||''}">${t.raw?t.q:esc(t.q)}</div>`:''}<p class="hint" id="hint">${t.hint}</p>
     <div class="answers ${cls}" ${t.tap?`style="--cols:${t.tap}"`:''}>${t.opts.map(optHTML).join('')}</div></section>`;
-    $('#back').onclick=menu;
+    $('#back').onclick=hub;
     let locked=false;const btns=[...app.querySelectorAll('.answers button')];
     btns.forEach(b=>b.onclick=()=>{if(locked)return;locked=true;
       if(!started){started=true;if(g.timed)startTimer()}
@@ -1735,7 +2267,7 @@ function memory(){screen='mem';stopTimer();const pairs=[6,8,10,12][level-1];
   app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${Lx("Память","Memory")}${lvlTag(GAMES.mem)}</h2><span id="mv">${Lx("Ходов: 0","Moves: 0")}</span></div>
   <p class="hint" style="margin-top:12px">${Lx("Открывай по две карточки и запоминай, где кто спрятался","Flip two cards at a time and remember who is hiding where")}</p>
   <div class="mem" style="--cols:${cols}">${cards.map((c,k)=>`<button aria-label="${Lx("Карточка","Card")} ${k+1}">${c}</button>`).join('')}</div></section>`;
-  $('#back').onclick=menu;
+  $('#back').onclick=hub;
   app.querySelectorAll('.mem button').forEach(b=>b.onclick=()=>{
     if(open.length===2||b.classList.contains('open')||b.classList.contains('done'))return;
     b.classList.add('open');open.push(b);
@@ -1751,7 +2283,7 @@ function schulte(){screen='schulte';stopTimer();const n=[3,4,5,5][level-1],N=n*n
   app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${Lx("Таблица Шульте","Schulte table")}${lvlTag(GAMES.schulte)}</h2><span class="timer" id="tm">⏱ 0</span></div>
   <p class="hint" style="margin-top:12px">${Lx("Нажимай числа по порядку:","Tap the numbers in order:")} <b id="nx">1</b> ${Lx("из","of")} ${N}</p>
   <div class="schulte" style="--n:${n}">${nums.map(v=>`<button data-v="${v}" style="${level===4?`color:${pick(tint)};font-size:${rnd(18,34)}px`:''}">${v}</button>`).join('')}</div></section>`;
-  $('#back').onclick=menu;
+  $('#back').onclick=hub;
   app.querySelectorAll('.schulte button').forEach(b=>b.onclick=()=>{const v=+b.dataset.v;if(b.classList.contains('done'))return;
     if(!t0){t0=Date.now();timerId=setInterval(()=>{const tm=$('#tm');if(tm)tm.textContent='⏱ '+Math.floor((Date.now()-t0)/1000)},250)}
     if(v===next){b.classList.add('done');tone(500+next*12,0,.08);next++;$('#nx').textContent=Math.min(next,N);if(next>N)finish()}
@@ -1762,6 +2294,143 @@ function schulte(){screen='schulte';stopTimer();const n=[3,4,5,5][level-1],N=n*n
 
 /* ===== Запуск ===== */
 initStore().then(()=>{renderMe();player?menu():login()});
+
+/* ===== Кошачья арена: пошаговые бои подушками в духе браузерных бойцовских игр 2000-х =====
+   Каждый ход: один удар в одну из 5 зон и блок двух соседних зон. Сила — урон, Ловкость — увороты,
+   Интуиция — суперудары (криты), Выносливость — запас бодрости (HP). За уровни дают очки характеристик. */
+const AR_ST=[['str',Lx("Сила","Strength"),'💪',Lx("больше урон","more damage")],['agi',Lx("Ловкость","Agility"),'🐾',Lx("чаще уворачивается и реже промахивается","dodges more, misses less")],
+  ['intu',Lx("Интуиция","Intuition"),'🔮',Lx("чаще суперудары, реже пропускает их","more super hits, takes fewer")],['end',Lx("Выносливость","Endurance"),'❤️',Lx("больше бодрости","more stamina")]];
+const ZONES=[[Lx("Ушки","Ears"),Lx("по ушкам","on the ears"),Lx("ушки","ears")],[Lx("Грудка","Chest"),Lx("по грудке","on the chest"),Lx("грудку","chest")],[Lx("Пузико","Tummy"),Lx("по пузику","on the tummy"),Lx("пузико","tummy")],
+  [Lx("Хвостик","Tail"),Lx("по хвостику","on the tail"),Lx("хвостик","tail")],[Lx("Лапки","Paws"),Lx("по лапкам","on the paws"),Lx("лапки","paws")]];
+const BLOCKS=[[0,1],[1,2],[2,3],[3,4],[4,0]];
+const arNeed=l=>Math.round(15*l*l+5*l);
+function cleanArena(a){a=a&&typeof a==='object'?a:{};const n=(v,lo,hi,d)=>{v=+v;return Number.isFinite(v)?clamp(Math.floor(v),lo,hi):d};const st=a.st&&typeof a.st==='object'?a.st:{};
+  return {lvl:n(a.lvl,1,60,1),xp:n(a.xp,0,1e7,0),pts:n(a.pts,0,300,3),st:{str:n(st.str,3,200,3),agi:n(st.agi,3,200,3),intu:n(st.intu,3,200,3),end:n(st.end,3,200,3)},
+    win:n(a.win,0,1e6,0),lose:n(a.lose,0,1e6,0),draw:n(a.draw,0,1e6,0),streak:n(a.streak,0,1e4,0)}}
+/* Бонусы от вещей: чем выше редкость, тем сильнее; у каждого места свой бонус */
+const tierOf=r=>RAR_ORDER.indexOf(r)+1;
+function gearOf(cat){const G=catGenes(cat);const LK=G.look&&SKIN_BY_ID[G.look]&&SKIN_BY_ID[G.look].look;const wear={...(LK||{}),...((cat&&cat.wear)||{})};
+  const b={str:0,agi:0,intu:0,end:0,hp:0,dmg:0,armor:0,weapon:null};
+  for(const [slot,id] of Object.entries(wear)){const w=WEAR_BY_ID[id];if(!w)continue;const t=tierOf(w.r);
+    if(slot==='hat'){b.end+=Math.ceil(t/2);b.hp+=t*3}else if(slot==='glasses'||slot==='eyes')b.intu+=Math.ceil(t/2);
+    else if(slot==='handR'||slot==='handL'){if(id==='ty_shield'){b.armor+=t+1}else{b.dmg+=t;if(!b.weapon||t>tierOf(WEAR_BY_ID[b.weapon].r))b.weapon=id}}
+    else if(slot==='wrist')b.agi+=Math.ceil(t/2);else if(slot==='chest'){b.intu+=Math.floor(t/2);b.hp+=t*2}else if(slot==='body')b.armor+=t;else if(slot==='back'){b.agi+=Math.floor(t/2);b.hp+=t*2}}
+  return b}
+/* Боец: характеристики + котик + вещи */
+function fighter(name,cat,ar,cs,form){const g=gearOf(cat);const cb=k=>Math.round(((cs&&cs[k])||5)-5)/2;
+  const s={str:ar.st.str+g.str+Math.round(cb('str'))+(form==='rascal'?2:0),agi:ar.st.agi+g.agi+Math.round(cb('agi')),intu:ar.st.intu+g.intu+Math.round(cb('luck')),end:ar.st.end+g.end};
+  for(const k in s)s[k]=Math.max(1,s[k]);
+  const hp=30+s.end*6+ar.lvl*3+g.hp;
+  return {name,cat,lvl:ar.lvl,s,hp,max:hp,dmg:[Math.round(s.str*1+2+g.dmg),Math.round(s.str*1.6+4+g.dmg*1.5)],armor:g.armor,weapon:g.weapon}}
+const meFighter=()=>fighter(player.cat.name,player.cat,player.arena,activeInd().stats,player.cat.form);
+/* Соперники */
+const BOT_NAMES=[Lx("Барсик-Задира","Bully Barsik"),Lx("Мурка Быстрая Лапа","Swiftpaw Murka"),Lx("Пушок Неудержимый","Unstoppable Fluffy"),Lx("Тигра","Tigra"),Lx("Снежок-Ниндзя","Ninja Snowball"),Lx("Рыжий Гром","Ginger Thunder"),Lx("Черныш","Blackie"),Lx("Граф Мурлыкин","Count Purrington"),Lx("Плюшка","Bun"),Lx("Кексик-Бомбочка","Cupcake Bomb")];
+function gearHint(){const G=catGenes(player.cat);const LK=G.look&&SKIN_BY_ID[G.look]&&SKIN_BY_ID[G.look].look;const ids=Object.values({...(LK||{}),...player.cat.wear}).filter(id=>WEAR_BY_ID[id]);
+  return {n:ids.length,tier:ids.length?Math.round(ids.reduce((a,id)=>a+tierOf(WEAR_BY_ID[id].r),0)/ids.length):1}}
+function botFighter(lvl,kind,hint={n:2,tier:2}){const pts=Math.max(0,3*lvl+(kind==='boss'?2:kind==='train'?-3:0));const st={str:3,agi:3,intu:3,end:3};const bias=pick(['str','agi','intu','end']);
+  for(let i=0;i<pts;i++){const k=Math.random()<.35?bias:pick(['str','agi','intu','end']);st[k]++}
+  const pool=SKINS.filter(s=>kind==='boss'?['legend','mythic'].includes(s.r):kind==='train'?['common','uncommon'].includes(s.r):true);const sk=pick(pool);
+  const wear={};const n=kind==='train'?0:Math.min(7,Math.max(1,hint.n)+(kind==='boss'?1:0));const maxT=Math.min(6,Math.max(1,hint.tier));const slots=['hat','glasses','handR','wrist','chest','body','back'];
+  for(const sl of shuffle(slots).slice(0,n)){const opts=WEAR.filter(w=>(w.slot===sl||(sl==='handR'&&w.slot==='hand'))&&tierOf(w.r)<=maxT&&tierOf(w.r)>=Math.max(1,maxT-1));if(opts.length)wear[sl]=pick(opts).id}
+  const f=fighter(kind==='train'?Lx("Плюшевый спарринг-кот","Plush sparring cat"):kind==='boss'?`👑 ${pick(BOT_NAMES)}`:pick(BOT_NAMES),{skin:sk.id,wear},{lvl,st},{},null);
+  if(kind==='train'){f.hp=f.max=Math.round(f.max*.75);f.dmg=f.dmg.map(d=>Math.max(1,Math.round(d*.6)))}
+  return f}
+function playerRivals(){const me=player&&nickKey(player.nick);
+  const rows=store.mode==='online'?store.leaders:Object.values(localPlayers()).map(p=>normalize(p));
+  return (rows||[]).filter(r=>r&&r.nick&&nickKey(r.nick)!==me&&r.arena).slice(0,30)}
+
+/* ---- Расчёт одного удара ---- */
+const pct=(base,diff)=>clamp(base+diff*4,3,55);
+function strike(A,D,zone,block,log){
+  const z=ZONES[zone],blocked=BLOCKS[block].includes(zone);
+  const dodge=pct(6,D.s.agi-A.s.agi),crit=pct(6,A.s.intu-D.s.intu);
+  const adv=pick([Lx("неожиданно","suddenly"),Lx("хитро прищурившись","with a sly squint"),Lx("задумавшись о рыбке","while thinking about fish"),Lx("с разбегу","with a running start"),Lx("весело мяукнув","with a cheerful meow"),Lx("подпрыгнув","with a hop"),Lx("не глядя","without looking")]);
+  const verb=A.weapon?`${Lx("взмахнул: «","swung the “")}${WEAR_BY_ID[A.weapon].name}${Lx("» и попал","” and hit")}`:pick([Lx("шлёпнул подушкой","whacked with a pillow"),Lx("мягко стукнул лапкой","gently bopped with a paw"),Lx("боднул","head-butted"),Lx("махнул хвостом","swished a tail")]);
+  const roll=Math.random()*100;
+  if(roll<dodge&&!blocked){log.push({t:`<b>${esc(D.name)}</b> ${pick([Lx("кувыркнувшись","with a somersault"),Lx("изящно","gracefully"),Lx("в последний момент","at the last moment"),Lx("отпрыгнув на шкаф","by jumping onto the wardrobe")])} ${Lx("увернулся от удара","dodged")} <b>${esc(A.name)}</b> ${z[1]}.`,c:'dodge'});return 0}
+  const isCrit=Math.random()*100<crit;
+  if(blocked&&!isCrit){log.push({t:`<b>${esc(D.name)}</b> ${Lx("ловко прикрыл","neatly covered")} ${z[2]} — ${Lx("удар","the strike of")} <b>${esc(A.name)}</b> ${Lx("не прошёл.","didn't get through.")}`,c:'block'});return 0}
+  let d=rnd(A.dmg[0],A.dmg[1]);if(isCrit)d=blocked?d:d*2;d=Math.max(1,Math.round(d*(1-D.armor/(D.armor+14))));
+  D.hp=Math.max(0,D.hp-d);
+  const what=isCrit?(blocked?`${Lx("пробил блок и попал","broke through the block and hit")} ${z[1]}`:`${Lx("нанёс СУПЕРУДАР","landed a SUPER HIT")} ${z[1]}`):`${verb} ${z[1]}`;
+  log.push({t:`<b>${esc(A.name)}</b> ${adv} ${what} ${Lx("соперника","the opponent")} <b>${esc(D.name)}</b>. <span class="dmg">−${d}</span> [${D.hp}/${D.max}]`,c:isCrit?'crit':'hit'});return d}
+/* Ход соперника: любит ушки и грудку, блок — случайный, но запоминает, куда бьёт игрок */
+function aiMove(st){const hist=st.myHist;let block=rnd(0,4);if(hist.length>=2&&Math.random()<.45){const z=pick(hist.slice(-3));block=BLOCKS.findIndex(b=>b.includes(z))}
+  const w=[3,3,2,1.5,1.5];let r=Math.random()*11,zone=0;for(;zone<4;zone++){r-=w[zone];if(r<0)break}return {zone,block}}
+
+/* ---- Экран арены ---- */
+let arTab='fight';
+function arenaScreen(){screen='arena';stopTimer();tick();const A=player.arena,me=meFighter();const need=arNeed(A.lvl);const why=canPlayWithCat();
+  const st=AR_ST.map(([k,n,ic,h])=>`<div class="gr"><span>${ic} ${n}</span><span><b>${A.st[k]}</b>${me.s[k]!==A.st[k]?` <em>(${Lx("с бонусами","with bonuses")} ${me.s[k]})</em>`:''} ${A.pts?`<button class="btn small" data-up="${k}" aria-label="${Lx("Добавить","Add")} ${n}">+</button>`:''} <em>${h}</em></span></div>`).join('');
+  const g=gearOf(player.cat);
+  const rivals=playerRivals();
+  app.innerHTML=`<section class="sheet arena"><div class="top">${backBtn()}<h2>${Lx("⚔️ Кошачья арена","⚔️ Cat Arena")}</h2><span class="chip"><b>★</b>${wallet()}</span></div>
+  <div class="catpage"><div class="stage"><div class="bigcat">${catSVG({...player.cat,pose:'stand'},'happy')}</div>
+    <p style="margin:6px 0 0;text-align:center"><b>${esc(player.cat.name)}</b> · ${Lx("уровень арены","arena level")} <b>${A.lvl}</b></p>
+    <div class="track" style="margin:6px 0"><div class="fill" style="width:${Math.round(A.xp/need*100)}%;background:var(--xp)"></div></div><p class="note" style="margin:0;text-align:center">${Lx("Опыт","XP")} ${A.xp} ${Lx("из","of")} ${need} · ${Lx("победы","wins")} ${A.win} · ${Lx("поражения","losses")} ${A.lose}${A.draw?` · ${Lx("ничьи","draws")} ${A.draw}`:''}${A.streak>1?` · 🔥 ${A.streak} ${Lx("подряд","in a row")}`:''}</p></div>
+  <div><h4 style="margin-top:0">${Lx("Характеристики","Stats")}${A.pts?` · <span class="mut">${Lx("свободных очков:","free points:")} ${A.pts}</span>`:''}</h4><div class="genes" style="margin-top:0">${st}
+    <div class="gr"><span>🛡 ${Lx("Бодрость","Stamina")}</span><span><b>${me.max}</b> · ${Lx("удар","strike")} ${me.dmg[0]}–${me.dmg[1]}${me.armor?` · ${Lx("защита","armor")} ${me.armor}`:''}${me.weapon?` · ${esc(WEAR_BY_ID[me.weapon].name)}`:` · ${Lx("подушка","pillow")}`}</span></div></div>
+    <p class="note">${Lx("Одежда даёт бонусы: шапка — выносливость, очки и глаза — интуиция, вещи в лапках — урон (щит — защита), браслеты — ловкость, украшения на груди — интуиция и бодрость, одежда — защита, спина — ловкость и бодрость. Чем выше редкость, тем больше бонус.","Clothes give bonuses: hats add endurance, glasses and eyes add intuition, things in paws add damage (a shield adds armor), bracelets add agility, chest jewelry adds intuition and stamina, clothes add armor, back items add agility and stamina. The higher the rarity, the bigger the bonus.")}</p></div></div>
+  ${why?`<p class="bubble">${why}</p>`:''}
+  <h4>${Lx("Выбери бой","Choose a fight")}</h4><div class="menu">
+   <button class="tile" data-fight="train" ${why?'disabled':''}><span class="ic" style="background:#2e9e5b">🧸</span><span><h3>${Lx("Тренировка","Training")}</h3><p>${Lx("Плюшевый спарринг-кот. Немного опыта и 1 ★","A plush sparring cat. A little XP and 1 ★")}</p></span></button>
+   <button class="tile" data-fight="duel" ${why?'disabled':''}><span class="ic" style="background:#3a7bd5">⚔️</span><span><h3>${Lx("Дуэль","Duel")}</h3><p>${Lx("Случайный кот твоего уровня. 2 ★ за победу","A random cat of your level. 2 ★ for a win")}</p></span></button>
+   <button class="tile" data-fight="boss" ${why?'disabled':''}><span class="ic" style="background:#d99a00">👑</span><span><h3>${Lx("Чемпион арены","Arena champion")}</h3><p>${Lx("Сильный кот на уровень выше. 6 ★ за победу","A strong cat one level higher. 6 ★ for a win")}</p></span></button>
+   ${rivals.length?`<button class="tile" data-fight="pvp" ${why?'disabled':''}><span class="ic" style="background:#e5243b">🐾</span><span><h3>${Lx("Кот другого игрока","Another player's cat")}</h3><p>${Lx("Бой с настоящим котом из таблицы лидеров. 3 ★ за победу","Fight a real cat from the leaderboard. 3 ★ for a win")}</p></span></button>`:''}</div>
+  <p class="note">${Lx("Каждый бой тратит энергию и сытость, но поднимает спорт и развлечение и помогает похудеть. Проигрыш иногда даёт ушиб — тогда котёнку нужно лекарство.","Each fight uses energy and fullness but raises sport and fun and helps lose weight. Losing sometimes causes a bruise, and then your kitten needs medicine.")}</p></section>`;
+  $('#back').onclick=menu;
+  app.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>{if(!A.pts)return;A.st[b.dataset.up]++;A.pts--;tone(700,0,.08);savePlayer(true);arenaScreen()});
+  app.querySelectorAll('[data-fight]').forEach(b=>b.onclick=()=>{const w=canPlayWithCat();if(w){toast(w);return}
+    const c=player.cat;if(lifeStage(c)!=='baby'&&c.disc<40&&Math.random()<.2){toast(Lx("😼 Котёнок капризничает и не хочет драться. Повышай дисциплину!","😼 Your kitten is being naughty and won't fight. Raise its discipline!"));return}
+    const kind=b.dataset.fight;let foe;
+    if(kind==='pvp'){const r=pick(rivals);foe=fighter(`${r.cat.name} (${r.nick})`,r.cat,r.arena,null,r.cat.form)}
+    else foe=botFighter(Math.max(1,kind==='train'?A.lvl-1:kind==='boss'?A.lvl+1:A.lvl+rnd(-1,1)),kind,gearHint());
+    fightScreen(kind,meFighter(),foe)})}
+
+function fightScreen(kind,me,foe){screen='fight';const st={round:1,atk:null,blk:null,log:[],myHist:[],over:false};
+  const card=(F,flip)=>`<div class="fcard"><div class="fcat${flip?' flip':''}" id="${flip?'fFoe':'fMe'}">${catSVG({...F.cat,pose:'stand'},'normal')}</div><b>${esc(F.name)}</b><span class="tag">${Lx("ур.","lv.")} ${F.lvl} · 💪${F.s.str} 🐾${F.s.agi} 🔮${F.s.intu} ❤️${F.s.end}</span>
+    <div class="track hp"><div class="fill" id="${flip?'hpFoe':'hpMe'}" style="width:100%"></div></div><span class="hpn" id="${flip?'hnFoe':'hnMe'}">${F.hp}/${F.max}</span></div>`;
+  app.innerHTML=`<section class="sheet arena"><div class="top"><button class="link" id="flee">${Lx("← Сдаться","← Give up")}</button><h2>${Lx("Бой","Fight")} · <span id="fRound">${Lx("ход","round")} 1</span></h2></div>
+  <div class="fight">${card(me,false)}<div class="vs">VS</div>${card(foe,true)}</div>
+  <div class="zones"><div><h5>${Lx("🎯 Куда ударить","🎯 Where to strike")}</h5>${ZONES.map((z,i)=>`<button class="zb" data-atk="${i}">${z[0]}</button>`).join('')}</div>
+   <div><h5>${Lx("🛡 Что закрыть","🛡 What to block")}</h5>${BLOCKS.map((b,i)=>`<button class="zb" data-blk="${i}">${ZONES[b[0]][0]} + ${ZONES[b[1]][0]}</button>`).join('')}</div></div>
+  <div class="btns"><button class="btn" id="goHit" disabled>${Lx("Вперёд!","Go!")}</button></div>
+  <div class="flog" id="flog" aria-live="polite"><p class="note">${Lx("Выбери одну зону для удара и две зоны для блока. Соперник делает то же самое. Блок останавливает удар, но суперудар может его пробить.","Pick one zone to strike and two zones to block. Your opponent does the same. A block stops a strike, but a super hit can break through it.")}</p></div></section>`;
+  const upd=()=>{$('#goHit').disabled=st.atk==null||st.blk==null||st.over;app.querySelectorAll('[data-atk]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.atk===st.atk));app.querySelectorAll('[data-blk]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.blk===st.blk))};
+  const bars=()=>{$('#hpMe').style.width=me.hp/me.max*100+'%';$('#hpFoe').style.width=foe.hp/foe.max*100+'%';$('#hnMe').textContent=`${me.hp}/${me.max}`;$('#hnFoe').textContent=`${foe.hp}/${foe.max}`};
+  const shake=id=>{const e=$('#'+id);if(!e)return;e.classList.remove('hitfx');void e.offsetWidth;e.classList.add('hitfx')};
+  app.querySelectorAll('[data-atk]').forEach(b=>b.onclick=()=>{st.atk=+b.dataset.atk;upd()});
+  app.querySelectorAll('[data-blk]').forEach(b=>b.onclick=()=>{st.blk=+b.dataset.blk;upd()});
+  $('#flee').onclick=()=>{if(st.over)return;st.over=true;me.hp=0;endFight(kind,me,foe,st,true)};
+  $('#goHit').onclick=()=>{if(st.over||st.atk==null||st.blk==null)return;const ai=aiMove(st);const log=[];st.myHist.push(st.atk);
+    const d1=strike(me,foe,st.atk,ai.block,log);const d2=foe.hp>0?strike(foe,me,ai.zone,st.blk,log):0;
+    if(d1){shake('fFoe');tone(220,0,.08,'square',.05)}if(d2)setTimeout(()=>{shake('fMe');tone(160,0,.08,'square',.05)},180);if(!d1&&!d2)tone(900,0,.05);
+    st.log=[{t:`<b>${Lx("Ход","Round")} ${st.round}</b>`,c:'round'},...log,...st.log].slice(0,80);st.round++;
+    $('#flog').innerHTML=st.log.map(l=>`<p class="${l.c}">${l.t}</p>`).join('');$('#fRound').textContent=`${Lx("ход","round")} ${st.round}`;bars();
+    if(me.hp<=0||foe.hp<=0||st.round>40){st.over=true;setTimeout(()=>endFight(kind,me,foe,st,false),reduced?50:700)}
+    st.atk=st.blk=null;upd()};
+  upd();window.scrollTo({top:0})}
+
+function endFight(kind,me,foe,st,fled){const A=player.arena,c=player.cat;tick();
+  const res=me.hp>0&&foe.hp<=0?'win':me.hp<=0&&foe.hp>0?'lose':me.hp>foe.hp?'win':foe.hp>me.hp?'lose':'draw';
+  const base={train:6,duel:14,boss:35,pvp:20}[kind]+foe.lvl*2;let xp=res==='win'?base:res==='draw'?Math.round(base/2):Math.round(base/5);if(fled)xp=0;
+  let stars=res==='win'?{train:1,duel:2,boss:6,pvp:3}[kind]+(c.form==='normal'?1:0)+(A.streak>=2?1:0):0;
+  A[res==='win'?'win':res==='lose'?'lose':'draw']++;A.streak=res==='win'?A.streak+1:0;A.xp+=xp;let ups=0;
+  while(A.xp>=arNeed(A.lvl)){A.xp-=arNeed(A.lvl);A.lvl++;A.pts+=3;ups++;stars+=2}
+  if(stars)player.stars+=stars;
+  applyEffects({energy:-12,food:-6,sport:15,fun:10});loseWeight(.15);
+  let hurt=false;if(res==='lose'&&!fled&&Math.random()<.15){makeSick(c,Date.now(),'');hurt=true}
+  savePlayer(true);renderMe();
+  if(res==='win')fanfare();
+  const m=$('#modal');
+  m.innerHTML=evOverlay(`<div class="prize ${res==='win'?'glow':''}" style="width:130px;margin:0 auto">${catSVG(c,res==='win'?'happy':'sad')}</div>
+   <h3>${fled?Lx("Ты сдался","You gave up"):res==='win'?Lx("Победа!","Victory!"):res==='lose'?Lx("Поражение","Defeat"):Lx("Ничья","Draw")}</h3>
+   <p>${Lx("Соперник:","Opponent:")} <b>${esc(foe.name)}</b>. ${Lx("Ходов:","Rounds:")} ${st.round-1}.</p>
+   <p class="result" style="padding:0">${stars?`<span class="st" style="font-size:28px">+${stars} ★</span> `:''}${xp?`<b style="color:var(--xp)">+${xp} ${Lx("опыта арены","arena XP")}</b>`:''}</p>
+   ${ups?`<p class="bubble">${Lx("Новый уровень арены","New arena level")} ${A.lvl}! ${Lx("Распредели 3 очка характеристик.","Spend your 3 stat points.")}</p>`:''}
+   ${hurt?`<p class="err">${Lx("🤕 Котёнок получил ушиб. Дай ему лекарство в уходе.","🤕 Your kitten got a bruise. Give it medicine on the care screen.")}</p>`:''}
+   <div class="btns"><button class="btn" id="arBack">${Lx("На арену","Back to the arena")}</button><button class="btn alt" id="arHome">${Lx("В комнату","To the room")}</button></div>`);
+  $('#arBack').onclick=()=>{m.innerHTML='';arenaScreen()};$('#arHome').onclick=()=>{m.innerHTML='';menu()};$('#arBack').focus()}
 
 /* ===== Ивенты: появляются по таймеру, в каждом участвует котёнок игрока ===== */
 const EV_EVERY=20*60e3;
@@ -2052,7 +2721,7 @@ const GAME_IMPL={
 async function catGame(key){screen='cg';stopTimer();const g=GAMES[key],C=CAT_GAMES[key];const stamp=Symbol();catGame.cur=stamp;
   app.innerHTML=`<section class="sheet"><div class="top">${backBtn()}<h2>${g.ic} ${g.title}</h2><span class="timer" id="cgS"></span></div><p class="hint">${C.rule}</p>
   <div class="draw"><canvas id="cgc" width="360" height="480" aria-label="${Lx("Игровое поле","Game field")}" style="cursor:pointer"></canvas></div></section>`;
-  $('#back').onclick=menu;
+  $('#back').onclick=gamesScreen;
   const cat=await svgImage(catSVG(player.cat,'happy'));const cv=$('#cgc');if(!cv||catGame.cur!==stamp)return;const ctx=cv.getContext('2d');const W=360,H=480;
   const alive=()=>catGame.cur===stamp&&screen==='cg'&&document.body.contains(cv);
   const st={score:0};let tap=null;cv.onpointerdown=e=>{e.preventDefault();tap=evPoint(cv,e,W,H)};
@@ -2060,7 +2729,7 @@ async function catGame(key){screen='cg';stopTimer();const g=GAMES[key],C=CAT_GAM
   function frame(now){if(!alive())return;const dt=Math.min(50,now-last);last=now;const fin=game.update(dt,now-t0,tap);tap=null;const l=$('#cgS');if(l)l.textContent=game.label();
     if(fin)return finish();requestAnimationFrame(frame)}
   requestAnimationFrame(frame);
-  function finish(){screen='result';const s=st.score;const stars=game.stars(s)+(s>0&&hasTr('lucky')?1:0)+(s>0&&cstat('str')+cstat('agi')>=16?1:0);tick();applyEffects(C.eff);
+  function finish(){screen='result';const s=st.score;const stars=game.stars(s)+(s>0&&hasTr('lucky')?1:0)+(s>0&&cstat('str')+cstat('agi')>=16?1:0);tick();applyEffects(C.eff);loseWeight(.1);
     player.cat.energy=clamp(player.cat.energy-10,0,100);player.cat.food=clamp(player.cat.food-5,0,100);const info=record(key,stars,20+s*3,s,false);
     resultScreen(game.result(s),stars,s>0?Lx("Котёнок в восторге!","Your kitten is thrilled!"):Lx("Котёнку всё равно понравилось","Your kitten still had fun"),()=>start(key),info,
       `<p class="tag">${Object.entries(C.eff).map(([k,v])=>`${STAT_NAME[k]} +${v}`).join(' · ')} ${Lx("· Энергия −10","· Energy −10")}</p>`)}}
